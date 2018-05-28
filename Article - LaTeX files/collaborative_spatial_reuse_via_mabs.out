@@ -1,0 +1,21 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Related Work}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Solving WNs Resource Allocation Problems via Bandits}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Multi-Armed Bandits for Improving Spatial Reuse in WNs}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{-greedy}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.2}{EXP3}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.3}{UCB}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.4}{Thompson sampling}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{System model}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{Channel modeling}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{Throughput calculation}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.3}{Simulation Parameters}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Performance Evaluation}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Toy Grid Scenario}{section.5}% 14
+\BOOKMARK [3][-]{subsubsection.5.1.1}{Optimal Solution}{subsection.5.1}% 15
+\BOOKMARK [3][-]{subsubsection.5.1.2}{Performance of the -greedy policy}{subsection.5.1}% 16
+\BOOKMARK [3][-]{subsubsection.5.1.3}{Performance of the EXP3 policy}{subsection.5.1}% 17
+\BOOKMARK [3][-]{subsubsection.5.1.4}{Performance of the UCB policy}{subsection.5.1}% 18
+\BOOKMARK [3][-]{subsubsection.5.1.5}{Performance of the Thompson sampling policy}{subsection.5.1}% 19
+\BOOKMARK [2][-]{subsection.5.2}{Random Scenarios}{section.5}% 20
+\BOOKMARK [1][-]{section.6}{Conclusions }{}% 21
