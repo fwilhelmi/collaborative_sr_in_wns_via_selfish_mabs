@@ -46,13 +46,13 @@ gamma = 0;
 wlan = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
     
 % Compute the throughput experienced per WLAN at each iteration
-[tpt_evolution_per_wlan_exp3, times_arm_has_been_played]  = exp3(wlan, gamma, initialEta);
+[tpt_evolution_per_wlan_exp3_2_2, times_arm_has_been_played_2_2]  = exp3(wlan, gamma, initialEta);
 
 % Plot the results
 if plotResults
-    display_results_individual_performance(wlan, tpt_evolution_per_wlan_exp3, ...
-        times_arm_has_been_played, 'EXP3');
+    display_results_individual_performance(wlan, tpt_evolution_per_wlan_exp3_2_2, ...
+        times_arm_has_been_played_2_2, 'EXP3');
 end
 
 % Save the workspace
-save('./Output/exp3_exp2_workspace.mat')
+save('./output/simulation_2_2_workspace.mat')

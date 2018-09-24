@@ -43,10 +43,10 @@ wlans = generate_network_3D(nWlans, 'grid', 2, drawMap); % SAFE CONFIGURATION
     
 policy = TS_POLICY;
 % Compute the throughput experienced per WLAN at each iteration
-[tptEvolutionPerWlan, timesArmHasBeenPlayed] = thompson_sampling(wlans);
+[tpt_evolution_per_wlan_ts, times_arm_has_been_played_4] = thompson_sampling(wlans);
 
 % Plot the results
-display_results_individual_performance(wlans, tptEvolutionPerWlan, timesArmHasBeenPlayed, 'TS');
+display_results_individual_performance(wlans, tpt_evolution_per_wlan_ts, times_arm_has_been_played_4, 'TS');
 
 % Save the workspace
-save('./Output/ts_exp1_workspace.mat')
+save('./Output/simulation_4_workspace.mat')

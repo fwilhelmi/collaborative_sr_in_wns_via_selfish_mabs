@@ -11,11 +11,12 @@
 % Optimal values obtained from execution of Experiment_0_compute_optimal_configurations.m
 agg_tpt_optimal_prop_fairness = 891.0714;    % Mbps
 ind_tpt_optimal_prop_fairness = 222.7678;    % Mbps    
+optimal_max_min = 222.7678;
 
 nWlans = 4;                         % Number of WLANs in the map
-totalIterations = 10;            % Maximum convergence time (one period implies the participation of all WLANs)
-minimumIterationToConsider = 5;  % Iteration from which to consider the obtained results
-totalRepetitions = 2;             % Number of TOTAL repetitions to take the average
+totalIterations = 10000;            % Maximum convergence time (one period implies the participation of all WLANs)
+minimumIterationToConsider = 5000;  % Iteration from which to consider the obtained results
+totalRepetitions = 1;               % Number of TOTAL repetitions to take the average
 
 % Define the transitory and the permanent intervals of iterations
 transitoryInterval = 1 : minimumIterationToConsider;
@@ -38,7 +39,7 @@ allCombs = allcomb(1:K, 1:K);
 possibleComb = allcomb(possibleActions,...
     possibleActions,possibleActions,possibleActions);
 
-plotResults = true;                 % To plot or not the results at the end of the simulation
+plotResults = false;                % To plot or not the results at the end of the simulation
 printInfo = false;                  % To print info after Bandits implementation (1) or not (0)
 drawMap = false;                    % Variable for drawing the map
 randomInitialConfiguration = true;  % Variable for assigning random channel/tx_power/cca at the beginning

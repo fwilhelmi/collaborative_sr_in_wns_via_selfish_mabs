@@ -43,12 +43,12 @@ wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
     
 policy = UCB_POLICY;
 % Compute the throughput experienced per WLAN at each iteration
-[tptEvolutionPerWlan, timesArmHasBeenPlayed] = ucb(wlans);
+[tpt_evolution_per_wlan_ucb, times_arm_has_been_played_3] = ucb(wlans);
 
 % Plot the results
 if plotResults
-    display_results_individual_performance(wlans, tptEvolutionPerWlan, timesArmHasBeenPlayed, 'UCB');
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_ucb, times_arm_has_been_played_3, 'UCB');
 end
 
 % Save the workspace
-save('./Output/ucb_exp1_workspace.mat')
+save('./Output/simulation_3_workspace.mat')

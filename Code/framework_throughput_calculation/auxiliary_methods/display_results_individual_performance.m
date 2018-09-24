@@ -155,6 +155,7 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     %% Average tpt experienced per WLAN
     mean_tpt_per_wlan = mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
     std_per_wlan = std(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
+    figure
     figure('pos',[450 400 500 350])
     axes;
     axis([1 20 30 70]);
