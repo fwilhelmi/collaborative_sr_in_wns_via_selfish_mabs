@@ -8,7 +8,8 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = thompson_sampling( wlans, varargin )
+function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
+thompson_sampling( wlans, varargin )
 % thompson_sampling applies TS to maximize the experienced
 % throughput of a given scenario
 %
@@ -69,7 +70,9 @@ function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = thompson_sampling( wl
     cumulativeRewardPerWlan = zeros(nWlans, K);     % Initialize the cumulative reward obtained by each WLAN for each arm
     meanRewardPerWlan = zeros(nWlans, K);           % Initialize the mean reward obtained by each WLAN for each arm
     estimatedRewardPerWlan = zeros(nWlans, K);      % Initialize the mean reward obtained by each WLAN for each arm
-            
+    % Initialize the regret experienced by each WLAN
+    regretAfterAction = zeros(1, nWlans);   
+     
     %% INITIALIZE THE PAYOFF OF EACH ARM    
     
     iteration = 1;
@@ -103,17 +106,20 @@ function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = thompson_sampling( wl
             powerMatrix = power_matrix(wlansAux);                
             tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps  
             % Update the reward of each WN
-            for wlan_i = 1 : nWlans                                    
-                rw = (tptAfterAction(wlan_i)/((upperBoundRewardPerWlan(wlan_i))));       
+            rw = zeros(1, nWlans);
+            for wlan_i = 1 : nWlans     
+                rw(wlan_i) = tptAfterAction(wlan_i)/((upperBoundRewardPerWlan(wlan_i)));       
                 estimatedRewardPerWlan(wlan_i, selectedArm(wlan_i)) = ...
                     (estimatedRewardPerWlan(wlan_i, selectedArm(wlan_i)) * ...
-                    timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) + rw) / ...
+                    timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) + rw(wlan_i)) / ...
                     (timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) + 2);                    
-                cumulativeRewardPerWlan(wlan_i, selectedArm(wlan_i)) = cumulativeRewardPerWlan(wlan_i, selectedArm(wlan_i)) + rw;
+                cumulativeRewardPerWlan(wlan_i, selectedArm(wlan_i)) = cumulativeRewardPerWlan(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
                 meanRewardPerWlan(wlan_i, selectedArm(wlan_i)) = ...
                     cumulativeRewardPerWlan(wlan_i, selectedArm(wlan_i)) /...
                     timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i));
             end 
+
+            regretAfterAction = 1 - rw;
             
             % Update the times WN has selected the current action
             timesArmHasBeenPlayed(order(i), selectedArm(order(i))) = ...
@@ -122,8 +128,9 @@ function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = thompson_sampling( wl
         end
         
         % Store the throughput at the end of the iteration for statistics
-        tptExperiencedByWlan(iteration, :) = tptAfterAction;
-        
+        tptExperiencedPerWlan(iteration, :) = tptAfterAction;
+        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
+
         % Increase the number of 'learning iterations' of a WLAN
         iteration = iteration + 1; 
         

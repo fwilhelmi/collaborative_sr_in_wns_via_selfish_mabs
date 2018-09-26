@@ -8,7 +8,8 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [tptExperiencedByWlan, timesArmHasBeenPlayed] = exp3(wlans, gamma, initialEta, varargin)
+function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan] = ...
+    exp3(wlans, gamma, initialEta, varargin)
 % exp3 applies EXP3 (basic formulation) to maximize the experienced
 % throughput of a given scenario
 %
@@ -70,6 +71,8 @@ function [tptExperiencedByWlan, timesArmHasBeenPlayed] = exp3(wlans, gamma, init
     transitionsCounter = zeros(nWlans, K^2);    % Initialize the transitions counter   
     armsProbabilities = zeros(nWlans, K);    % Initialize arms probabilities
     estimated_reward = zeros(1, nWlans);        % Initialize the estimated reward for each WN
+    % Initialize the regret experienced by each WLAN
+    regretAfterAction = zeros(1, nWlans);
     
     % Initialize the learning rate
     eta = initialEta;
@@ -121,6 +124,7 @@ function [tptExperiencedByWlan, timesArmHasBeenPlayed] = exp3(wlans, gamma, init
             tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps    
             
             rw = tptAfterAction ./ upperBoundRewardPerWlan;
+            regretAfterAction = 1 - rw;
                         
             estimated_reward(order(i)) = (rw(order(i)) / armsProbabilities(order(i), selectedArm(order(i))));
                         
@@ -150,8 +154,9 @@ function [tptExperiencedByWlan, timesArmHasBeenPlayed] = exp3(wlans, gamma, init
         end 
         
         % Store the throughput at the end of the iteration for statistics
-        tptExperiencedByWlan(iteration, :) = tptAfterAction;
-                
+        tptExperiencedPerWlan(iteration, :) = tptAfterAction;
+        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
+        
         % Update the learning rate according to the "update mode"
         previousEta = eta;
         if updateMode == UPDATE_MODE_FAST

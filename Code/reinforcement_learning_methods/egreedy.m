@@ -8,7 +8,8 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = egreedy( wlans, initialEpsilon, varargin )
+function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
+    egreedy( wlans, initialEpsilon, varargin )
 % EGREEDY - Given a WN, applies e-greedy to maximize the experienced throughput
 %
 %   OUTPUT: 
@@ -72,6 +73,8 @@ function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = egreedy( wlans, initi
     timesArmHasBeenPlayed = zeros(nWlans, K);     
     % Initialize the mean reward obtained by each WLAN for each arm
     rewardPerArm = zeros(nWlans, K); 
+    % Initialize the regret experienced by each WLAN
+    regretAfterAction = zeros(1, nWlans);
     
     % Initialize epsilon
     epsilon = initialEpsilon; 
@@ -112,15 +115,20 @@ function [ tptExperiencedByWlan, timesArmHasBeenPlayed ] = egreedy( wlans, initi
             tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps          
             
             % Update the reward of each WN
+            rw = zeros(1, nWlans);
             for wlan_i = 1 : nWlans
-                rw = tptAfterAction(wlan_i) / upperBoundThroughputPerWlan(wlan_i);
-                rewardPerArm(wlan_i, selectedArm(wlan_i)) = rw;
+                rw(wlan_i) = tptAfterAction(wlan_i) / upperBoundThroughputPerWlan(wlan_i);
+                rewardPerArm(wlan_i, selectedArm(wlan_i)) = rw(wlan_i);
             end   
+            
+            % Update the regret experienced by each WN
+            regretAfterAction = 1 - rw;
             
         end
         
-        % Store the throughput at the end of the iteration for statistics
-        tptExperiencedByWlan(iteration,:) = tptAfterAction;  % bps
+        % Store the throughput and the regret at the end of the iteration for statistics
+        tptExperiencedPerWlan(iteration, :) = tptAfterAction;        % bps
+        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
         
         % Update the exploration coefficient according to the inputted mode
         if updateMode == UPDATE_MODE_FAST
