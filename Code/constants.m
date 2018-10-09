@@ -14,9 +14,9 @@ ind_tpt_optimal_prop_fairness = 222.7678;    % Mbps
 optimal_max_min = 222.7678;
 
 nWlans = 4;                         % Number of WLANs in the map
-totalIterations = 10000;            % Maximum convergence time (one period implies the participation of all WLANs)
-minimumIterationToConsider = 5000;  % Iteration from which to consider the obtained results
-totalRepetitions = 1;               % Number of TOTAL repetitions to take the average
+totalIterations = 1000;            % Maximum convergence time (one period implies the participation of all WLANs)
+minimumIterationToConsider = 500;  % Iteration from which to consider the obtained results
+totalScenarios = 100;               % Number of TOTAL repetitions to take the average
 
 % Define the transitory and the permanent intervals of iterations
 transitoryInterval = 1 : minimumIterationToConsider;

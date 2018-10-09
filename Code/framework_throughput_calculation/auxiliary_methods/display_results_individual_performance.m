@@ -155,7 +155,6 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     %% Average tpt experienced per WLAN
     mean_tpt_per_wlan = mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
     std_per_wlan = std(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
-    figure
     figure('pos',[450 400 500 350])
     axes;
     axis([1 20 30 70]);
@@ -223,6 +222,5 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     fig_name = ['histogram_individual_throughput_' method_name];
     savefig(['./Output/' fig_name '.fig'])
     saveas(gcf,['./Output/' fig_name],'epsc')
-
     
 end

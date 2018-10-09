@@ -79,10 +79,10 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
    
     iteration = 1;
 
-    while(iteration < totalIterations + 1) 
-        % Assign turns to WLANs randomly 
-        order = randperm(nWlans);  
-        wlan_ix = order(1);
+    while(iteration < totalIterations + 1)      
+        
+        wlan_ix = mod(iteration, nWlans) + 1;
+        
         % Select an action according to the policy
         selectedArm(wlan_ix) = select_action_ts(estimatedRewardPerWlan(wlan_ix, :), ...
             timesArmHasBeenPlayed(wlan_ix, :));  
@@ -118,19 +118,15 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             meanRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
                 cumulativeRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) /...
                 timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux));
+            timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
+                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;  
             % Update transitions counter of static WNs
             if wlan_ix_aux ~= wlan_ix
                 transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;    
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                    timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;  
+                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1; 
             end        
         end
         regretAfterAction = 1 - rw;
-
-        % Update the times WN has selected the current action
-        timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) = ...
-            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 1;  
 
         % Store the throughput at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;

@@ -69,7 +69,7 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
     previousAction = selectedArm;               % Initialize the previous action as the initial one
     timesArmHasBeenPlayed = zeros(nWlans, K);   % Initialize the number each arm has been played
     transitionsCounter = zeros(nWlans, K^2);    % Initialize the transitions counter   
-    armsProbabilities = zeros(nWlans, K);    % Initialize arms probabilities
+    armsProbabilities = (1/K)*ones(nWlans, K);       % Initialize arms probabilities
     estimated_reward = zeros(1, nWlans);        % Initialize the estimated reward for each WN
     % Initialize the regret experienced by each WLAN
     regretAfterAction = zeros(1, nWlans);
@@ -79,9 +79,7 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
     previousEta = eta;
        
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME           
-  
-    iteration = 1;
-    
+    iteration = 1;    
     while(iteration < totalIterations + 1) 
 
         % Assign turns to WLANs randomly 
@@ -89,66 +87,62 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
                 
         for i = 1 : nWlans % Iterate sequentially for each agent in the random order   
      
-            armsProbabilities(order(i), :) = (1 - gamma) * (weightsPerArm(order(i), :) ./ ...
-                sum(weightsPerArm(order(i), :))) + gamma / K;
+            wlan_ix = order(i);
             
-            % To avoid errors in execution time
+            % Update arms probabilities according to weights      
             for k = 1 : K
-                if isnan(armsProbabilities(order(i), k))
-                    armsProbabilities(order(i), k) = 0;
+                armsProbabilities(wlan_ix, k) = (1 - gamma) * ...
+                    (weightsPerArm(wlan_ix, k) / ...
+                    sum(weightsPerArm(wlan_ix, :))) + (gamma / K);                
+                % To avoid errors in execution time
+                if isnan(armsProbabilities(wlan_ix, k))
+                    armsProbabilities(wlan_ix, k) = 1/K;
                 end
-            end            
-            if sum(armsProbabilities(order(i), :) == 0) == K
-                armsProbabilities(order(i), :) = ones(1, K)/K;
-            end
+            end             
                      
             % Draw an action according to probabilites distribution
-            selectedArm(order(i)) = randsample(1:K, 1, true, armsProbabilities(order(i),:));  
+            selectedArm(wlan_ix) = randsample(1:K, 1, true, armsProbabilities(wlan_ix,:));  
             % Find the index of the current and the previous action in allCombs
-            ix = find(allCombs(:,1) == previousAction(order(i)) & allCombs(:,2) == selectedArm(order(i)));
+            ix = find(allCombs(:,1) == previousAction(wlan_ix) & allCombs(:,2) == selectedArm(wlan_ix));
             % Update the previous action
-            previousAction(order(i)) = selectedArm(order(i));      
+            previousAction(wlan_ix) = selectedArm(wlan_ix);      
             % Update the transitions counter
-            transitionsCounter(order(i), ix) = transitionsCounter(order(i), ix) + 1; 
+            transitionsCounter(wlan_ix, ix) = transitionsCounter(wlan_ix, ix) + 1; 
             % Update the times WN has selected the current action
-            timesArmHasBeenPlayed(order(i), selectedArm(order(i))) = timesArmHasBeenPlayed(order(i), selectedArm(order(i))) + 1;           
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) = timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 1;           
             % Find channel and tx power of the current action
-            [a, ~, c] = val2indexes(selectedArm(order(i)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
+            [a, ~, c] = val2indexes(selectedArm(wlan_ix), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
             % Update WN configuration
-            wlansAux(order(i)).Channel = a;   
-            %wlan_aux(order(i)).CCA = ccaActions(b);
-            wlansAux(order(i)).TxPower = txPowerActions(c);  
+            wlansAux(wlan_ix).Channel = a;   
+            wlansAux(wlan_ix).TxPower = txPowerActions(c);  
 
             % Compute the reward with the throughput obtained in the round after applying the action
             powerMatrix = power_matrix(wlansAux);
             tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps    
             
+            % Update the reward of each WN
             rw = tptAfterAction ./ upperBoundRewardPerWlan;
             regretAfterAction = 1 - rw;
-                        
-            estimated_reward(order(i)) = (rw(order(i)) / armsProbabilities(order(i), selectedArm(order(i))));
-                        
-            if eta == 0 && previousEta == 0
-                weightsPerArm(order(i), selectedArm(order(i))) = ...
-                    weightsPerArm(order(i), selectedArm(order(i)))^0 * ...
-                    exp((eta * estimated_reward(order(i))));           
-            else
-                weightsPerArm(order(i), selectedArm(order(i))) = ...
-                    weightsPerArm(order(i), selectedArm(order(i)))^(eta / previousEta) * ...
-                    exp((eta * estimated_reward(order(i))));
-            end
-                       
+                     
+            % Update the estimated reward
+            estimated_reward(wlan_ix) = (rw(wlan_ix) / ...
+                armsProbabilities(wlan_ix, selectedArm(wlan_ix)));
+                    
+            % Update the weights of eah action
             for k = 1 : K
-                 if k ~= selectedArm(order(i))                    
-                    if eta == 0 && previousEta == 0 
-                        weightsPerArm(order(i), k) = ...
-                          weightsPerArm(order(i), k)^0;
+                if eta == 0 && previousEta == 0
+                    weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^0 * ...
+                        exp((eta * estimated_reward(wlan_ix)));           
+                else
+                    if k == selectedArm(wlan_ix) 
+                        weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^...
+                            (eta / previousEta) * exp((eta * estimated_reward(wlan_ix)));
                     else
-                        weightsPerArm(order(i), k) = ...
-                          weightsPerArm(order(i), k)^(eta / previousEta);
+%                         weightsPerArm(wlan_ix, k) = ...
+%                             weightsPerArm(wlan_ix, k)^(eta / previousEta);
                     end
                  end
-                 weightsPerArm(order(i), k) = max( weightsPerArm(order(i), k), 1e-6 );
+                 weightsPerArm(wlan_ix, k) = max( weightsPerArm(wlan_ix, k), 1e-6 );
             end
             
         end 

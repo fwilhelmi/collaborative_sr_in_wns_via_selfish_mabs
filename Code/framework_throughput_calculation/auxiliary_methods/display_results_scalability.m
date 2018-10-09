@@ -42,7 +42,7 @@ function [] = display_results_scalability( wlansSizes, throughputEvolutionPerWla
     % For each size of wlans, process data to be plotted
     for s = 1 : size(wlansSizes, 2)
         
-        for r = 1 : totalRepetitions
+        for r = 1 : totalScenarios
 
             %meanAggTptSingleSimulationRandom(r) = mean(sum(throughputEvolutionPerWlanRandom{s, r}(permanentInterval, :)'));
             meanAggTptSingleSimulationEgreedy(r) = mean(sum(throughputEvolutionPerWlanEgreedy{s, r}(permanentInterval, :)'));
@@ -58,7 +58,7 @@ function [] = display_results_scalability( wlansSizes, throughputEvolutionPerWla
 
         end
         
-        %meanAggTptTotalRepetitionsRandom(s) = mean(meanAggTptSingleSimulationRandom);
+        %meanAggTpttotalScenariosRandom(s) = mean(meanAggTptSingleSimulationRandom);
         meanAggTptTotalRepetitionsEgreedy(s) = mean(meanAggTptSingleSimulationEgreedy);
         meanAggTptTotalRepetitionsExp3(s) = mean(meanAggTptSingleSimulationExp3);
         meanAggTptTotalRepetitionsUcb(s) = mean(meanAggTptSingleSimulationUcb);
@@ -116,7 +116,7 @@ function [] = display_results_scalability( wlansSizes, throughputEvolutionPerWla
     
     for s = 1 : size(wlansSizes, 2)
         
-        for r = 1 : totalRepetitions
+        for r = 1 : totalScenarios
             % Random
             %meanThroughputPerWlanRandomConcat{s}(r, :) = ...
             %    mean(throughputEvolutionPerWlanRandom{s, r}(permanentInterval, :));
@@ -224,7 +224,7 @@ function [] = display_results_scalability( wlansSizes, throughputEvolutionPerWla
         std_temporal_tpt_ucb = [];
         std_temporal_tpt_ts = [];
 
-        for r = 1 : totalRepetitions
+        for r = 1 : totalScenarios
 
             %std_temporal_tpt_random = [std_temporal_tpt_random; std(throughputEvolutionPerWlanRandom{s, r})];
             std_temporal_tpt_eg = [std_temporal_tpt_eg; std(throughputEvolutionPerWlanEgreedy{s, r})];

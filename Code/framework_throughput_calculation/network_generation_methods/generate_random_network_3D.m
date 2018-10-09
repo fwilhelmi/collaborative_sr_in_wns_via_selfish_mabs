@@ -8,7 +8,7 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function wlan = generate_random_network_3D( N_WLANs, NumChannels, printMap )
+function wlan = generate_random_network_3D( N_WLANs, NumChannels, TxPowerLevels, ccaLevels, printMap )
     % DrawNetwork3D  Calculate interferences on WLANs.
     %   Inputs:
     %       * N_WLANs: number of WLANs on the studied environment
@@ -32,8 +32,8 @@ function wlan = generate_random_network_3D( N_WLANs, NumChannels, printMap )
     %% Locate elements on the map randomly
     for j=1:N_WLANs    
         % Assign Tx Power and CCA on the WLAN
-        wlan(j).TxPower = 20;
-        wlan(j).CCA = -82;
+        wlan(j).TxPower = max(TxPowerLevels);
+        wlan(j).CCA = min(ccaLevels);
         % Assign channel to the AP randomly
         wlan(j).Channel = ceil(NumChannels*rand());
         % Assign location to the AP on the 3D map
