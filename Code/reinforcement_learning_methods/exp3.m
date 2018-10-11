@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan] = ...
-    exp3(wlans, gamma, initialEta, varargin)
+    exp3(wlans, gamma, initialEta, upperBoundThroughputPerWlan, varargin)
 % exp3 applies EXP3 (basic formulation) to maximize the experienced
 % throughput of a given scenario
 %
@@ -56,14 +56,9 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
         initialActionIxPerWlan(i) = indexes2val(wlansAux(i).Channel, ...
             indexCca, indexTpc, size(channelActions,2), size(ccaActions,2));
     end
+    
     % Initialize the indexes of the taken action
-    actionIndexPerWlan = initialActionIxPerWlan;                           
-    
-    % Compute the maximum achievable throughput per WLAN
-    powerMatrix = power_matrix(wlansAux);     
-    upperBoundRewardPerWlan = compute_max_bound_throughput(wlansAux, ...
-        powerMatrix, NOISE_DBM, max(txPowerActions));
-    
+    actionIndexPerWlan = initialActionIxPerWlan;                              
     selectedArm = actionIndexPerWlan;           % Initialize arm selection for each WLAN by using the initial action
     weightsPerArm = ones(nWlans, K);            % Initialize weight to 1 for each action
     previousAction = selectedArm;               % Initialize the previous action as the initial one
@@ -115,37 +110,35 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
             % Update WN configuration
             wlansAux(wlan_ix).Channel = a;   
             wlansAux(wlan_ix).TxPower = txPowerActions(c);  
-
-            % Compute the reward with the throughput obtained in the round after applying the action
-            powerMatrix = power_matrix(wlansAux);
-            tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps    
-            
-            % Update the reward of each WN
-            rw = tptAfterAction ./ upperBoundRewardPerWlan;
-            regretAfterAction = 1 - rw;
-                     
+        end 
+        
+        % Compute the reward with the throughput obtained in the round after applying the action
+        tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps    
+        % Update the reward of each WN
+        rw = tptAfterAction ./ upperBoundThroughputPerWlan;
+        regretAfterAction = 1 - rw;        
+        
+        for wlan_i = 1 : nWlans           
             % Update the estimated reward
-            estimated_reward(wlan_ix) = (rw(wlan_ix) / ...
-                armsProbabilities(wlan_ix, selectedArm(wlan_ix)));
-                    
+            estimated_reward(wlan_i) = (rw(wlan_i) / ...
+                armsProbabilities(wlan_i, selectedArm(wlan_i)));                    
             % Update the weights of eah action
             for k = 1 : K
                 if eta == 0 && previousEta == 0
-                    weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^0 * ...
-                        exp((eta * estimated_reward(wlan_ix)));           
+                    weightsPerArm(wlan_i, k) = weightsPerArm(wlan_i, k)^0 * ...
+                        exp((eta * estimated_reward(wlan_i)));           
                 else
-                    if k == selectedArm(wlan_ix) 
-                        weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^...
-                            (eta / previousEta) * exp((eta * estimated_reward(wlan_ix)));
+                    if k == selectedArm(wlan_i) 
+                        weightsPerArm(wlan_i, k) = weightsPerArm(wlan_i, k)^...
+                            (eta / previousEta) * exp((eta * estimated_reward(wlan_i)));
                     else
-%                         weightsPerArm(wlan_ix, k) = ...
-%                             weightsPerArm(wlan_ix, k)^(eta / previousEta);
+    %                         weightsPerArm(wlan_ix, k) = ...
+    %                             weightsPerArm(wlan_ix, k)^(eta / previousEta);
                     end
                  end
-                 weightsPerArm(wlan_ix, k) = max( weightsPerArm(wlan_ix, k), 1e-6 );
+                 weightsPerArm(wlan_i, k) = max( weightsPerArm(wlan_i, k), 1e-6 );
             end
-            
-        end 
+        end
         
         % Store the throughput at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;

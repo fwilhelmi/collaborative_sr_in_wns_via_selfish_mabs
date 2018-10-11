@@ -107,24 +107,242 @@
 \maketitle
 
 \section{Introduction}
+In order to decrease the temporal variability experienced by WNs applying online learning, we propose the following mechanism:
+\begin{itemize}
+	\item WNs are synchronized, so that they act at specific intervals.
+	\item In each iteration, only one WN is able to select an action. Of course, it can select the one that is currently using (exploitation).
+	\item Every WN that remains "static" in a given iteration is considered to choose the last selected action.
+\end{itemize}
 
+Two important implications are derived from the abovementioned mechanism: \emph{i)} the action-selection strategy of the learning algorithms are modified, \emph{ii)} the adversarial setting changes, so that the performance of every chosen action is potentially evaluated in a larger set of situations. According to the latter, a higher level of valuable knowledge is more likely to be provided to each arm. However, depending on the learning algorithm used, there can be other implications.
+ 
 \section{Results - Toy Scenario}
 
 \subsection{$\varepsilon$-greedy}
 \label{section:e-greedy}
 
+Figure \ref{fig:e_greedy} shows several results regarding the application of $\varepsilon$-greedy in the toy scenario (1,000 iterations are considered), both for the fully decentralized and the synchronized approaches. As shown, the latter allows to experience a lower temporal throughput variability (\ref{fig:temporal_individual_tpt_EG} vs \ref{fig:temporal_individual_tpt_OEG}), since a lower number of actions is being exploited (\ref{fig:actions_probability_EG} vs \ref{fig:actions_probability_OEG}). However, similar results are obtained with respect to the average throughput experienced per WN (\ref{fig:mean_tpt_EG} vs \ref{fig:mean_tpt_OEG}). The fact is that, for the synchronized approach, WNs tend to exploit sub-optimal actions for longer periods (while they wait for their turn). In contrast, WNs are able to rapidly discard these sub-optimal actions in their turn.
 
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_EG}
+		\caption{Actions prob. (default)}\label{fig:actions_probability_EG}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_OEG}
+		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OEG}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_EG}
+		\caption{Temp. variability  (default)}\label{fig:temporal_individual_tpt_EG}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OEG}
+		\caption{Temp. variability  (sync.)}\label{fig:temporal_individual_tpt_OEG}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_EG}
+		\caption{Mean tpt. (default)}\label{fig:mean_tpt_EG}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_OEG}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OEG}
+	\end{subfigure}
+	\caption{Simulation results in $\varepsilon$-greedy (1,000 iterations)}
+	\label{fig:e_greedy}
+\end{figure*}
 
 \subsection{EXP3}
 \label{section:exp3}
 
+Figure \ref{fig:exp3} shows several results regarding the application of EXP3 in the toy scenario (1,000 iterations are considered), both for the fully decentralized and the synchronized approaches. Again, the synchronized version of EXP3 leads to a lower temporal variability (\ref{fig:temporal_individual_tpt_EXP3} vs \ref{fig:temporal_individual_tpt_OEXP3}). No significant conclusions can be drawn for the actions probability profile (\ref{fig:actions_probability_EXP3} vs \ref{fig:actions_probability_OEXP3}), since in EXP3 it appears to be slightly random (recall that different EXP3 simulations may lead to different results). Finally, regarding the average throughput experienced per WN, similar "pseudo-randomized" results are obtained (\ref{fig:mean_tpt_EXP3} vs \ref{fig:mean_tpt_OEXP3}). 
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_EXP3}
+		\caption{Actions prob. (default)}\label{fig:actions_probability_EXP3}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_OEXP3}
+		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OEXP3}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_EXP3}
+		\caption{Temp. variability  (default)}\label{fig:temporal_individual_tpt_EXP3}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OEXP3}
+		\caption{Temp. variability  (sync.)}\label{fig:temporal_individual_tpt_OEXP3}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_EXP3}
+		\caption{Mean tpt. (default)}\label{fig:mean_tpt_EXP3}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_OEXP3}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OEXP3}
+	\end{subfigure}
+	\caption{Simulation results in EXP3 (1,000 iterations)}
+	\label{fig:exp3}
+\end{figure*}
+
 \subsection{UCB}
 \label{section:ucb}
+
+Figure \ref{fig:ucb} shows several results regarding the application of UCB in the toy scenario (1,000 iterations are considered), both for the fully decentralized and the synchronized approaches. Unlike the previous cases, applying the synchronized approach to UCB is counter-productive, since its operational mode is altered by forcing WNs to choose undesired actions. As a result, the action-selection strategy is somehow randomized.
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_UCB}
+		\caption{Actions prob. (default)}\label{fig:actions_probability_UCB}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_OUCB}
+		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OUCB}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_UCB}
+		\caption{Temp. variability  (default)}\label{fig:temporal_individual_tpt_UCB}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OUCB}
+		\caption{Temp. variability  (sync.)}\label{fig:temporal_individual_tpt_OUCB}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_UCB}
+		\caption{Mean tpt. (default)}\label{fig:mean_tpt_UCB}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_OUCB}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OUCB}
+	\end{subfigure}
+	\caption{Simulation results in UCB (1,000 iterations)}
+	\label{fig:ucb}
+\end{figure*}
 
 \subsection{Thompson sampling}
 \label{section:ts}
 
+Figure \ref{fig:ts} shows several results regarding the application of Thompson sampling in the toy scenario (1,000 iterations are considered), both for the fully decentralized and the synchronized approaches. In this case, the temporal variability is significantly decreased (\ref{fig:temporal_individual_tpt_TS} vs \ref{fig:temporal_individual_tpt_OTS}). In contrast, the actions probability changes for the synchronized approach. In this case, some WNs (2 and 3) alternate two between actions. As it can be inferred from the temporal variability, one of the actions (the one granting lower performance) is selected until iteration 600 (approximately). At that moment, the best performing action (with respect to the adversarial environment) is chosen. This phenomena allegedly occurs when near-to-optimal actions are forced to be selected several times during the "static" periods. As a result, the algorithm provides high estimates to that actions, which are hard to be overtaken by the actual best-performing ones.
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_TS}
+		\caption{Actions prob. (default)}\label{fig:actions_probability_TS}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/actions_probability_OTS}
+		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OTS}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_TS}
+		\caption{Temp. variability  (default)}\label{fig:temporal_individual_tpt_TS}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OTS}
+		\caption{Temp. variability  (sync.)}\label{fig:temporal_individual_tpt_OTS}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_TS}
+		\caption{Mean tpt. (default)}\label{fig:mean_tpt_TS}
+	\end{subfigure}
+	\begin{subfigure}[b]{.33\textwidth}
+		\includegraphics[width=\textwidth]{images/mean_tpt_OTS}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OTS}
+	\end{subfigure}
+	\caption{Simulation results in Thompson sampling (1,000 iterations)}
+	\label{fig:ts}
+\end{figure*}
+
 \section{Results - Random Scenario}
 In order to reduce the simulation time, we have considered 1,000 learning iterations, rather than 100,000.
+
+First, we aim to show the effect of considering a higher number of actions, thus framing more realistic settings. For that, we have considered to use 3 orthogonal channels (as for the 2.4 GHz band), and 4 levels of power, which now range from -15 to 30 dBm (as defined in the IEEE 802.11 standard). As shown in Figure \ref{fig:scalability_more_actions}, using the new set of actions leads, in general, to much better and concentrated results for low densities (\ref{fig:hist_mean_tpt_2_WNs_actions}). However, as the number of WNs increases, the performance achieved by the new set of actions is worst than the achieved by the old set. Recall that the old set of actions considers that the number of orthogonal channels increases according to density (i.e., $n_{channels} = \frac{n_{WNs}}{2}$). Finally, it is interesting to observe the case where we have 4 WNs (\ref{fig:hist_mean_tpt_4_WNs_actions}). In this case, there are two clearly separated sets of throughputs when using the new set of actions, which is more evident for UCB and Thompson sampling. The fact is that there are 3 orthogonal channels and 4 WNs. Therefore, with a proper channel allocation, two WNs will enjoy full channel access, while the other two will compete for the remaining one.
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_2_WNs_actions}
+		\caption{2 WNs}\label{fig:hist_mean_tpt_2_WNs_actions}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_4_WNs_actions}
+		\caption{4 WNs}\label{fig:hist_mean_tpt_4_WNs_actions}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_6_WNs_actions}
+		\caption{6 WNs}\label{fig:hist_mean_tpt_6_WNs_actions}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_8_WNs_actions}
+		\caption{8 WNs}\label{fig:hist_mean_tpt_8_WNs_actions}
+	\end{subfigure}
+	\caption{Histogram of the mean throughput experienced by WNs for each algorithm. The results are computed from 100 different random scenarios for each of the WNs sizes, where 1,000 learning iterations are considered. In red, we have the results for the initial set of actions, which consider that the number of channels is half the number of WNs. In blue, the new set of actions is considered.}
+	\label{fig:scalability_more_actions}
+\end{figure*}
+
+Now, in order to further illustrate the effect of applying synchronized selfish learning, we compare it with the default decentralized approach in the random scenarios. In this case, we use the realistic range of actions in both situations. As shown in Figure \ref{fig:scalability_sync_vs_async}, the synchronized mechanisms lead to less variability than their default versions (the histogram tends to be narrower for all the cases). In contrast, some performance loss can be observed, especially for the UCB algorithm (note that the blue distribution is slightly shifted to the left, with respect to the red one). 
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_2_WNs}
+		\caption{2 WNs}\label{fig:hist_mean_tpt_2_WNs}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_4_WNs}
+		\caption{4 WNs}\label{fig:hist_mean_tpt_4_WNs}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_6_WNs}
+		\caption{6 WNs}\label{fig:hist_mean_tpt_6_WNs}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/hist_mean_tpt_8_WNs}
+		\caption{8 WNs}\label{fig:hist_mean_tpt_8_WNs}
+	\end{subfigure}
+	\caption{Histogram of the mean throughput experienced by WNs for each algorithm. The results are computed from 100 different random scenarios for each of the WNs sizes, where 1,000 learning iterations are considered. In red, we have the results for the default algorithms implementation, while blue indicates their synchronized versions.}
+	\label{fig:scalability_sync_vs_async}
+\end{figure*}
+
+\section{Impact of modifying the range of actions}
+Here we aim to measure the impact of modifying the range of actions on the performance of the learning algorithms. For that, for each of the proposed action-selection strategies, we will compare the following performance measurements in the grid scenario, for different number of available actions: \emph{i)} the mean throughput experienced in average, \emph{ii)} the mean variability experienced in average.
+
+Firstly, Figures \ref{fig:impact_num_channels} and \ref{fig:impact_num_channels_on_variability} show the impact of using different number of orthogonal channels for each algorithm. As shown in \ref{fig:impact_num_channels}, the mean throughput increases until reaching 4 channels, so that each WN is able to properly access to a single channel. Such an ideal case is achieved by Thompson sampling and UCB. However, for $\varepsilon$-greedy and EXP3 we notice some performance anomalies when the number of available channels increases. Regarding the experienced variability (\ref{fig:impact_num_channels_on_variability}), we observe a peak when the number of channels is 3, situation in which at least two WNs are permanently in conflict, since they are competing for the same channel resources. Note that, for the other cases where the number of channels is not enough to accommodate all the WNs, a lower variability is experienced due to the impossibility of achieving a better performance.
+
+Secondly, the impact of modifying the available levels of transmit power is shown in both \ref{fig:impact_tx_power_levels_on_throughput} and \ref{fig:impact_tx_power_levels_on_variability}. In this case, we use the following sets of transmit power levels:
+\begin{itemize}
+	\item Set 1: \{5, 20\} dBm
+	\item Set 2: \{5, 10, 15, 20\} dBm
+	\item Set 3: from 2 to 20 dBm in steps of 2 dBm
+	\item Set 4: from 1 to 20 dBm in steps of 1 dBm
+\end{itemize}
+Regarding the throughput experienced (\ref{fig:impact_tx_power_levels_on_throughput}), we notice a very low variability when different sets of transmit power levels are used. In contrast, increasing the number of transmission power levels affects to the variability experienced by WNs. Such a variability increases in case of UCB and Thompson sampling. Different effects are noticed for $\varepsilon$-greedy and EXP3.
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/impact_num_channels}
+		\caption{Channel impact on the throughput}\label{fig:impact_num_channels}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/impact_num_channels_on_variability}
+		\caption{Channel impact on the variability}\label{fig:impact_num_channels_on_variability}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/impact_tx_power_levels_on_throughput}
+		\caption{TxPow impact on the throughput}\label{fig:impact_tx_power_levels_on_throughput}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\includegraphics[width=\textwidth]{images/impact_tx_power_levels_on_variability}
+		\caption{TxPow impact on the variability}\label{fig:impact_tx_power_levels_on_variability}
+	\end{subfigure}
+	\caption{Mean and standard deviation of the throughput experienced in average when using different sets of actions.}
+	\label{fig:impact_actions}
+\end{figure*}
 
 \end{document}

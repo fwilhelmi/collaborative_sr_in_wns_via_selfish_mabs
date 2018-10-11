@@ -8,32 +8,34 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function draw_network_3D(wlan)
+function draw_network_3D(wlans)
 % DrawNetwork3D - Plots a 3D of the network 
 %   INPUT: 
 %       * wlan - contains information of each WLAN in the map. For instance,
 %       wlan(1) corresponds to the first one, so that it has unique
 %       parameters (x,y,z,BW,CCA,etc.)
 
-    MaxX=10;
-    MaxY=5; 
-    MaxZ=10;
-    for j = 1 : size(wlan,2)
-        x(j) = wlan(j).position_ap(1);
-        y(j) = wlan(j).position_ap(2);
-        z(j) = wlan(j).position_ap(3);
+    load('constants.mat')
+    
+    num_wlans = size(wlans, 2);
+    
+    for j = 1 : num_wlans
+        x(j) = wlans(j).x;
+        y(j) = wlans(j).y;
+        z(j) = wlans(j).z;
     end
+    
     figure
     axes;
     set(gca,'fontsize',16);
     labels = num2str((1:size(y' ))','%d');    
-    for i=1:size(wlan,2)
-        scatter3(wlan(i).position_ap(1), wlan(i).position_ap(2), wlan(i).position_ap(3), 70, [0 0 0], 'filled');
+    for i = 1 : num_wlans
+        scatter3(wlans(i).x, wlans(i).y, wlans(i).z, 70, [0 0 0], 'filled');
         hold on;   
-        scatter3(wlan(i).position_sta(1), wlan(i).position_sta(2), wlan(i).position_sta(3), 30, [0 0 1], 'filled');
-        line([wlan(i).position_ap(1), wlan(i).position_sta(1)], ...
-            [wlan(i).position_ap(2), wlan(i).position_sta(2)], ...
-            [wlan(i).position_ap(3), wlan(i).position_sta(3)], 'Color', [0.4, 0.4, 1.0], 'LineStyle', ':');        
+        scatter3(wlans(i).xn, wlans(i).yn, wlans(i).zn, 30, [0 0 1], 'filled');
+        line([wlans(i).x, wlans(i).xn], ...
+            [wlans(i).y, wlans(i).yn], ...
+            [wlans(i).z, wlans(i).zn], 'Color', [0.4, 0.4, 1.0], 'LineStyle', ':');        
     end
     text(x,y,z,labels,'horizontal','left','vertical','bottom') 
     xlabel('x [meters]','fontsize',14);

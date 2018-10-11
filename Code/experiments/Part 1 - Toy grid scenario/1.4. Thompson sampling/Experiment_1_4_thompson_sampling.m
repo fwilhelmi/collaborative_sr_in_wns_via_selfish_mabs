@@ -38,19 +38,27 @@ disp('-----------------------')
 % Generate constants from 'constants.m'
 constants
 
+load('workspace_throughput_all_combinations.mat')
+
 % Setup the scenario: generate WLANs and initialize states and actions
 wlans = generate_network_3D(nWlans, 'grid', 2, drawMap); % SAFE CONFIGURATION
+
+% Compute the maximum achievable throughput per WLAN
+powerMatrix = power_matrix(wlans);     
+upperBoundThroughputPerWlan = compute_max_bound_throughput(wlans, ...
+    powerMatrix, NOISE_DBM, max(txPowerActions));
     
-policy = TS_POLICY;
 % Compute the throughput experienced per WLAN at each iteration
-[tpt_evolution_per_wlan_ts, times_arm_has_been_played_ts, regret_per_wlan_ts] = thompson_sampling(wlans);
-[tpt_evolution_per_wlan_ots, times_arm_has_been_played_ots, regret_per_wlan_ots] = ordered_thompson_sampling(wlans);
+[tpt_evolution_per_wlan_ts, times_arm_has_been_played_ts, regret_per_wlan_ts] = thompson_sampling(wlans, upperBoundThroughputPerWlan);
+[tpt_evolution_per_wlan_ots, times_arm_has_been_played_ots, regret_per_wlan_ots] = ordered_thompson_sampling(wlans, upperBoundThroughputPerWlan);
 
 % Plot the results
-if plotResults
-    display_results_individual_performance(wlans, tpt_evolution_per_wlan_ts, times_arm_has_been_played_ts, 'TS');
-    display_results_individual_performance(wlans, tpt_evolution_per_wlan_ots, times_arm_has_been_played_ots, 'OTS');
-end
+%if plotResults
+display_results_individual_performance(wlans, tpt_evolution_per_wlan_ts, ...
+    times_arm_has_been_played_ts, upperBoundThroughputPerWlan, max_max_min, 'TS');
+display_results_individual_performance(wlans, tpt_evolution_per_wlan_ots, ...
+    times_arm_has_been_played_ots, upperBoundThroughputPerWlan, max_max_min, 'OTS');
+%end
 
 % Save the workspace
 save('./Output/simulation_1_4_workspace.mat')

@@ -82,7 +82,6 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         for w = 1 : nWlans              
             [a, ~, c] = val2indexes(order_actions(k), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
             wlansAux(order_wlans(w)).Channel = a;   
-            %wlan_aux(i).CCA = ccaActions(b);
             wlansAux(order_wlans(w)).TxPower = txPowerActions(c);  
             powerMatrix = power_matrix(wlansAux);
             tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps   
@@ -116,17 +115,16 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         [a, ~, c] = val2indexes(selectedArm(wlan_ix), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
         % Update WN configuration
         wlansAux(wlan_ix).Channel = a;   
-        %wlan_aux(wlan_ix).CCA = ccaActions(b);
         wlansAux(wlan_ix).TxPower = txPowerActions(c);  
         % Compute the throughput noticed after applying the action           
         powerMatrix = power_matrix(wlansAux);                
         tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps         
         % Update the reward of each WN
-        rw = zeros(1, nWlans);        
+        rw = tptAfterAction./upperBoundRewardPerWlan; 
+        % Update the mean reward experienced by each WN
         for wlan_ix_aux = 1 : nWlans 
             timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;  
-            rw(wlan_ix_aux) = (tptAfterAction(wlan_ix_aux)/((upperBoundRewardPerWlan(wlan_ix_aux))));                                       
+                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;                                                    
             cumulativeRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
                 cumulativeRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) + rw(wlan_ix_aux);
             meanRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...

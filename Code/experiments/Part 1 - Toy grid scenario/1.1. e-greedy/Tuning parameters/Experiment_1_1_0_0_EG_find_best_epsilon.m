@@ -35,14 +35,20 @@ disp('e-greedy: finding the best parameters')
 disp('-----------------------')
 
 % Generate constants from 'constants.m'
+load('workspace_throughput_all_combinations.mat')
 constants
 
-totalRepetitions = 100;
+% Setup the scenario: generate WLANs and initialize states and actions
+wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
+% Compute the maximum achievable throughput per WLAN
+powerMatrix = power_matrix(wlans);     
+upperBoundThroughputPerWlan = compute_max_bound_throughput(wlans, ...
+    powerMatrix, NOISE_DBM, max(txPowerActions));
 
+
+totalRepetitions = 5;
 initialEpsilon = 0:.1:1;
 
-policy = EG_POLICY;
-  
 % Initialize variables at which to store information per repetition
 tptEvolutionPerWlanEgreedy = cell(1, totalRepetitions);
 averageThroughputEvolution = cell(1, totalRepetitions);
@@ -53,20 +59,20 @@ maxMinThroughput = cell(1, totalRepetitions);
 
 %% ITERATE FOR NUMBER OF REPETITIONS (TO TAKE THE AVERAGE)
 for r = 1 : totalRepetitions
+    
+    totalIterations
+    
     disp('------------------------------------')
     disp(['ROUND ' num2str(r) '/' num2str(totalRepetitions) ...
         ' (' num2str(totalIterations) ' iterations)'])
     disp('------------------------------------')   
-
-    % Setup the scenario: generate WLANs and initialize states and actions
-    wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
 
     % Iterate for each initial epsilon
     for e = 1 : size(initialEpsilon, 2)        
         
         disp(['    - \epsilon_0 = ' num2str(initialEpsilon(e))])
     
-        [tptEvolutionPerWlan, timesArmHasBeenPlayed] = egreedy( wlans, initialEpsilon(e) );
+        [tptEvolutionPerWlan, timesArmHasBeenPlayed] = egreedy( wlans, initialEpsilon(e), upperBoundThroughputPerWlan );
 
         tptEvolutionPerWlanEgreedy{r}  = tptEvolutionPerWlan;
         
@@ -96,52 +102,53 @@ save('stdThroughputExperiencedEgreedy', 'stdThroughputExperiencedEgreedy')
 save('stdAggregateThroughputEgreedy', 'stdAggregateThroughputEgreedy')
 save('stdMaxMinThroughputEgreedy', 'stdMaxMinThroughputEgreedy')
 
-% %% PLOT THE RESULTS
-% 
-% % Set font type
-% set(0,'defaultUicontrolFontName','Times New Roman');
-% set(0,'defaultUitableFontName','Times New Roman');
-% set(0,'defaultAxesFontName','Times New Roman');
-% set(0,'defaultTextFontName','Times New Roman');
-% set(0,'defaultUipanelFontName','Times New Roman');
-% 
-% % Compute the optimal configuration to compare the approaches
+%% PLOT THE RESULTS
+
+% Set font type
+set(0,'defaultUicontrolFontName','Times New Roman');
+set(0,'defaultUitableFontName','Times New Roman');
+set(0,'defaultAxesFontName','Times New Roman');
+set(0,'defaultTextFontName','Times New Roman');
+set(0,'defaultUipanelFontName','Times New Roman');
+
+% Compute the optimal configuration to compare the approaches
 % maximumAchievableThroughput = compute_throughput_all_combinations...
 %     (wlans, channelActions, ccaActions, txPowerActions, NOISE_DBM);
-% % Find the best configuration for each wlans and display it
-% for i = 1:size(maximumAchievableThroughput, 1)
-%     bestThroughputConfiguration(i) = sum(maximumAchievableThroughput(i, :));
-%     bestFairnessConfiguration(i) = sum(log(maximumAchievableThroughput(i, :)));
-% end    
-% 
-% for e = 1:size(initialEpsilon, 2)
-%     for i = 1:totalRepetitions
-%         auxArray(i,e) = meanAggregateThroughputEgreedy{i}(e);
-%     end
-% end
-% meanAggregateThroughputPerEpsilon = mean(auxArray, 1);
-% stdAggregateThroughputPerEpsilon = std(auxArray, 1);
+
+
+% Find the best configuration for each wlans and display it
+for i = 1:size(maximumAchievableThroughput, 1)
+    bestThroughputConfiguration(i) = sum(maximumAchievableThroughput(i, :));
+    bestFairnessConfiguration(i) = sum(log(maximumAchievableThroughput(i, :)));
+end    
+
+
+for e = 1:size(initialEpsilon, 2)
+    for i = 1:totalRepetitions
+        auxArray(i,e) = meanAggregateThroughputEgreedy{i}(e);
+    end
+end
+meanAggregateThroughputPerEpsilon = mean(auxArray, 1);
+stdAggregateThroughputPerEpsilon = std(auxArray, 1);
 % 
 % % Maximum value and index:
 % [maxVal, ix] = max(meanAggregateThroughputPerEpsilon(:));
 % disp(['Best epsilon = ' num2str(initialEpsilon(ix))]);
-% 
-% % Plot the aggregated throughput obtained for each epsilon
-% figure('pos', [450 400 500 350])
-% axes;
-% axis([1 20 30 70]);
-% errorbar(initialEpsilon, meanAggregateThroughputPerEpsilon, stdAggregateThroughputPerEpsilon, '-s')
-% hold on
-% xticks(initialEpsilon)
-% % Plot the optimal values
-% [optimal_prop_fairness, ix] = max(bestFairnessConfiguration);
-% [optimal_agg_tpt, ix2] = max(bestThroughputConfiguration);
-% plot(initialEpsilon, agg_tpt_optimal_prop_fairness * ones(1, size(initialEpsilon, 2)), '--', 'linewidth',2);
-% set(gca, 'FontSize', 22)
-% %l = {'\epsilon_{0}', 'Best Configuration'};
-% %legend(l)
-% ylabel('Network Throughput (Mbps)', 'FontSize', 24)
-% xlabel('\epsilon_{0}', 'FontSize', 24)
-% axis([min(initialEpsilon) max(initialEpsilon) 0 1.1 * agg_tpt_optimal_prop_fairness])
-% xticks(initialEpsilon)
-% legend({'Mean agg. throughput', 'Optimal (max. prop. fairness)'})
+
+% Plot the aggregated throughput obtained for each epsilon
+figure('pos', [450 400 500 350])
+axes;
+axis([1 20 30 70]);
+errorbar(initialEpsilon, meanAggregateThroughputPerEpsilon, stdAggregateThroughputPerEpsilon, '-s')
+hold on
+xticks(initialEpsilon)
+% Plot the optimal values
+plot(initialEpsilon, max_pf * ones(1, size(initialEpsilon, 2)), '--', 'linewidth',2);
+set(gca, 'FontSize', 22)
+%l = {'\epsilon_{0}', 'Best Configuration'};
+%legend(l)
+ylabel('Network Throughput (Mbps)', 'FontSize', 24)
+xlabel('\epsilon_{0}', 'FontSize', 24)
+axis([min(initialEpsilon) max(initialEpsilon) 0 1.1 * max_pf])
+xticks(initialEpsilon)
+legend({'Mean agg. throughput', 'Optimal (max. prop. fairness)'})

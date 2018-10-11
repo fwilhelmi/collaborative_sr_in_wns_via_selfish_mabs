@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    ordered_thompson_sampling( wlans, varargin )
+    ordered_thompson_sampling( wlans, upperBoundThroughputPerWlan, varargin )
 % thompson_sampling applies TS to maximize the experienced
 % throughput of a given scenario
 %
@@ -57,13 +57,7 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     end
 
     % Initialize the indexes of the taken action
-    actionIndexPerWlan = initialActionIndexPerWlan;                           
-    
-    % Compute the maximum achievable throughput per WLAN
-    powerMatrix = power_matrix(wlansAux);     
-    upperBoundRewardPerWlan = compute_max_bound_throughput(wlansAux, ...
-        powerMatrix, NOISE_DBM, max(txPowerActions));
-    
+    actionIndexPerWlan = initialActionIndexPerWlan;                              
     selectedArm = actionIndexPerWlan;               % Initialize arm selection for each WLAN by using the initial action
     timesArmHasBeenPlayed = zeros(nWlans, K);       % Initialize the times an arm has been played
     currentAction = zeros(1, nWlans);
@@ -103,12 +97,11 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         %wlan_aux(wlan_ix).CCA = ccaActions(b);
         wlansAux(wlan_ix).TxPower = txPowerActions(c);  
         % Compute the reward with the throughput obtained in the round after applying the action
-        powerMatrix = power_matrix(wlansAux);                
-        tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps  
+        tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps  
         % Update the reward of each WN
         rw = zeros(1, nWlans);
         for wlan_ix_aux = 1 : nWlans
-            rw(wlan_ix_aux) = tptAfterAction(wlan_ix_aux)/((upperBoundRewardPerWlan(wlan_ix_aux)));       
+            rw(wlan_ix_aux) = tptAfterAction(wlan_ix_aux)/((upperBoundThroughputPerWlan(wlan_ix_aux)));       
             estimatedRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
                 (estimatedRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) * ...
                 timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + rw(wlan_ix_aux)) / ...

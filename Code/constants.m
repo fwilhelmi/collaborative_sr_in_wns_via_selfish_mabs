@@ -8,14 +8,9 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-% Optimal values obtained from execution of Experiment_0_compute_optimal_configurations.m
-agg_tpt_optimal_prop_fairness = 891.0714;    % Mbps
-ind_tpt_optimal_prop_fairness = 222.7678;    % Mbps    
-optimal_max_min = 222.7678;
-
 nWlans = 4;                         % Number of WLANs in the map
-totalIterations = 1000;            % Maximum convergence time (one period implies the participation of all WLANs)
-minimumIterationToConsider = 500;  % Iteration from which to consider the obtained results
+totalIterations = 5000;            % Maximum convergence time (one period implies the participation of all WLANs)
+minimumIterationToConsider = 2500;  % Iteration from which to consider the obtained results
 totalScenarios = 100;               % Number of TOTAL repetitions to take the average
 
 % Define the transitory and the permanent intervals of iterations
@@ -24,10 +19,10 @@ permanentInterval = minimumIterationToConsider + 1 : totalIterations;
 
 NOISE_DBM = -100;                   % Floor NOISE_DBM in dBm
 
-nChannels = 2;                      % Number of available channels (from 1 to n_channels)
+nChannels = 4;                      % Number of available channels (from 1 to n_channels)
 channelActions = 1 : nChannels;     % Possible channels
 ccaActions = [-82];                 % CCA levels (dBm)
-txPowerActions = [5 10 15 20];      % Transmit power levels (dBm)
+txPowerActions = [-15 0 15 30];      % Transmit power levels (dBm)
 
 % Each state represents an [i,j,k] combination for indexes on "channels", "cca" and "tx_power"
 possibleActions = 1:(size(channelActions, 2) * ...
@@ -54,19 +49,22 @@ MaxRangeY = 1;
 MaxRangeZ = 1;
 MaxRange = sqrt(3);
 
-% Policies indexes
-RANDOM_POLICY = 0;
-EG_POLICY = 1;
-EXP3_POLICY = 2;
-UCB_POLICY = 3;
-TS_POLICY = 4;
-
 % Update modes of the exploration coefficient (epsilon-greedy)
 UPDATE_MODE_FAST = 0;   % epsilon = initial_epsilon / t 
 UPDATE_MODE_SLOW = 1;   % epsilon = epsilon / sqrt(t)
 
 % Selected update mode (epsilon-greedy)
 updateMode = UPDATE_MODE_SLOW;
+
+% Path-loss model variables
+PLd1=5;             % Path-loss factor
+shadowing = 9.5;    % Shadowing factor
+obstacles = 30;     % Obstacles factor
+alfa = 4.4;         % Propagation model
+%     shadowingmatrix = shadowing*randn(nWlans);       % Shadowing affecting each WLAN
+%     obstaclesmatrix = obstacles*rand(nWlans);        % Obstacles affecting each WLAN
+
+COCHANNEL_INTERFERENCE = true;
 
 % Save constants into current folder
 save('constants.mat');  

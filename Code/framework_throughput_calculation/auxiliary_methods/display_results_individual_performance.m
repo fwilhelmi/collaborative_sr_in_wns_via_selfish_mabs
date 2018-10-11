@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan, ...
-    timesArmHasBeenPlayed, method_name )
+    timesArmHasBeenPlayed, upperBoundThroughputPerWlan, upperBoundAggregatePerformance, method_name )
 % display_results_individual_performance displays the results of experiments for
 % individual performance of each policy (e.g., "Experiment_2_1_individual_performance_EG_parameters_4_WN.m")
 %   INPUT: 
@@ -29,9 +29,6 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     set(0,'defaultAxesFontName','Times New Roman');
     set(0,'defaultTextFontName','Times New Roman');
     set(0,'defaultUipanelFontName','Times New Roman');
-    
-    agg_tpt_optimal_prop_fairness = 891.0714;    % Mbps
-    ind_tpt_optimal_prop_fairness = 222.7678;    % Mbps    
 
     % Compute data to be plotted
     mean_agg_tpt_entire_simulation = mean(sum(tptEvolutionPerWlan(1:totalIterations, :), 2));
@@ -41,9 +38,9 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     mean_fairness_entire_simulation = mean(jains_fairness(tptEvolutionPerWlan(1:totalIterations, :)));
     mean_prop_fairness_entire_simulation = mean(sum(log(tptEvolutionPerWlan(1:totalIterations, :)),2));
     mean_agg_tpt_comparison_optimal_entire_simulation = ...
-        mean_agg_tpt_entire_simulation / agg_tpt_optimal_prop_fairness;
+        mean_agg_tpt_entire_simulation / upperBoundAggregatePerformance;
     mean_ind_tpt_comparison_optimal_entire_simulation = ...
-        mean(mean(tptEvolutionPerWlan(1:totalIterations, :),2)) / ind_tpt_optimal_prop_fairness;
+        mean(mean(tptEvolutionPerWlan(1:totalIterations, :),2)) ./ upperBoundThroughputPerWlan;
     
     % Plot results of the entire simulation
     disp(['------------' newline 'Results (entire simulation):' newline '------------'])
@@ -70,10 +67,10 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
         mean_prop_fairness_last_iterations = mean(sum(log(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations, :)),2));
         % Mean aggregate tpt. / Aggregate throughput (optimal prop. fairness)
         mean_agg_tpt_comparison_optimal_last_iterations = ...
-            mean_agg_tpt_last_iterations / agg_tpt_optimal_prop_fairness;
+            mean_agg_tpt_last_iterations / upperBoundAggregatePerformance;
         % Mean average tpt. / individual throughput (optimal prop. fairness)
         mean_ind_tpt_comparison_optimal_last_iterations = ...
-            mean(mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations, :),2)) / ind_tpt_optimal_prop_fairness;
+            mean(mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations, :),2)) ./ upperBoundThroughputPerWlan;
                 
         disp(['------------' newline 'Results (last iterations):' newline '------------'])
 
@@ -101,7 +98,7 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
         
     end
 
-    n_wlans = size(wlans, 2);
+    num_wlans = size(wlans, 2);
     
     %% Aggregated throughput experienced for each iteration
     figure('pos',[450 400 500 350]);
@@ -114,10 +111,10 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     ylabel('Network Throughput (Mbps)', 'fontsize', 24)
     axis([1 totalIterations 0 1.1 * max(agg_tpt_per_iteration)])    
     hold on
-    h1 = plot(1 : totalIterations, agg_tpt_optimal_prop_fairness * ones(1, totalIterations), 'r--', 'linewidth',2);
+    h1 = plot(1 : totalIterations, num_wlans * upperBoundAggregatePerformance * ones(1, totalIterations), 'r--', 'linewidth',2);
     %legend(h1, {'Optimal (Max. Prop. Fairness)'});
     legend({'Temporal throughput', 'Optimal (Max. Prop. Fairness)'});
-    %text(totalIterations * 0.5 , agg_tpt_optimal_prop_fairness * 1.1, 'Optimal (Max. Prop. Fairness)', 'fontsize', 24)
+    %text(totalIterations * 0.5 , max_pf * 1.1, 'Optimal (Max. Prop. Fairness)', 'fontsize', 24)
     % Save Figure
     fig_name = ['temporal_aggregate_tpt_' method_name];
     savefig(['./Output/' fig_name '.fig'])
@@ -127,12 +124,12 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     fig = figure('pos',[450 400 500 350]);
     axes;
     axis([1 20 30 70]);
-    for i = 1:n_wlans
-        subplot(n_wlans/2, n_wlans/2, i)
+    for i = 1 : num_wlans
+        subplot(num_wlans/2, num_wlans/2, i)
         tpt_per_iteration = tptEvolutionPerWlan(1:totalIterations, i);
         plot(1:totalIterations, tpt_per_iteration);
         hold on
-        plot(1 : totalIterations, ind_tpt_optimal_prop_fairness * ones(1, totalIterations), 'r--', 'linewidth',2);
+        plot(1 : totalIterations, upperBoundThroughputPerWlan(i) * ones(1, totalIterations), 'r--', 'linewidth',2);
         title(['WN ' num2str(i)]);
         set(gca, 'FontSize', 18)
         axis([1 totalIterations 0 1.1 * max(tpt_per_iteration)])
@@ -164,7 +161,7 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     ylabel('Mean throughput (Mbps)','fontsize', 24)
     hold on
     errorbar(mean_tpt_per_wlan, std_per_wlan, '.r');
-    plot(0 : nWlans + 1, ind_tpt_optimal_prop_fairness * ones(1, nWlans + 2), 'r--', 'linewidth',2);
+    plot(0 : nWlans + 1, upperBoundAggregatePerformance * ones(1, nWlans + 2), 'r--', 'linewidth',2);
     % Save Figure
     fig_name = ['mean_tpt_' method_name];
     savefig(['./Output/' fig_name '.fig'])
@@ -175,7 +172,7 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     axes;
     axis([1 20 30 70]);  
     % Print the preferred action per wlan
-    for i=1:n_wlans             
+    for i=1:num_wlans             
         K = size(timesArmHasBeenPlayed, 2);
         subplot(2,2,i);
         bar(1:K, timesArmHasBeenPlayed(i, :)/totalIterations);
@@ -202,25 +199,25 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     savefig(['./Output/' fig_name '.fig'])
     saveas(gcf,['./Output/' fig_name],'epsc')
     
-    %% Histogram experienced throughput (single simulation)
-    figure('pos',[450 400 500 350]);
-    axes;
-    axis([1 20 30 70]);
-    tptEvolutionPerWlanConcat = [tptEvolutionPerWlan(:,1); ...
-        tptEvolutionPerWlan(:,2); tptEvolutionPerWlan(:,3); tptEvolutionPerWlan(:,4);];
-    h = hist(tptEvolutionPerWlanConcat,20);
-    hist(tptEvolutionPerWlanConcat,20);
-    set(gca,'FontSize', 22)
-    xlabel('Individual experienced throughput (Mbps)', 'fontsize', 24)
-    ylabel('Counts', 'fontsize', 24)
-    axis([0 max(max(tptEvolutionPerWlanConcat)) 0 max(h)*1.1])
-    hold on
-    pl = plot(ind_tpt_optimal_prop_fairness * ones(1, round(1.1*max(h))), 1 : round(1.1*max(h)), 'r--', 'linewidth',2);
-    legend(pl, {['Optimal (Max. ' newline 'Prop. Fairness)']});
-    %text(totalIterations * 0.5 , agg_tpt_optimal_prop_fairness * 1.1, 'Optimal (Max. Prop. Fairness)', 'fontsize', 24)
-    % Save Figure
-    fig_name = ['histogram_individual_throughput_' method_name];
-    savefig(['./Output/' fig_name '.fig'])
-    saveas(gcf,['./Output/' fig_name],'epsc')
+%     %% Histogram experienced throughput (single simulation)
+%     figure('pos',[450 400 500 350]);
+%     axes;
+%     axis([1 20 30 70]);
+%     tptEvolutionPerWlanConcat = [tptEvolutionPerWlan(:,1); ...
+%         tptEvolutionPerWlan(:,2); tptEvolutionPerWlan(:,3); tptEvolutionPerWlan(:,4);];
+%     h = hist(tptEvolutionPerWlanConcat,20);
+%     hist(tptEvolutionPerWlanConcat,20);
+%     set(gca,'FontSize', 22)
+%     xlabel('Individual experienced throughput (Mbps)', 'fontsize', 24)
+%     ylabel('Counts', 'fontsize', 24)
+%     axis([0 max(max(tptEvolutionPerWlanConcat)) 0 max(h)*1.1])
+%     hold on
+%     pl = plot(ind_tpt_optimal_prop_fairness * ones(1, round(1.1*max(h))), 1 : round(1.1*max(h)), 'r--', 'linewidth',2);
+%     legend(pl, {['Optimal (Max. ' newline 'Prop. Fairness)']});
+%     %text(totalIterations * 0.5 , max_pf * 1.1, 'Optimal (Max. Prop. Fairness)', 'fontsize', 24)
+%     % Save Figure
+%     fig_name = ['histogram_individual_throughput_' method_name];
+%     savefig(['./Output/' fig_name '.fig'])
+%     saveas(gcf,['./Output/' fig_name],'epsc')
     
 end

@@ -43,19 +43,26 @@ initialEta = 0.6;
 gamma = 0;
 
 % Setup the scenario: generate WLANs and initialize states and actions
-wlan = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
-    
+wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
+
+% Compute the maximum achievable throughput per WLAN
+powerMatrix = power_matrix(wlans);     
+upperBoundThroughputPerWlan = compute_max_bound_throughput(wlans, ...
+    powerMatrix, NOISE_DBM, max(txPowerActions));
+
+load('workspace_throughput_all_combinations.mat')
+
 % Compute the throughput experienced per WLAN at each iteration
-[tpt_evolution_per_wlan_exp3, times_arm_has_been_played_exp3, regret_per_wlan_exp3]  = exp3(wlan, gamma, initialEta);
-[tpt_evolution_per_wlan_oexp3, times_arm_has_been_played_oexp3, regret_per_wlan_oexp3]  = ordered_exp3(wlan, gamma, initialEta);
+[tpt_evolution_per_wlan_exp3, times_arm_has_been_played_exp3, regret_per_wlan_exp3]  = exp3(wlans, gamma, initialEta, upperBoundThroughputPerWlan);
+%[tpt_evolution_per_wlan_oexp3, times_arm_has_been_played_oexp3, regret_per_wlan_oexp3]  = ordered_exp3(wlan, gamma, initialEta, upperBoundThroughputPerWlan);
 
 % Plot the results
-if plotResults
-    display_results_individual_performance(wlan, tpt_evolution_per_wlan_exp3, ...
-        times_arm_has_been_played_exp3, 'EXP3');
-    display_results_individual_performance(wlan, tpt_evolution_per_wlan_oexp3, ...
-        times_arm_has_been_played_oexp3, 'OEXP3');
-end
+%if plotResults
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_exp3, ...
+        times_arm_has_been_played_exp3, upperBoundThroughputPerWlan, max_max_min, 'EXP3');
+%    display_results_individual_performance(wlan, tpt_evolution_per_wlan_oexp3, ...
+%        times_arm_has_been_played_oexp3, upperBoundThroughputPerWlan, max_max_min, 'OEXP3');
+%end
 
 % Save the workspace
 save('./output/simulation_1_2_workspace.mat')

@@ -39,19 +39,29 @@ disp('-----------------------')
 constants
 
 initialEpsilon = 1;
-policy = EG_POLICY;
 
 % Setup the scenario: generate WLANs and initialize states and actions
 wlans = generate_network_3D(nWlans, 'grid', 2, drawMap); % SAFE CONFIGURATION
-    
+
+% Compute the maximum achievable throughput per WLAN
+upperBoundThroughputPerWlan = compute_max_selfish_throughput( wlans );
+
+load('workspace_throughput_all_combinations_cochannel_interference.mat')
+%load('workspace_throughput_all_combinations.mat')
+
 % Compute the throughput experienced per WLAN at each iteration
-[tpt_evolution_per_wlan_eg, times_arm_has_been_played_eg, regret_per_wlan_eg] = egreedy( wlans, initialEpsilon );
-[tpt_evolution_per_wlan_oeg, times_arm_has_been_played_oeg, regret_per_wlan_oeg] = ordered_egreedy( wlans, initialEpsilon );
+[tpt_evolution_per_wlan_eg, times_arm_has_been_played_eg, regret_per_wlan_eg , meanRewardPerAction] = ...
+    egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan );
+[tpt_evolution_per_wlan_oeg, times_arm_has_been_played_oeg, regret_per_wlan_oeg] = ...
+    ordered_egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan );
 
 % Plot the results
+plotResults = true;
 if plotResults
-    display_results_individual_performance(wlans, tpt_evolution_per_wlan_eg, times_arm_has_been_played_eg, 'EG');
-    display_results_individual_performance(wlans, tpt_evolution_per_wlan_oeg, times_arm_has_been_played_oeg, 'OEG');
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_eg, ...
+        times_arm_has_been_played_eg, upperBoundThroughputPerWlan, max_max_min, 'EG');
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_oeg, ...
+        times_arm_has_been_played_oeg, upperBoundThroughputPerWlan, max_max_min, 'OEG');
 end
 
 % Save the workspace

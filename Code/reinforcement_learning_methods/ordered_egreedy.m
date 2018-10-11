@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    ordered_egreedy( wlans, initialEpsilon, varargin )
+    ordered_egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan, varargin )
 % EGREEDY - Given a WN, applies e-greedy to maximize the experienced throughput
 %
 %   OUTPUT: 
@@ -57,15 +57,8 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     % Initialize the indexes of the taken action
     actionIndexPerWlan = initialActionIxPerWlan;                           
     
-    % Compute the maximum achievable throughput per WLAN
-    powerMatrix = power_matrix(wlansAux);     
-    upper_bound_reward_per_wlan = compute_max_bound_throughput(wlansAux, ...
-       powerMatrix, NOISE_DBM, max(txPowerActions));
-    %upperBoundRewardPerWlan = optimal_max_min;
-    
     % Initialize arm selection for each WLAN by using the initial action
-    selectedArm = actionIndexPerWlan;   
-    
+    selectedArm = actionIndexPerWlan;
     % Keep track of current and previous actions for getting the transitions probabilities
     currentAction = zeros(1, nWlans);
     previousAction = selectedArm;
@@ -112,10 +105,10 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         
         % Compute the throughput noticed after applying the action
         powerMatrix = power_matrix(wlansAux);
-        tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps  
+        tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps  
         
         % Update the reward of each WN
-        rw = tptAfterAction./upper_bound_reward_per_wlan;    
+        rw = tptAfterAction./upperBoundThroughputPerWlan;    
                
         for wlan_ix_aux = 1 : nWlans
             rewardPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = rw(wlan_ix_aux);

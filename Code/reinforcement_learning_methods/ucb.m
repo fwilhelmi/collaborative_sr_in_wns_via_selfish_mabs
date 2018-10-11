@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-ucb( wlans, varargin )
+    ucb( wlans, upperBoundThroughputPerWlan, varargin )
 % ucb applies UCB to maximize the experienced throughput of a given scenario
 %
 %   OUTPUT: 
@@ -53,14 +53,9 @@ ucb( wlans, varargin )
         initialActionIxPerWlan(i) = indexes2val(wlansAux(i).Channel, ...
             indexCca, indexTpc, size(channelActions,2), size(ccaActions,2));
     end
+    
     % Initialize the indexes of the taken action
     actionIndexPerWlan = initialActionIxPerWlan;                           
-    
-    % Compute the maximum achievable throughput per WLAN
-    powerMatrix = power_matrix(wlansAux);     
-    upperBoundRewardPerWlan = compute_max_bound_throughput(wlansAux, ...
-        powerMatrix, NOISE_DBM, max(txPowerActions));
-    
     selectedArm = actionIndexPerWlan;              % Initialize arm selection for each WLAN by using the initial action
     timesArmHasBeenPlayed = ones(nWlans, K);   % Initialize the times an arm has been played
     currentAction = zeros(1, nWlans);
@@ -87,13 +82,12 @@ ucb( wlans, varargin )
             %wlan_aux(i).CCA = ccaActions(b);
             wlansAux(order_wlans(w)).TxPower = txPowerActions(c);  
             powerMatrix = power_matrix(wlansAux);
-            tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps   
+            tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps   
             cumulativeRewardPerWlanPerArm(order_wlans(w), order_actions(k)) = ...
-                (tptAfterAction(order_wlans(w))/((upperBoundRewardPerWlan(order_wlans(w)))));
-            throughput = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps 
-            tptExperiencedPerWlan(iteration, order_wlans(w)) = throughput(order_wlans(w));
+                (tptAfterAction(order_wlans(w))/((upperBoundThroughputPerWlan(order_wlans(w)))));
+            tptExperiencedPerWlan(iteration, order_wlans(w)) = tptAfterAction(order_wlans(w));
             meanRewardPerWlanPerArm(order_wlans(w), order_actions(k)) = ...
-                (throughput(order_wlans(w))/((upperBoundRewardPerWlan(order_wlans(w)))));
+                (tptAfterAction(order_wlans(w))/((upperBoundThroughputPerWlan(order_wlans(w)))));
         end
         iteration = iteration + 1;
     end  
@@ -125,24 +119,21 @@ ucb( wlans, varargin )
             wlansAux(order(i)).Channel = a;   
             %wlan_aux(order(i)).CCA = ccaActions(b);
             wlansAux(order(i)).TxPower = txPowerActions(c);  
-            % Compute the throughput noticed after applying the action           
-            powerMatrix = power_matrix(wlansAux);                
-            tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps         
-
-            % Update the reward of each WN
-            rw = zeros(1, nWlans);
-            for wlan_i = 1 : nWlans                                    
-                rw(wlan_i) = (tptAfterAction(wlan_i)/((upperBoundRewardPerWlan(wlan_i))));                                       
-                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
-                    cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
-                meanRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
-                    cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) /...
-                    timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i));                                            
-            end  
- 
-            regretAfterAction = 1 - rw;
-            
         end
+        
+        % Compute the throughput noticed after applying the action           
+        powerMatrix = power_matrix(wlansAux);                
+        tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps         
+        rw = tptAfterAction ./ upperBoundThroughputPerWlan;  
+        for wlan_i = 1 : nWlans                  
+            cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
+                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
+            meanRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
+                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) /...
+                timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i));                                            
+        end  
+
+        regretAfterAction = 1 - rw;
         
         % Store the throughput at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;                        

@@ -8,8 +8,8 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    egreedy( wlans, initialEpsilon, varargin )
+function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan, meanRewardPerAction ] = ...
+    egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan, varargin )
 % EGREEDY - Given a WN, applies e-greedy to maximize the experienced throughput
 %
 %   OUTPUT: 
@@ -54,14 +54,9 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         initialActionIxPerWlan(i) = indexes2val(wlansAux(i).Channel, ...
             indexCca, indexTpc, size(channelActions,2), size(ccaActions,2));
     end
+    
     % Initialize the indexes of the taken action
     actionIndexPerWlan = initialActionIxPerWlan;                           
-    
-    % Compute the maximum achievable throughput per WLAN
-    powerMatrix = power_matrix(wlansAux);     
-    upperBoundThroughputPerWlan = compute_max_bound_throughput(wlansAux, ...
-        powerMatrix, NOISE_DBM, max(txPowerActions));
-    
     % Initialize arm selection for each WLAN by using the initial action
     selectedArm = actionIndexPerWlan;             
     % Keep track of current and previous actions for getting the transitions probabilities
@@ -75,6 +70,8 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     rewardPerArm = zeros(nWlans, K); 
     % Initialize the regret experienced by each WLAN
     regretAfterAction = zeros(1, nWlans);
+    
+    cumulative_reward_per_action = zeros(nWlans, K);
     
     % Initialize epsilon
     epsilon = initialEpsilon; 
@@ -109,22 +106,26 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             % Update WN configuration
             wlansAux(order(i)).Channel = a;   
             %wlan_aux(order(i)).CCA = ccaActions(b);
-            wlansAux(order(i)).TxPower = txPowerActions(c); 
-            % Compute the throughput noticed after applying the action
-            powerMatrix = power_matrix(wlansAux);
-            tptAfterAction = compute_throughput_from_sinr(wlansAux, powerMatrix, NOISE_DBM);  % bps          
-            
-            % Update the reward of each WN
-            rw = zeros(1, nWlans);
-            for wlan_i = 1 : nWlans
-                rw(wlan_i) = tptAfterAction(wlan_i) / upperBoundThroughputPerWlan(wlan_i);
-                rewardPerArm(wlan_i, selectedArm(wlan_i)) = rw(wlan_i);
-            end   
-            
-            % Update the regret experienced by each WN
-            regretAfterAction = 1 - rw;
-            
-        end
+            wlansAux(order(i)).TxPower = txPowerActions(c);                        
+        end 
+        
+        % Compute the throughput noticed after applying the action
+        tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps     
+        % Update the reward of each WN
+        rw = tptAfterAction ./ upperBoundThroughputPerWlan;            
+        for wlan_i = 1 : nWlans                
+            rewardPerArm(wlan_i, selectedArm(wlan_i)) = rw(wlan_i);
+            cumulative_reward_per_action(wlan_i, selectedArm(wlan_i)) =  ...
+                cumulative_reward_per_action(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
+        end   
+
+        % Update the regret experienced by each WN
+        regretAfterAction = 1 - rw;  
+       
+%         disp(['Iteration ' num2str(iteration)])
+%         selectedArm
+%         tptAfterAction
+%         rewardPerArm        
         
         % Store the throughput and the regret at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;        % bps
@@ -143,6 +144,14 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         iteration = iteration + 1; 
     
     end
+        
+    for wlan_i = 1 : nWlans        
+        for action_ix = 1 : K
+            meanRewardPerAction(wlan_i, action_ix) =  ...
+                cumulative_reward_per_action(wlan_i, action_ix)...
+                / timesArmHasBeenPlayed(wlan_i, action_ix);
+        end
+    end    
         
     %% PRINT INFORMATION REGARDING ACTION SELECTION
     if printInfo    

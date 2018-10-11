@@ -254,12 +254,16 @@ for i = 1 : size(wlansSizes, 2)
     h_oucb = hist(meanThroughputPerWlanOUcbConcat{i}(:), 30);
     h_ots = hist(meanThroughputPerWlanOTsConcat{i}(:), 30);
 
-    max_counts = max(max([h_eg h_exp3 h_ucb h_ts])); 
+    max_counts = max(max(max([h_eg h_exp3 h_ucb h_ts])), max(max([h_oeg h_oexp3 h_oucb h_ots]))); 
 
     max_tpt = max(max([meanThroughputPerWlanEgreedyConcat{i}(:) ...
         meanThroughputPerWlanExp3Concat{i}(:), ...
         meanThroughputPerWlanUcbConcat{i}(:), ...
-        meanThroughputPerWlanTsConcat{i}(:)]));
+        meanThroughputPerWlanTsConcat{i}(:), ...
+        meanThroughputPerWlanOEgreedyConcat{i}(:) ...
+        meanThroughputPerWlanOExp3Concat{i}(:), ...
+        meanThroughputPerWlanOUcbConcat{i}(:), ...
+        meanThroughputPerWlanOTsConcat{i}(:)]));
 
     fig = figure('pos',[450 400 500 350]);
     axes;
@@ -319,6 +323,7 @@ for i = 1 : size(wlansSizes, 2)
 
     % Legend
     legend('Async.','Sync.')
+    %legend('Default','More actions')
     % Set Axes labels
     AxesH    = findobj(fig, 'Type', 'Axes');       
     % Y-label

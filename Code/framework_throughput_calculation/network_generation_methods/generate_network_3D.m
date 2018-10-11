@@ -66,9 +66,9 @@ function wlans = generate_network_3D(nWlans, topology, stasPosition, printMap)
     ];
     
     for j=1:nWlans 
-        wlans(j).TxPower = datasample(txPowerActions, 1);       % Assign Tx Power
-        wlans(j).CCA = datasample(ccaActions, 1);               % Assign CCA
-        wlans(j).Channel = round((nChannels-1).*rand() + 1);    % mod(j,nChannels/2) + 1;   % Assign channels
+        wlans(j).TxPower = max(txPowerActions); %datasample(txPowerActions, 1);       % Assign Tx Power
+        wlans(j).CCA = min(ccaActions); %datasample(ccaActions, 1);               % Assign CCA
+        wlans(j).Channel = 1;%round((nChannels-1).*rand() + 1);    % mod(j,nChannels/2) + 1;   % Assign channels
         wlans(j).BW = 20e6; 
         if (topology == 'ring')
             wlans(j).x = posX(j);
