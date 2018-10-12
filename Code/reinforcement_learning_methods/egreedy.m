@@ -20,7 +20,7 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
 %       * wlan - wlan object containing information about all the WLANs
 %       * initialEpsilon - initial exploration coefficient
 
-    constants
+    load('constants.mat')
     
     try
         if size(varargin, 2) == 3
@@ -68,20 +68,15 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     timesArmHasBeenPlayed = zeros(nWlans, K);     
     % Initialize the mean reward obtained by each WLAN for each arm
     rewardPerArm = zeros(nWlans, K); 
-    % Initialize the regret experienced by each WLAN
-    regretAfterAction = zeros(1, nWlans);
     
     cumulative_reward_per_action = zeros(nWlans, K);
     
     % Initialize epsilon
     epsilon = initialEpsilon; 
    
-    %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME            
-  
+    %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME       
     iteration = 1;
-
-    while(iteration < totalIterations+1) 
-
+    while(iteration < totalIterations + 1) 
         % Assign turns to WLANs randomly 
         order = randperm(nWlans);  
         % Iterate sequentially for each agent in the random order   
@@ -97,40 +92,34 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             previousAction(order(i)) = currentAction(order(i));  
             % Update the transitions counter
             transitionsCounter(order(i), ix) = transitionsCounter(order(i), ix) + 1;  
-            % Update the times WN has selected the current action
-            timesArmHasBeenPlayed(order(i), selectedArm(order(i))) = ...
-                timesArmHasBeenPlayed(order(i), selectedArm(order(i))) + 1;
             % Find channel and tx power of the current action
             [a, ~, c] = val2indexes(selectedArm(order(i)), ...
                 size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
             % Update WN configuration
             wlansAux(order(i)).Channel = a;   
-            %wlan_aux(order(i)).CCA = ccaActions(b);
-            wlansAux(order(i)).TxPower = txPowerActions(c);                        
+            wlansAux(order(i)).TxPower = txPowerActions(c);
         end 
         
         % Compute the throughput noticed after applying the action
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps     
         % Update the reward of each WN
         rw = tptAfterAction ./ upperBoundThroughputPerWlan;            
-        for wlan_i = 1 : nWlans                
+        for wlan_i = 1 : nWlans      
+            % Update the times WN has selected the current action
+            timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) = ...
+                timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) + 1;
             rewardPerArm(wlan_i, selectedArm(wlan_i)) = rw(wlan_i);
             cumulative_reward_per_action(wlan_i, selectedArm(wlan_i)) =  ...
                 cumulative_reward_per_action(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
-        end   
+        end  
 
-        % Update the regret experienced by each WN
-        regretAfterAction = 1 - rw;  
-       
 %         disp(['Iteration ' num2str(iteration)])
 %         selectedArm
 %         tptAfterAction
-%         rewardPerArm        
-        
+%         rewardPerArm    
         % Store the throughput and the regret at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;        % bps
-        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
-        
+        regretExperiencedPerWlan(iteration, :) = (1 - rw);        
         % Update the exploration coefficient according to the inputted mode
         if updateMode == UPDATE_MODE_FAST
             epsilon = initialEpsilon / iteration;    
@@ -138,11 +127,9 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             epsilon = initialEpsilon / sqrt(iteration);   
         else
             disp(['updateModeEpsilon = ' num2str(updateModeEpsilon) ' does not exist!'])
-        end
-        
+        end        
         % Increase the number of iterations
-        iteration = iteration + 1; 
-    
+        iteration = iteration + 1;     
     end
         
     for wlan_i = 1 : nWlans        

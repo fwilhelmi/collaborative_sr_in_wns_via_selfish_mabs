@@ -23,20 +23,26 @@ function optimalThroughputPerWlan = compute_max_selfish_throughput( wlans )
 
     wlans_aux = wlans;
     num_wlans = size(wlans_aux, 2);
-    optimalThroughputPerWlan = zeros(1, num_wlans);    
     
     % Iterate for each WLAN
+%     for i = 1 : num_wlans
+%         for j = 1 : num_wlans
+%             if j ~= i
+%                 wlans_aux(j).TxPower = min(txPowerActions);
+%                 wlans_aux(j).Channel = max(channelActions);
+%             end
+%         end
+%         wlans_aux(i).TxPower = max(txPowerActions);
+%         wlans_aux(i).Channel = min(channelActions);
+%         tpt = compute_throughput_from_sinr(wlans_aux, NOISE_DBM); % Mbps
+%         optimalThroughputPerWlan(i) = tpt(i);
+%     end
+
     for i = 1 : num_wlans
-        for j = 1 : num_wlans
-            if j ~= i
-                wlans_aux(j).TxPower = min(txPowerActions);
-                wlans_aux(j).Channel = max(channelActions);
-            end
-        end
         wlans_aux(i).TxPower = max(txPowerActions);
-        wlans_aux(i).Channel = min(channelActions);
-        tpt = compute_throughput_from_sinr(wlans_aux, NOISE_DBM); % Mbps
-        optimalThroughputPerWlan(i) = tpt(i);
     end
+    powMatrix = power_matrix(wlans_aux);
+    snr_dbm = powMatrix - NOISE_DBM;
+    optimalThroughputPerWlan = compute_theoretical_capacity(wlans_aux(1).BW, diag(snr_dbm)') / 1e6; % Mbps
     
 end

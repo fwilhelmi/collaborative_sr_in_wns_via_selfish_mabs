@@ -19,7 +19,7 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
 %   INPUT: 
 %       * wlan - wlan object containing information about all the WLANs
 
-    constants
+    load('constants.mat')
     
     try
         if size(varargin, 2) == 3
@@ -47,10 +47,10 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
 
     % Find the index of the initial action taken by each WLAN
     initialActionIxPerWlan = zeros(1, nWlans);
-    for i=1:nWlans
-        [~,indexCca] = find(ccaActions==wlansAux(i).CCA);
-        [~,indexTpc] = find(txPowerActions==wlansAux(i).TxPower);
-        initialActionIxPerWlan(i) = indexes2val(wlansAux(i).Channel, ...
+    for w = 1 : nWlans
+        [~,indexCca] = find(ccaActions==wlansAux(w).CCA);
+        [~,indexTpc] = find(txPowerActions==wlansAux(w).TxPower);
+        initialActionIxPerWlan(w) = indexes2val(wlansAux(w).Channel, ...
             indexCca, indexTpc, size(channelActions,2), size(ccaActions,2));
     end
     
@@ -63,106 +63,103 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     transitionsCounter = zeros(nWlans, K^2);
     cumulativeRewardPerWlanPerArm = zeros(nWlans, K);     % Initialize the cumulative reward obtained by each WLAN for each arm
     meanRewardPerWlanPerArm = zeros(nWlans, K);           % Initialize the mean reward obtained by each WLAN for each arm
-   % Initialize the regret experienced by each WLAN
-    regretAfterAction = zeros(1, nWlans);     
 
     %% INITIALIZE THE PAYOFF OF EACH ARM    
     
     iteration = 1;
     
     %disp(['WLAN ' num2str(w)])
-    order_actions = randperm(K);  
+    order_actions = zeros(nWlans, K);
+    for w = 1 : nWlans
+        order_actions(w, :) = randperm(K); 
+    end
+    
     % for each action k in K 
     for k = 1 : K       
         % for each WLAN w in nWlans
-        order_wlans = randperm(nWlans);  
-        for w = 1 : nWlans              
-            [a, ~, c] = val2indexes(order_actions(k), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
-            wlansAux(order_wlans(w)).Channel = a;   
-            %wlan_aux(i).CCA = ccaActions(b);
-            wlansAux(order_wlans(w)).TxPower = txPowerActions(c);  
-            powerMatrix = power_matrix(wlansAux);
-            tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps   
-            cumulativeRewardPerWlanPerArm(order_wlans(w), order_actions(k)) = ...
-                (tptAfterAction(order_wlans(w))/((upperBoundThroughputPerWlan(order_wlans(w)))));
-            tptExperiencedPerWlan(iteration, order_wlans(w)) = tptAfterAction(order_wlans(w));
-            meanRewardPerWlanPerArm(order_wlans(w), order_actions(k)) = ...
-                (tptAfterAction(order_wlans(w))/((upperBoundThroughputPerWlan(order_wlans(w)))));
+        for w = 1 : nWlans   
+            selectedArm(w) = order_actions(w,k);
+            [a, ~, c] = val2indexes(selectedArm(w), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
+            wlansAux(w).Channel = a;   
+            wlansAux(w).TxPower = txPowerActions(c);              
+        end
+        tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps  
+        for w = 1 : nWlans
+            cumulativeRewardPerWlanPerArm(w, order_actions(w,k)) = ...
+                (tptAfterAction(w)/((upperBoundThroughputPerWlan(w))));
+            tptExperiencedPerWlan(iteration, w) = tptAfterAction(w);
+            meanRewardPerWlanPerArm(w, order_actions(w,k)) = ...
+                (tptAfterAction(w)/((upperBoundThroughputPerWlan(w))));
         end
         iteration = iteration + 1;
     end  
-    selectedArm(:) = K; 
-        
+    
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME                 
     while(iteration < totalIterations + 1) 
-        % Assign turns to WLANs randomly 
-        order = randperm(nWlans);  
-        % Iterate sequentially for each agent in the random order 
-        for i = 1 : nWlans                  
+        % Iterate sequentially for each agent in the random order
+        order = randperm(nWlans);
+        for w = 1 : nWlans                  
             % Select an action according to the policy
-            selectedArm(order(i)) = select_action_ucb(meanRewardPerWlanPerArm(order(i),:), ...
-                iteration - K, timesArmHasBeenPlayed(order(i),:));   
+            selectedArm(order(w)) = select_action_ucb(meanRewardPerWlanPerArm(order(w), :), ...
+                iteration - K, timesArmHasBeenPlayed(order(w), :));   
             % Update the current action
-            currentAction(order(i)) = selectedArm(order(i));
+            currentAction(order(w)) = selectedArm(order(w));
             % Find the index of the current and the previous action in allCombs
-            ix = find(allCombs(:,1) == previousAction(order(i)) ...
-                & allCombs(:,2) == currentAction(order(i)));
+            ix = find(allCombs(:,1) == previousAction(order(w)) ...
+                & allCombs(:,2) == currentAction(order(w)));
             % Update the previous action
-            previousAction(order(i)) = currentAction(order(i));       
+            previousAction(order(w)) = currentAction(order(w));       
             % Update the transitions counter
-            transitionsCounter(order(i), ix) = transitionsCounter(order(i), ix) + 1;                                
+            transitionsCounter(order(w), ix) = transitionsCounter(order(w), ix) + 1;                                
             % Update the times WN has selected the current action
-            timesArmHasBeenPlayed(order(i), selectedArm(order(i))) = timesArmHasBeenPlayed(order(i), selectedArm(order(i))) + 1;                
+            %timesArmHasBeenPlayed(w, selectedArm(w)) = timesArmHasBeenPlayed(w, selectedArm(w)) + 1;                
             % Find channel and tx power of the current action
-            [a, ~, c] = val2indexes(selectedArm(order(i)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
+            [a, ~, c] = val2indexes(selectedArm(order(w)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
             % Update WN configuration
-            wlansAux(order(i)).Channel = a;   
-            %wlan_aux(order(i)).CCA = ccaActions(b);
-            wlansAux(order(i)).TxPower = txPowerActions(c);  
-        end
+            wlansAux(order(w)).Channel = a;   
+            wlansAux(order(w)).TxPower = txPowerActions(c);        
+        end        
         
         % Compute the throughput noticed after applying the action           
-        powerMatrix = power_matrix(wlansAux);                
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps         
-        rw = tptAfterAction ./ upperBoundThroughputPerWlan;  
-        for wlan_i = 1 : nWlans                  
-            cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
-                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
-            meanRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
-                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) /...
-                timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i));                                            
+        rw = tptAfterAction ./ upperBoundThroughputPerWlan;         
+        % Update the mean reward experienced by each WLAN             
+        for w_aux = 1 : nWlans       
+            % Update the times WN has selected the current action
+            timesArmHasBeenPlayed(w_aux, selectedArm(w_aux)) = timesArmHasBeenPlayed(w_aux, selectedArm(w_aux)) + 1; 
+            cumulativeRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) = ...
+                cumulativeRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) + rw(w_aux);
+            meanRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) = ...
+                cumulativeRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) /...
+                timesArmHasBeenPlayed(w_aux, selectedArm(w_aux));                                            
         end  
-
-        regretAfterAction = 1 - rw;
         
         % Store the throughput at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;                        
-        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
-
+        regretExperiencedPerWlan(iteration, :) = (1 - rw);
         % Increase the number of 'learning iterations' of a WLAN
-        iteration = iteration + 1; 
-        
+        iteration = iteration + 1;         
     end
     
     %% PRINT RESULTS
     if printInfo 
         % Print the preferred action per wlan
-        for i = 1 : nWlans
-            [~, ix] = max(meanRewardPerWlanPerArm(i, :));
+        for w = 1 : nWlans
+            [~, ix] = max(meanRewardPerWlanPerArm(w, :));
             [a, ~, c] = val2indexes(possibleActions(ix), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));  
-            disp(['   * WLAN' num2str(i) ':'])
+            disp(['   * WLAN' num2str(w) ':'])
             disp(['       - Channel:' num2str(a)])
             disp(['       - TPC:' num2str(txPowerActions(c))])
         end
         % Print the preferred action per wlan
-        for i = 1 : nWlans    
-            timesArmHasBeenPlayed(i, :)/totalIterations
-            [~, ix] = max(meanRewardPerWlanPerArm(i, :));
+        for w = 1 : nWlans    
+            timesArmHasBeenPlayed(w, :)/totalIterations
+            [~, ix] = max(meanRewardPerWlanPerArm(w, :));
             [a, ~, c] = val2indexes(possibleActions(ix), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));  
-            disp(['   * WN' num2str(i) ':'])
+            disp(['   * WN' num2str(w) ':'])
             disp(['       - Channel:' num2str(a)])
             disp(['       - TPC:' num2str(txPowerActions(c))])
-            a = transitionsCounter(i,:);
+            a = transitionsCounter(w,:);
             % Max value
             [val1, ix1] = max(a);
             [ch1_1, ~, x] = val2indexes(possibleActions(allCombs(ix1,1)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2)); 

@@ -26,13 +26,13 @@ function throughputPerWlan = compute_throughput_from_sinr( wlans, noise )
     % Compute the power matrix
     powerStaFromAp = power_matrix(wlans);
     % Compute the interference experienced per WLAN
-    interference_per_wlan = compute_interference_per_wlan(wlans, powerStaFromAp); %dBm 
-    interference_plus_noise = interference_per_wlan + db2pow(noise);
+    interference_per_wlan_mw = compute_interference_per_wlan(wlans, powerStaFromAp); %dBm 
+    interference_plus_noise = pow2db(interference_per_wlan_mw + db2pow(noise));
     for i = 1 : num_wlans
         % Compute the SINR per WLAN                   
-        sinr_dbm(i) = pow2db(db2pow(powerStaFromAp(i,i)) / interference_plus_noise(i)); % dBm
+        sinr_dbm(i) = powerStaFromAp(i,i) - interference_plus_noise(i); % dBm
         % Compute the tpt of each WLAN according to the sensed interferences
-        throughputPerWlan(i) = compute_theoretical_capacity(wlans(i).BW, db2pow(sinr_dbm(i))) / 1e6; % Mbps     
+        throughputPerWlan(i) = compute_theoretical_capacity(wlans(i).BW, sinr_dbm(i)) / 1e6; % Mbps     
     end
         
 end

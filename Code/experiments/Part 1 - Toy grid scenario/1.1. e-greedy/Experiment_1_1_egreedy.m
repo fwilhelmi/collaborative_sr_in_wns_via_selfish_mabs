@@ -23,14 +23,6 @@
 clc
 clear all
 
-% Add paths to methods folders
-addpath(genpath('framework_throughput_calculation/power_management_methods/'));
-addpath(genpath('framework_throughput_calculation/throughput_calculation_methods/'));
-addpath(genpath('framework_throughput_calculation/network_generation_methods/'));
-addpath(genpath('framework_throughput_calculation/auxiliary_methods/'));
-addpath(genpath('reinforcement_learning_methods/'));
-addpath(genpath('reinforcement_learning_methods/action_selection_methods/'));
-
 disp('-----------------------')
 disp('SIM 1_1: e-greedy')
 disp('-----------------------')
@@ -46,17 +38,31 @@ wlans = generate_network_3D(nWlans, 'grid', 2, drawMap); % SAFE CONFIGURATION
 % Compute the maximum achievable throughput per WLAN
 upperBoundThroughputPerWlan = compute_max_selfish_throughput( wlans );
 
-load('workspace_throughput_all_combinations_cochannel_interference.mat')
-%load('workspace_throughput_all_combinations.mat')
+load('workspace_throughput_all_combinations_toy_scenario.mat')
+
+% Find the best configuration for each WLAN and display it
+for i = 1 : size(throughputPerConfiguration, 1)
+    agg_tpt(i) = sum(throughputPerConfiguration(i,:));
+    fairness(i) = jains_fairness(throughputPerConfiguration(i,:));
+    prop_fairness(i) = sum(log(throughputPerConfiguration(i,:)));
+    max_min(i) = min(throughputPerConfiguration(i,:));
+end    
+
+% Proportional fairness
+[val, ix] = max(prop_fairness);
+max_pf = agg_tpt(ix);    
+% Aggregate throughput
+[max_agg, ix2] = max(agg_tpt);
+% Max-min throughput
+[max_max_min, ix3] = max(max_min);
 
 % Compute the throughput experienced per WLAN at each iteration
 [tpt_evolution_per_wlan_eg, times_arm_has_been_played_eg, regret_per_wlan_eg , meanRewardPerAction] = ...
     egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan );
 [tpt_evolution_per_wlan_oeg, times_arm_has_been_played_oeg, regret_per_wlan_oeg] = ...
-    ordered_egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan );
+    ordered_egreedy_cumulative( wlans, initialEpsilon, upperBoundThroughputPerWlan );
 
 % Plot the results
-plotResults = true;
 if plotResults
     display_results_individual_performance(wlans, tpt_evolution_per_wlan_eg, ...
         times_arm_has_been_played_eg, upperBoundThroughputPerWlan, max_max_min, 'EG');

@@ -20,7 +20,7 @@ thompson_sampling( wlans, upperBoundThroughputPerWlan, varargin )
 %   INPUT: 
 %       * wlan - wlan object containing information about all the WLANs
 
-    constants
+    load('constants.mat')
     
     try
         if size(varargin, 2) == 3
@@ -95,8 +95,7 @@ thompson_sampling( wlans, upperBoundThroughputPerWlan, varargin )
                 size(channelActions, 2), size(ccaActions, 2), size(txPowerActions, 2));
             % Update WN configuration
             wlansAux(order(i)).Channel = a;   
-            %wlan_aux(order(i)).CCA = ccaActions(b);
-            wlansAux(order(i)).TxPower = txPowerActions(c);              
+            wlansAux(order(i)).TxPower = txPowerActions(c);
         end
         
         % Compute the reward with the throughput obtained in the round after applying the action
@@ -117,12 +116,10 @@ thompson_sampling( wlans, upperBoundThroughputPerWlan, varargin )
             timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) = ...
                 timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) + 1;  
         end 
-
-        regretAfterAction = 1 - rw;
         
         % Store the throughput at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;
-        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
+        regretExperiencedPerWlan(iteration, :) = (1 - rw);
 
         % Increase the number of 'learning iterations' of a WLAN
         iteration = iteration + 1; 

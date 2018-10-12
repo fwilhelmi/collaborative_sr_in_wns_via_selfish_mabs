@@ -22,7 +22,7 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
 %       * gamma - weigths regulator EXP3
 %       * eta - learning rate EXP3
 
-    constants
+    load('constants.mat')
     
     try
         if size(varargin, 2) == 3
@@ -66,8 +66,6 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
     transitionsCounter = zeros(nWlans, K^2);    % Initialize the transitions counter   
     armsProbabilities = (1/K)*ones(nWlans, K);       % Initialize arms probabilities
     estimated_reward = zeros(1, nWlans);        % Initialize the estimated reward for each WN
-    % Initialize the regret experienced by each WLAN
-    regretAfterAction = zeros(1, nWlans);
     
     % Initialize the learning rate
     eta = initialEta;
@@ -76,14 +74,10 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME           
     iteration = 1;    
     while(iteration < totalIterations + 1) 
-
         % Assign turns to WLANs randomly 
-        order = randperm(nWlans);  
-                
-        for i = 1 : nWlans % Iterate sequentially for each agent in the random order   
-     
-            wlan_ix = order(i);
-            
+        order = randperm(nWlans);                  
+        for i = 1 : nWlans % Iterate sequentially for each agent in the random order        
+            wlan_ix = order(i);            
             % Update arms probabilities according to weights      
             for k = 1 : K
                 armsProbabilities(wlan_ix, k) = (1 - gamma) * ...
@@ -93,8 +87,7 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
                 if isnan(armsProbabilities(wlan_ix, k))
                     armsProbabilities(wlan_ix, k) = 1/K;
                 end
-            end             
-                     
+            end      
             % Draw an action according to probabilites distribution
             selectedArm(wlan_ix) = randsample(1:K, 1, true, armsProbabilities(wlan_ix,:));  
             % Find the index of the current and the previous action in allCombs
@@ -111,13 +104,10 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
             wlansAux(wlan_ix).Channel = a;   
             wlansAux(wlan_ix).TxPower = txPowerActions(c);  
         end 
-        
         % Compute the reward with the throughput obtained in the round after applying the action
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps    
         % Update the reward of each WN
-        rw = tptAfterAction ./ upperBoundThroughputPerWlan;
-        regretAfterAction = 1 - rw;        
-        
+        rw = tptAfterAction ./ upperBoundThroughputPerWlan;    
         for wlan_i = 1 : nWlans           
             % Update the estimated reward
             estimated_reward(wlan_i) = (rw(wlan_i) / ...
@@ -132,18 +122,16 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
                         weightsPerArm(wlan_i, k) = weightsPerArm(wlan_i, k)^...
                             (eta / previousEta) * exp((eta * estimated_reward(wlan_i)));
                     else
-    %                         weightsPerArm(wlan_ix, k) = ...
-    %                             weightsPerArm(wlan_ix, k)^(eta / previousEta);
+                            weightsPerArm(wlan_ix, k) = ...
+                                weightsPerArm(wlan_ix, k)^(eta / previousEta);
                     end
                  end
                  weightsPerArm(wlan_i, k) = max( weightsPerArm(wlan_i, k), 1e-6 );
             end
-        end
-        
+        end        
         % Store the throughput at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;
-        regretExperiencedPerWlan(iteration, :) = regretAfterAction;
-        
+        regretExperiencedPerWlan(iteration, :) = (1 - rw);        
         % Update the learning rate according to the "update mode"
         previousEta = eta;
         if updateMode == UPDATE_MODE_FAST
@@ -152,8 +140,7 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
             eta = initialEta / sqrt(iteration);   
         else
             % eta remains constant	
-        end   
-        
+        end           
         % Increase the number of 'learning iterations' of a WLAN
         iteration = iteration + 1;     
     end

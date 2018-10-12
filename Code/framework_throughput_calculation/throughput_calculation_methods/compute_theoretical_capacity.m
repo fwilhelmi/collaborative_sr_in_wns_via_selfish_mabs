@@ -17,6 +17,10 @@ function C = compute_theoretical_capacity(B, sinr)
 %   * B - Available Bandwidth (Hz) 
 %   * sinr - Signal to Interference plus Noise Ratio (-)
 
-    C = B * log2(1 + sinr);
+    if sinr < 0 
+        C = 0;
+    else
+        C = B * log2(1 + sinr);
+    end
 
 end

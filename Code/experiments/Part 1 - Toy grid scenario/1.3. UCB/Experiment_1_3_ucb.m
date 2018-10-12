@@ -38,27 +38,43 @@ disp('-----------------------')
 % Generate constants from 'constants.m'
 constants
 
-load('workspace_throughput_all_combinations.mat')
+load('throughput_per_configuration_cochannel_interference_on.mat')
+%load('throughput_per_configuration_cochannel_interference_off.mat')
+% Find the best configuration for each WLAN and display it
+for i = 1 : size(throughputPerConfiguration, 1)
+    agg_tpt(i) = sum(throughputPerConfiguration(i,:));
+    fairness(i) = jains_fairness(throughputPerConfiguration(i,:));
+    prop_fairness(i) = sum(log(throughputPerConfiguration(i,:)));
+    max_min(i) = min(throughputPerConfiguration(i,:));
+end    
+
+% Proportional fairness
+[val, ix] = max(prop_fairness);
+max_pf = agg_tpt(ix);    
+% Aggregate throughput
+[max_agg, ix2] = max(agg_tpt);
+% Max-min throughput
+[max_max_min, ix3] = max(max_min);
 
 % Setup the scenario: generate WLANs and initialize states and actions
 wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
 
 % Compute the maximum achievable throughput per WLAN
-powerMatrix = power_matrix(wlans);     
-upperBoundThroughputPerWlan = compute_max_bound_throughput(wlans, ...
-    powerMatrix, NOISE_DBM, max(txPowerActions));
+upperBoundThroughputPerWlan = compute_max_selfish_throughput( wlans );
     
 % Compute the throughput experienced per WLAN at each iteration
-[tpt_evolution_per_wlan_ucb, times_arm_has_been_played_ucb, regret_per_wlan_ucb] = ucb(wlans, upperBoundThroughputPerWlan);
-%[tpt_evolution_per_wlan_oucb, times_arm_has_been_played_oucb, regret_per_wlan_oucb] = ordered_ucb(wlans, upperBoundThroughputPerWlan);
+[tpt_evolution_per_wlan_ucb, times_arm_has_been_played_ucb, regret_per_wlan_ucb] = ...
+    ucb(wlans, upperBoundThroughputPerWlan);
+[tpt_evolution_per_wlan_oucb, times_arm_has_been_played_oucb, regret_per_wlan_oucb] = ...
+    ordered_ucb(wlans, upperBoundThroughputPerWlan);
 
 % Plot the results
-%if plotResults
+if plotResults
     display_results_individual_performance(wlans, tpt_evolution_per_wlan_ucb, ...
         times_arm_has_been_played_ucb, upperBoundThroughputPerWlan, max_max_min, 'UCB');
-%    display_results_individual_performance(wlans, tpt_evolution_per_wlan_oucb, ...
-%        times_arm_has_been_played_oucb, upperBoundThroughputPerWlan, max_max_min, 'OUCB');
-%end
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_oucb, ...
+        times_arm_has_been_played_oucb, upperBoundThroughputPerWlan, max_max_min, 'OUCB');
+end
 
 % Save the workspace
 save('./Output/simulation_1_3_workspace.mat')
