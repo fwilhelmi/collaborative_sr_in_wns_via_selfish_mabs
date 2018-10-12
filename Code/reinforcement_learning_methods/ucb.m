@@ -47,10 +47,10 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
 
     % Find the index of the initial action taken by each WLAN
     initialActionIxPerWlan = zeros(1, nWlans);
-    for w = 1 : nWlans
-        [~,indexCca] = find(ccaActions==wlansAux(w).CCA);
-        [~,indexTpc] = find(txPowerActions==wlansAux(w).TxPower);
-        initialActionIxPerWlan(w) = indexes2val(wlansAux(w).Channel, ...
+    for wlan_i = 1 : nWlans
+        [~,indexCca] = find(ccaActions==wlansAux(wlan_i).CCA);
+        [~,indexTpc] = find(txPowerActions==wlansAux(wlan_i).TxPower);
+        initialActionIxPerWlan(wlan_i) = indexes2val(wlansAux(wlan_i).Channel, ...
             indexCca, indexTpc, size(channelActions,2), size(ccaActions,2));
     end
     
@@ -70,26 +70,26 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     
     %disp(['WLAN ' num2str(w)])
     order_actions = zeros(nWlans, K);
-    for w = 1 : nWlans
-        order_actions(w, :) = randperm(K); 
+    for wlan_i = 1 : nWlans
+        order_actions(wlan_i, :) = randperm(K); 
     end
     
     % for each action k in K 
     for k = 1 : K       
         % for each WLAN w in nWlans
-        for w = 1 : nWlans   
-            selectedArm(w) = order_actions(w,k);
-            [a, ~, c] = val2indexes(selectedArm(w), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
-            wlansAux(w).Channel = a;   
-            wlansAux(w).TxPower = txPowerActions(c);              
+        for wlan_i = 1 : nWlans   
+            selectedArm(wlan_i) = order_actions(wlan_i,k);
+            [a, ~, c] = val2indexes(selectedArm(wlan_i), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
+            wlansAux(wlan_i).Channel = a;   
+            wlansAux(wlan_i).TxPower = txPowerActions(c);              
         end
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps  
-        for w = 1 : nWlans
-            cumulativeRewardPerWlanPerArm(w, order_actions(w,k)) = ...
-                (tptAfterAction(w)/((upperBoundThroughputPerWlan(w))));
-            tptExperiencedPerWlan(iteration, w) = tptAfterAction(w);
-            meanRewardPerWlanPerArm(w, order_actions(w,k)) = ...
-                (tptAfterAction(w)/((upperBoundThroughputPerWlan(w))));
+        for wlan_i = 1 : nWlans
+            cumulativeRewardPerWlanPerArm(wlan_i, order_actions(wlan_i,k)) = ...
+                (tptAfterAction(wlan_i)/((upperBoundThroughputPerWlan(wlan_i))));
+            tptExperiencedPerWlan(iteration, wlan_i) = tptAfterAction(wlan_i);
+            meanRewardPerWlanPerArm(wlan_i, order_actions(wlan_i,k)) = ...
+                (tptAfterAction(wlan_i)/((upperBoundThroughputPerWlan(wlan_i))));
         end
         iteration = iteration + 1;
     end  
@@ -98,40 +98,39 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     while(iteration < totalIterations + 1) 
         % Iterate sequentially for each agent in the random order
         order = randperm(nWlans);
-        for w = 1 : nWlans                  
+        for wlan_i = 1 : nWlans                  
             % Select an action according to the policy
-            selectedArm(order(w)) = select_action_ucb(meanRewardPerWlanPerArm(order(w), :), ...
-                iteration - K, timesArmHasBeenPlayed(order(w), :));   
+            selectedArm(order(wlan_i)) = select_action_ucb(meanRewardPerWlanPerArm(order(wlan_i), :), ...
+                iteration - K, timesArmHasBeenPlayed(order(wlan_i), :));   
             % Update the current action
-            currentAction(order(w)) = selectedArm(order(w));
+            currentAction(order(wlan_i)) = selectedArm(order(wlan_i));
             % Find the index of the current and the previous action in allCombs
-            ix = find(allCombs(:,1) == previousAction(order(w)) ...
-                & allCombs(:,2) == currentAction(order(w)));
+            ix = find(allCombs(:,1) == previousAction(order(wlan_i)) ...
+                & allCombs(:,2) == currentAction(order(wlan_i)));
             % Update the previous action
-            previousAction(order(w)) = currentAction(order(w));       
+            previousAction(order(wlan_i)) = currentAction(order(wlan_i));       
             % Update the transitions counter
-            transitionsCounter(order(w), ix) = transitionsCounter(order(w), ix) + 1;                                
+            transitionsCounter(order(wlan_i), ix) = transitionsCounter(order(wlan_i), ix) + 1;                                
             % Update the times WN has selected the current action
-            %timesArmHasBeenPlayed(w, selectedArm(w)) = timesArmHasBeenPlayed(w, selectedArm(w)) + 1;                
+            timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) = timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i)) + 1;                
             % Find channel and tx power of the current action
-            [a, ~, c] = val2indexes(selectedArm(order(w)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
+            [a, ~, c] = val2indexes(selectedArm(order(wlan_i)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));
             % Update WN configuration
-            wlansAux(order(w)).Channel = a;   
-            wlansAux(order(w)).TxPower = txPowerActions(c);        
+            wlansAux(order(wlan_i)).Channel = a;   
+            wlansAux(order(wlan_i)).TxPower = txPowerActions(c);        
         end        
         
         % Compute the throughput noticed after applying the action           
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps         
         rw = tptAfterAction ./ upperBoundThroughputPerWlan;         
         % Update the mean reward experienced by each WLAN             
-        for w_aux = 1 : nWlans       
+        for wlan_i = 1 : nWlans       
             % Update the times WN has selected the current action
-            timesArmHasBeenPlayed(w_aux, selectedArm(w_aux)) = timesArmHasBeenPlayed(w_aux, selectedArm(w_aux)) + 1; 
-            cumulativeRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) = ...
-                cumulativeRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) + rw(w_aux);
-            meanRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) = ...
-                cumulativeRewardPerWlanPerArm(w_aux, selectedArm(w_aux)) /...
-                timesArmHasBeenPlayed(w_aux, selectedArm(w_aux));                                            
+            cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
+                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
+            meanRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) = ...
+                cumulativeRewardPerWlanPerArm(wlan_i, selectedArm(wlan_i)) /...
+                timesArmHasBeenPlayed(wlan_i, selectedArm(wlan_i));                                            
         end  
         
         % Store the throughput at the end of the iteration for statistics
@@ -144,22 +143,22 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     %% PRINT RESULTS
     if printInfo 
         % Print the preferred action per wlan
-        for w = 1 : nWlans
-            [~, ix] = max(meanRewardPerWlanPerArm(w, :));
+        for wlan_i = 1 : nWlans
+            [~, ix] = max(meanRewardPerWlanPerArm(wlan_i, :));
             [a, ~, c] = val2indexes(possibleActions(ix), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));  
-            disp(['   * WLAN' num2str(w) ':'])
+            disp(['   * WLAN' num2str(wlan_i) ':'])
             disp(['       - Channel:' num2str(a)])
             disp(['       - TPC:' num2str(txPowerActions(c))])
         end
         % Print the preferred action per wlan
-        for w = 1 : nWlans    
-            timesArmHasBeenPlayed(w, :)/totalIterations
-            [~, ix] = max(meanRewardPerWlanPerArm(w, :));
+        for wlan_i = 1 : nWlans    
+            timesArmHasBeenPlayed(wlan_i, :)/totalIterations
+            [~, ix] = max(meanRewardPerWlanPerArm(wlan_i, :));
             [a, ~, c] = val2indexes(possibleActions(ix), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));  
-            disp(['   * WN' num2str(w) ':'])
+            disp(['   * WN' num2str(wlan_i) ':'])
             disp(['       - Channel:' num2str(a)])
             disp(['       - TPC:' num2str(txPowerActions(c))])
-            a = transitionsCounter(w,:);
+            a = transitionsCounter(wlan_i,:);
             % Max value
             [val1, ix1] = max(a);
             [ch1_1, ~, x] = val2indexes(possibleActions(allCombs(ix1,1)), size(channelActions,2), size(ccaActions,2), size(txPowerActions,2)); 

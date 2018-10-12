@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    ordered_ucb( wlans, upperBoundThroughputPerWlan, varargin )
+    ordered_ucb_cumulative( wlans, upperBoundThroughputPerWlan, varargin )
 % ucb applies UCB to maximize the experienced throughput of a given scenario
 %
 %   OUTPUT: 
@@ -62,9 +62,11 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     transitionsCounter = zeros(nWlans, K^2);
     cumulativeRewardPerWlanPerArm = zeros(nWlans, K);     % Initialize the cumulative reward obtained by each WLAN for each arm
     meanRewardPerWlanPerArm = zeros(nWlans, K);           % Initialize the mean reward obtained by each WLAN for each arm
-   % Initialize the regret experienced by each WLAN
-    regretAfterAction = zeros(1, nWlans);     
 
+    cumulative_reward = zeros(1, nWlans);
+    iterations_without_acting = ones(1, nWlans);        
+    iteration_per_wlan = zeros(1, nWlans);    
+    
     %% INITIALIZE THE PAYOFF OF EACH ARM        
     iteration = 1;    
     %disp(['WLAN ' num2str(w)])
@@ -92,9 +94,16 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         iteration = iteration + 1;
     end 
         
-    %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME     
+    %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME  
+    order = [];
     while(iteration < totalIterations + 1) 
-        wlan_ix = mod(iteration, nWlans) + 1;
+        
+        if isempty(order)
+            order = randperm(nWlans);
+        end        
+        wlan_ix = order(1);
+        order(1) = [];
+        
         % Select an action according to the policy
         selectedArm(wlan_ix) = select_action_ucb(meanRewardPerWlanPerArm(wlan_ix,:), ...
             iteration, timesArmHasBeenPlayed(wlan_ix,:));   
@@ -115,16 +124,20 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         % Compute the throughput noticed after applying the action           
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps         
         % Update the reward of each WN
-        rw = tptAfterAction./upperBoundThroughputPerWlan; 
+        rw = tptAfterAction./upperBoundThroughputPerWlan;  
+        cumulative_reward = cumulative_reward + rw;
+        avg_reward = cumulative_reward(wlan_ix)/iterations_without_acting(wlan_ix);
+        iterations_without_acting(wlan_ix) = 1;
+        cumulative_reward(wlan_ix) = 0;  
+        timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) = ...
+                timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 1;                                                    
+        cumulativeRewardPerWlanPerArm(wlan_ix, selectedArm(wlan_ix)) = ...
+            cumulativeRewardPerWlanPerArm(wlan_ix, selectedArm(wlan_ix)) + avg_reward;
+        meanRewardPerWlanPerArm(wlan_ix, selectedArm(wlan_ix)) = ...
+            cumulativeRewardPerWlanPerArm(wlan_ix, selectedArm(wlan_ix)) /...
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)); 
         % Update the mean reward experienced by each WN
-        for wlan_ix_aux = 1 : nWlans 
-            timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;                                                    
-            cumulativeRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                cumulativeRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) + rw(wlan_ix_aux);
-            meanRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                cumulativeRewardPerWlanPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) /...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux));              
+        for wlan_ix_aux = 1 : nWlans                          
             if wlan_ix_aux ~= wlan_ix
                 transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
                     transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;
@@ -134,6 +147,7 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         tptExperiencedPerWlan(iteration, :) = tptAfterAction;                        
         regretExperiencedPerWlan(iteration, :) = (1 - rw);
         % Increase the number of 'learning iterations' of a WLAN
+        iteration_per_wlan(wlan_ix) = iteration_per_wlan(wlan_ix) + 1;
         iteration = iteration + 1;         
     end
     

@@ -39,28 +39,25 @@ wlans = generate_network_3D(nWlans, 'grid', 2, drawMap); % SAFE CONFIGURATION
 upperBoundThroughputPerWlan = compute_max_selfish_throughput( wlans );
 
 load('workspace_throughput_all_combinations_toy_scenario.mat')
-
-% Find the best configuration for each WLAN and display it
-for i = 1 : size(throughputPerConfiguration, 1)
-    agg_tpt(i) = sum(throughputPerConfiguration(i,:));
-    fairness(i) = jains_fairness(throughputPerConfiguration(i,:));
-    prop_fairness(i) = sum(log(throughputPerConfiguration(i,:)));
-    max_min(i) = min(throughputPerConfiguration(i,:));
-end    
-
+% JFI
+[max_f, ix_max_f] = max(jains_fairness(throughputPerConfiguration));
 % Proportional fairness
-[val, ix] = max(prop_fairness);
-max_pf = agg_tpt(ix);    
+[max_pf, ix_max_pf] = max(sum(log(throughputPerConfiguration)'));
+agg_tpt_max_pf = sum(throughputPerConfiguration(ix_max_pf,:));
 % Aggregate throughput
-[max_agg, ix2] = max(agg_tpt);
+[max_agg, ix_max_agg] = max(sum(throughputPerConfiguration'));
 % Max-min throughput
-[max_max_min, ix3] = max(max_min);
+[max_max_min, ix_max_min] = max(min(throughputPerConfiguration'));
 
 % Compute the throughput experienced per WLAN at each iteration
 [tpt_evolution_per_wlan_eg, times_arm_has_been_played_eg, regret_per_wlan_eg , meanRewardPerAction] = ...
     egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan );
 [tpt_evolution_per_wlan_oeg, times_arm_has_been_played_oeg, regret_per_wlan_oeg] = ...
+    ordered_egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan );
+[tpt_evolution_per_wlan_ceg, times_arm_has_been_played_ceg, regret_per_wlan_ceg] = ...
     ordered_egreedy_cumulative( wlans, initialEpsilon, upperBoundThroughputPerWlan );
+[tpt_evolution_per_wlan_peg, times_arm_has_been_played_peg, regret_per_wlan_peg] = ...
+    egreedy_with_penalty( wlans, initialEpsilon, upperBoundThroughputPerWlan, 0.1 );
 
 % Plot the results
 if plotResults
@@ -68,6 +65,10 @@ if plotResults
         times_arm_has_been_played_eg, upperBoundThroughputPerWlan, max_max_min, 'EG');
     display_results_individual_performance(wlans, tpt_evolution_per_wlan_oeg, ...
         times_arm_has_been_played_oeg, upperBoundThroughputPerWlan, max_max_min, 'OEG');
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_ceg, ...
+        times_arm_has_been_played_ceg, upperBoundThroughputPerWlan, max_max_min, 'CEG');
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_peg, ...
+        times_arm_has_been_played_peg, upperBoundThroughputPerWlan, max_max_min, 'PEG');
 end
 
 % Save the workspace

@@ -23,7 +23,8 @@ for num_wlans_ix = 1 : size(network_sizes, 2)
         % Update the possible combinations of configurations
         possibleComb = allcomb(possibleActions, possibleActions, possibleActions, possibleActions);       
         % Generate a random scenario for the given number of WNs
-        wlans{num_wlans_ix, scenario} = generate_random_network_3D(network_sizes(num_wlans_ix), nChannels, txPowerActions, ccaActions, 0); % RANDOM CONFIGURATION
+        wlans{num_wlans_ix, scenario} = generate_random_network_3D(network_sizes(num_wlans_ix), ...
+            nChannels, txPowerActions, ccaActions, 0); % RANDOM CONFIGURATION
     end
 end
 

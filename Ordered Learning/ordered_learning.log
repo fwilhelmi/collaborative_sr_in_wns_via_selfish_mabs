@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  10 OCT 2018 14:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  12 OCT 2018 10:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1067,7 +1067,11 @@ Package: ifsym 2000/04/18 I.Kloeckl
 LaTeX Warning: Unused global option(s):
     [preprint].
 
-(./ordered_learning.aux)
+(./ordered_learning.aux
+
+LaTeX Warning: Label `fig:ts' multiply defined.
+
+)
 \openout1 = `ordered_learning.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 106.
@@ -1085,8 +1089,7 @@ LaTeX Font Info:    ... okay on input line 106.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 106.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 106.
 
-
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
+ (/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 106.
@@ -1162,113 +1165,167 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 121.
 
 Package epstopdf Info: Source file: <images/actions_probability_EG.eps>
-(epstopdf)                    date: 2018-10-10 07:37:42
-(epstopdf)                    size: 29483 bytes
+(epstopdf)                    date: 2018-10-12 08:13:43
+(epstopdf)                    size: 29479 bytes
 (epstopdf)             Output file: <images/actions_probability_EG-eps-converte
 d-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:03:00
-(epstopdf)                    size: 8750 bytes
+(epstopdf)                    date: 2018-10-12 08:27:45
+(epstopdf)                    size: 8673 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _EG-eps-converted-to.pdf images/actions_probability_EG.eps>
 (epstopdf)             \includegraphics on input line 129.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_EG-eps-converted-to.pdf, id=43, 429.605pt x 322.203
+<images/actions_probability_EG-eps-converted-to.pdf, id=39, 429.605pt x 322.203
 75pt>
 File: images/actions_probability_EG-eps-converted-to.pdf Graphic file (type pdf
 )
 <use images/actions_probability_EG-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_EG-eps-converted-to.pdf  us
 ed on input line 129.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/actions_probability_OEG.eps>
-(epstopdf)                    date: 2018-10-10 07:37:50
-(epstopdf)                    size: 29231 bytes
+(epstopdf)                    date: 2018-10-12 08:13:50
+(epstopdf)                    size: 29409 bytes
 (epstopdf)             Output file: <images/actions_probability_OEG-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:03:01
-(epstopdf)                    size: 8694 bytes
+(epstopdf)                    date: 2018-10-12 08:27:46
+(epstopdf)                    size: 8607 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _OEG-eps-converted-to.pdf images/actions_probability_OEG.eps>
 (epstopdf)             \includegraphics on input line 133.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_OEG-eps-converted-to.pdf, id=44, 429.605pt x 322.20
+<images/actions_probability_OEG-eps-converted-to.pdf, id=40, 429.605pt x 322.20
 375pt>
 File: images/actions_probability_OEG-eps-converted-to.pdf Graphic file (type pd
 f)
 <use images/actions_probability_OEG-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_OEG-eps-converted-to.pdf  u
 sed on input line 133.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
-Package epstopdf Info: Source file: <images/temporal_individual_tpt_EG.eps>
-(epstopdf)                    date: 2018-10-10 07:37:39
-(epstopdf)                    size: 156052 bytes
-(epstopdf)             Output file: <images/temporal_individual_tpt_EG-eps-conv
-erted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:05:10
-(epstopdf)                    size: 26063 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
-_tpt_EG-eps-converted-to.pdf images/temporal_individual_tpt_EG.eps>
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
+Package epstopdf Info: Source file: <images/actions_probability_CEG.eps>
+(epstopdf)                    date: 2018-10-12 08:13:59
+(epstopdf)                    size: 29488 bytes
+(epstopdf)             Output file: <images/actions_probability_CEG-eps-convert
+ed-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:27:47
+(epstopdf)                    size: 8727 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/actions_probability
+_CEG-eps-converted-to.pdf images/actions_probability_CEG.eps>
 (epstopdf)             \includegraphics on input line 137.
 Package epstopdf Info: Output file is already uptodate.
-<images/temporal_individual_tpt_EG-eps-converted-to.pdf, id=45, 437.635pt x 337
+<images/actions_probability_CEG-eps-converted-to.pdf, id=41, 429.605pt x 322.20
+375pt>
+File: images/actions_probability_CEG-eps-converted-to.pdf Graphic file (type pd
+f)
+<use images/actions_probability_CEG-eps-converted-to.pdf>
+Package pdftex.def Info: images/actions_probability_CEG-eps-converted-to.pdf  u
+sed on input line 137.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
+Package epstopdf Info: Source file: <images/temporal_individual_tpt_EG.eps>
+(epstopdf)                    date: 2018-10-12 08:13:39
+(epstopdf)                    size: 156234 bytes
+(epstopdf)             Output file: <images/temporal_individual_tpt_EG-eps-conv
+erted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:27:47
+(epstopdf)                    size: 26200 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
+_tpt_EG-eps-converted-to.pdf images/temporal_individual_tpt_EG.eps>
+(epstopdf)             \includegraphics on input line 141.
+Package epstopdf Info: Output file is already uptodate.
+<images/temporal_individual_tpt_EG-eps-converted-to.pdf, id=42, 437.635pt x 337
 .26pt>
 File: images/temporal_individual_tpt_EG-eps-converted-to.pdf Graphic file (type
  pdf)
 <use images/temporal_individual_tpt_EG-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_EG-eps-converted-to.pdf
-  used on input line 137.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+  used on input line 141.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_OEG.eps>
-(epstopdf)                    date: 2018-10-10 07:37:47
-(epstopdf)                    size: 155169 bytes
+(epstopdf)                    date: 2018-10-12 08:13:46
+(epstopdf)                    size: 155819 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_OEG-eps-con
 verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:05:11
-(epstopdf)                    size: 24680 bytes
+(epstopdf)                    date: 2018-10-12 08:27:48
+(epstopdf)                    size: 24703 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_OEG-eps-converted-to.pdf images/temporal_individual_tpt_OEG.eps>
-(epstopdf)             \includegraphics on input line 141.
+(epstopdf)             \includegraphics on input line 145.
 Package epstopdf Info: Output file is already uptodate.
-<images/temporal_individual_tpt_OEG-eps-converted-to.pdf, id=46, 437.635pt x 33
+<images/temporal_individual_tpt_OEG-eps-converted-to.pdf, id=43, 437.635pt x 33
 7.26pt>
 File: images/temporal_individual_tpt_OEG-eps-converted-to.pdf Graphic file (typ
 e pdf)
 <use images/temporal_individual_tpt_OEG-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_OEG-eps-converted-to.pd
-f  used on input line 141.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+f  used on input line 145.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
+Package epstopdf Info: Source file: <images/temporal_individual_tpt_CEG.eps>
+(epstopdf)                    date: 2018-10-12 08:13:55
+(epstopdf)                    size: 154170 bytes
+(epstopdf)             Output file: <images/temporal_individual_tpt_CEG-eps-con
+verted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:28:57
+(epstopdf)                    size: 27065 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
+_tpt_CEG-eps-converted-to.pdf images/temporal_individual_tpt_CEG.eps>
+(epstopdf)             \includegraphics on input line 149.
+Package epstopdf Info: Output file is already uptodate.
+<images/temporal_individual_tpt_CEG-eps-converted-to.pdf, id=44, 437.635pt x 33
+7.26pt>
+File: images/temporal_individual_tpt_CEG-eps-converted-to.pdf Graphic file (typ
+e pdf)
+<use images/temporal_individual_tpt_CEG-eps-converted-to.pdf>
+Package pdftex.def Info: images/temporal_individual_tpt_CEG-eps-converted-to.pd
+f  used on input line 149.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/mean_tpt_EG.eps>
-(epstopdf)                    date: 2018-10-10 07:37:40
-(epstopdf)                    size: 15654 bytes
+(epstopdf)                    date: 2018-10-12 08:13:41
+(epstopdf)                    size: 16089 bytes
 (epstopdf)             Output file: <images/mean_tpt_EG-eps-converted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:05:09
-(epstopdf)                    size: 6939 bytes
+(epstopdf)                    date: 2018-10-12 08:27:48
+(epstopdf)                    size: 7210 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_EG-eps-con
 verted-to.pdf images/mean_tpt_EG.eps>
-(epstopdf)             \includegraphics on input line 145.
+(epstopdf)             \includegraphics on input line 153.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_EG-eps-converted-to.pdf, id=47, 450.68375pt x 328.22626pt>
+<images/mean_tpt_EG-eps-converted-to.pdf, id=45, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_EG-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_EG-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_EG-eps-converted-to.pdf  used on input
- line 145.
-(pdftex.def)             Requested size: 155.02pt x 112.89761pt.
+ line 153.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 Package epstopdf Info: Source file: <images/mean_tpt_OEG.eps>
-(epstopdf)                    date: 2018-10-10 07:37:48
-(epstopdf)                    size: 15649 bytes
+(epstopdf)                    date: 2018-10-12 08:13:47
+(epstopdf)                    size: 16095 bytes
 (epstopdf)             Output file: <images/mean_tpt_OEG-eps-converted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:05:09
-(epstopdf)                    size: 6938 bytes
+(epstopdf)                    date: 2018-10-12 08:27:49
+(epstopdf)                    size: 7208 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_OEG-eps-co
 nverted-to.pdf images/mean_tpt_OEG.eps>
-(epstopdf)             \includegraphics on input line 149.
+(epstopdf)             \includegraphics on input line 157.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_OEG-eps-converted-to.pdf, id=48, 450.68375pt x 328.22626pt>
+<images/mean_tpt_OEG-eps-converted-to.pdf, id=46, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_OEG-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_OEG-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_OEG-eps-converted-to.pdf  used on inpu
-t line 149.
-(pdftex.def)             Requested size: 155.02pt x 112.89761pt.
+t line 157.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
+Package epstopdf Info: Source file: <images/mean_tpt_CEG.eps>
+(epstopdf)                    date: 2018-10-12 08:13:57
+(epstopdf)                    size: 15409 bytes
+(epstopdf)             Output file: <images/mean_tpt_CEG-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:28:57
+(epstopdf)                    size: 7045 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_CEG-eps-co
+nverted-to.pdf images/mean_tpt_CEG.eps>
+(epstopdf)             \includegraphics on input line 161.
+Package epstopdf Info: Output file is already uptodate.
+<images/mean_tpt_CEG-eps-converted-to.pdf, id=47, 450.68375pt x 328.22626pt>
+File: images/mean_tpt_CEG-eps-converted-to.pdf Graphic file (type pdf)
+<use images/mean_tpt_CEG-eps-converted-to.pdf>
+Package pdftex.def Info: images/mean_tpt_CEG-eps-converted-to.pdf  used on inpu
+t line 161.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
@@ -1276,53 +1333,72 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 Package epstopdf Info: Source file: <images/actions_probability_EXP3.eps>
-(epstopdf)                    date: 2018-10-10 07:38:12
-(epstopdf)                    size: 29185 bytes
+(epstopdf)                    date: 2018-10-12 08:14:18
+(epstopdf)                    size: 29110 bytes
 (epstopdf)             Output file: <images/actions_probability_EXP3-eps-conver
 ted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:17:11
-(epstopdf)                    size: 8711 bytes
+(epstopdf)                    date: 2018-10-12 08:27:50
+(epstopdf)                    size: 8700 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _EXP3-eps-converted-to.pdf images/actions_probability_EXP3.eps>
-(epstopdf)             \includegraphics on input line 164.
+(epstopdf)             \includegraphics on input line 176.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_EXP3-eps-converted-to.pdf, id=68, 429.605pt x 322.2
+<images/actions_probability_EXP3-eps-converted-to.pdf, id=67, 429.605pt x 322.2
 0375pt>
 File: images/actions_probability_EXP3-eps-converted-to.pdf Graphic file (type p
 df)
 <use images/actions_probability_EXP3-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_EXP3-eps-converted-to.pdf  
-used on input line 164.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+used on input line 176.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/actions_probability_OEXP3.eps>
-(epstopdf)                    date: 2018-10-10 07:38:19
-(epstopdf)                    size: 28874 bytes
+(epstopdf)                    date: 2018-10-12 08:14:24
+(epstopdf)                    size: 27860 bytes
 (epstopdf)             Output file: <images/actions_probability_OEXP3-eps-conve
 rted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:17:12
-(epstopdf)                    size: 8670 bytes
+(epstopdf)                    date: 2018-10-12 08:27:50
+(epstopdf)                    size: 8587 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _OEXP3-eps-converted-to.pdf images/actions_probability_OEXP3.eps>
-(epstopdf)             \includegraphics on input line 168.
+(epstopdf)             \includegraphics on input line 180.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_OEXP3-eps-converted-to.pdf, id=69, 429.605pt x 322.
+<images/actions_probability_OEXP3-eps-converted-to.pdf, id=68, 429.605pt x 322.
 20375pt>
 File: images/actions_probability_OEXP3-eps-converted-to.pdf Graphic file (type 
 pdf)
 <use images/actions_probability_OEXP3-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_OEXP3-eps-converted-to.pdf 
- used on input line 168.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+ used on input line 180.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
+Package epstopdf Info: Source file: <images/actions_probability_CEXP3.eps>
+(epstopdf)                    date: 2018-10-12 08:14:29
+(epstopdf)                    size: 27572 bytes
+(epstopdf)             Output file: <images/actions_probability_CEXP3-eps-conve
+rted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:31:03
+(epstopdf)                    size: 8511 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/actions_probability
+_CEXP3-eps-converted-to.pdf images/actions_probability_CEXP3.eps>
+(epstopdf)             \includegraphics on input line 184.
+Package epstopdf Info: Output file is already uptodate.
+<images/actions_probability_CEXP3-eps-converted-to.pdf, id=69, 429.605pt x 322.
+20375pt>
+File: images/actions_probability_CEXP3-eps-converted-to.pdf Graphic file (type 
+pdf)
+<use images/actions_probability_CEXP3-eps-converted-to.pdf>
+Package pdftex.def Info: images/actions_probability_CEXP3-eps-converted-to.pdf 
+ used on input line 184.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_EXP3.eps>
-(epstopdf)                    date: 2018-10-10 07:38:08
-(epstopdf)                    size: 155936 bytes
+(epstopdf)                    date: 2018-10-12 08:14:15
+(epstopdf)                    size: 156418 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_EXP3-eps-co
 nverted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:17:14
-(epstopdf)                    size: 27707 bytes
+(epstopdf)                    date: 2018-10-12 08:27:51
+(epstopdf)                    size: 26016 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_EXP3-eps-converted-to.pdf images/temporal_individual_tpt_EXP3.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 188.
 Package epstopdf Info: Output file is already uptodate.
 <images/temporal_individual_tpt_EXP3-eps-converted-to.pdf, id=70, 437.635pt x 3
 37.26pt>
@@ -1330,18 +1406,18 @@ File: images/temporal_individual_tpt_EXP3-eps-converted-to.pdf Graphic file (ty
 pe pdf)
 <use images/temporal_individual_tpt_EXP3-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_EXP3-eps-converted-to.p
-df  used on input line 172.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+df  used on input line 188.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_OEXP3.eps>
-(epstopdf)                    date: 2018-10-10 07:38:17
-(epstopdf)                    size: 156289 bytes
+(epstopdf)                    date: 2018-10-12 08:14:21
+(epstopdf)                    size: 150393 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_OEXP3-eps-c
 onverted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:17:14
-(epstopdf)                    size: 25569 bytes
+(epstopdf)                    date: 2018-10-12 08:27:52
+(epstopdf)                    size: 23853 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_OEXP3-eps-converted-to.pdf images/temporal_individual_tpt_OEXP3.eps>
-(epstopdf)             \includegraphics on input line 176.
+(epstopdf)             \includegraphics on input line 192.
 Package epstopdf Info: Output file is already uptodate.
 <images/temporal_individual_tpt_OEXP3-eps-converted-to.pdf, id=71, 437.635pt x 
 337.26pt>
@@ -1349,518 +1425,538 @@ File: images/temporal_individual_tpt_OEXP3-eps-converted-to.pdf Graphic file (t
 ype pdf)
 <use images/temporal_individual_tpt_OEXP3-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_OEXP3-eps-converted-to.
-pdf  used on input line 176.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+pdf  used on input line 192.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
+Package epstopdf Info: Source file: <images/temporal_individual_tpt_CEXP3.eps>
+(epstopdf)                    date: 2018-10-12 08:14:26
+(epstopdf)                    size: 155662 bytes
+(epstopdf)             Output file: <images/temporal_individual_tpt_CEXP3-eps-c
+onverted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:31:03
+(epstopdf)                    size: 19521 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
+_tpt_CEXP3-eps-converted-to.pdf images/temporal_individual_tpt_CEXP3.eps>
+(epstopdf)             \includegraphics on input line 196.
+Package epstopdf Info: Output file is already uptodate.
+<images/temporal_individual_tpt_CEXP3-eps-converted-to.pdf, id=72, 437.635pt x 
+337.26pt>
+File: images/temporal_individual_tpt_CEXP3-eps-converted-to.pdf Graphic file (t
+ype pdf)
+<use images/temporal_individual_tpt_CEXP3-eps-converted-to.pdf>
+Package pdftex.def Info: images/temporal_individual_tpt_CEXP3-eps-converted-to.
+pdf  used on input line 196.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/mean_tpt_EXP3.eps>
-(epstopdf)                    date: 2018-10-10 07:38:10
-(epstopdf)                    size: 15473 bytes
+(epstopdf)                    date: 2018-10-12 08:14:16
+(epstopdf)                    size: 16084 bytes
 (epstopdf)             Output file: <images/mean_tpt_EXP3-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2018-10-10 08:17:12
-(epstopdf)                    size: 7050 bytes
+(epstopdf)                    date: 2018-10-12 08:27:52
+(epstopdf)                    size: 7208 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_EXP3-eps-c
 onverted-to.pdf images/mean_tpt_EXP3.eps>
-(epstopdf)             \includegraphics on input line 180.
+(epstopdf)             \includegraphics on input line 200.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_EXP3-eps-converted-to.pdf, id=72, 450.68375pt x 322.20375pt>
+<images/mean_tpt_EXP3-eps-converted-to.pdf, id=73, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_EXP3-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_EXP3-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_EXP3-eps-converted-to.pdf  used on inp
-ut line 180.
-(pdftex.def)             Requested size: 155.02pt x 110.8261pt.
+ut line 200.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 Package epstopdf Info: Source file: <images/mean_tpt_OEXP3.eps>
-(epstopdf)                    date: 2018-10-10 07:38:18
-(epstopdf)                    size: 15657 bytes
+(epstopdf)                    date: 2018-10-12 08:14:22
+(epstopdf)                    size: 15970 bytes
 (epstopdf)             Output file: <images/mean_tpt_OEXP3-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2018-10-10 08:17:13
-(epstopdf)                    size: 6937 bytes
+(epstopdf)                    date: 2018-10-12 08:27:53
+(epstopdf)                    size: 7104 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_OEXP3-eps-
 converted-to.pdf images/mean_tpt_OEXP3.eps>
-(epstopdf)             \includegraphics on input line 184.
+(epstopdf)             \includegraphics on input line 204.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_OEXP3-eps-converted-to.pdf, id=73, 450.68375pt x 328.22626pt>
+<images/mean_tpt_OEXP3-eps-converted-to.pdf, id=74, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_OEXP3-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_OEXP3-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_OEXP3-eps-converted-to.pdf  used on in
-put line 184.
-(pdftex.def)             Requested size: 155.02pt x 112.89761pt.
+put line 204.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
+Package epstopdf Info: Source file: <images/mean_tpt_CEXP3.eps>
+(epstopdf)                    date: 2018-10-12 08:14:27
+(epstopdf)                    size: 16097 bytes
+(epstopdf)             Output file: <images/mean_tpt_CEXP3-eps-converted-to.pdf
+>
+(epstopdf)                    date: 2018-10-12 08:31:04
+(epstopdf)                    size: 7128 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_CEXP3-eps-
+converted-to.pdf images/mean_tpt_CEXP3.eps>
+(epstopdf)             \includegraphics on input line 208.
+Package epstopdf Info: Output file is already uptodate.
+<images/mean_tpt_CEXP3-eps-converted-to.pdf, id=75, 450.68375pt x 328.22626pt>
+File: images/mean_tpt_CEXP3-eps-converted-to.pdf Graphic file (type pdf)
+<use images/mean_tpt_CEXP3-eps-converted-to.pdf>
+Package pdftex.def Info: images/mean_tpt_CEXP3-eps-converted-to.pdf  used on in
+put line 208.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [2 <./images/actions_probability_EG-eps-converted-to.pdf> <./images/actions_pro
-bability_OEG-eps-converted-to.pdf> <./images/temporal_individual_tpt_EG-eps-con
-verted-to.pdf> <./images/temporal_individual_tpt_OEG-eps-converted-to.pdf> <./i
-mages/mean_tpt_EG-eps-converted-to.pdf> <./images/mean_tpt_OEG-eps-converted-to
-.pdf>]
+bability_OEG-eps-converted-to.pdf> <./images/actions_probability_CEG-eps-conver
+ted-to.pdf> <./images/temporal_individual_tpt_EG-eps-converted-to.pdf> <./image
+s/temporal_individual_tpt_OEG-eps-converted-to.pdf> <./images/temporal_individu
+al_tpt_CEG-eps-converted-to.pdf> <./images/mean_tpt_EG-eps-converted-to.pdf> <.
+/images/mean_tpt_OEG-eps-converted-to.pdf> <./images/mean_tpt_CEG-eps-converted
+-to.pdf>]
 Package epstopdf Info: Source file: <images/actions_probability_UCB.eps>
-(epstopdf)                    date: 2018-10-10 07:38:39
-(epstopdf)                    size: 29476 bytes
+(epstopdf)                    date: 2018-10-12 08:14:47
+(epstopdf)                    size: 29480 bytes
 (epstopdf)             Output file: <images/actions_probability_UCB-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:33
-(epstopdf)                    size: 8729 bytes
+(epstopdf)                    date: 2018-10-12 08:27:53
+(epstopdf)                    size: 8707 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _UCB-eps-converted-to.pdf images/actions_probability_UCB.eps>
-(epstopdf)             \includegraphics on input line 199.
+(epstopdf)             \includegraphics on input line 223.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_UCB-eps-converted-to.pdf, id=123, 429.605pt x 322.2
+<images/actions_probability_UCB-eps-converted-to.pdf, id=147, 429.605pt x 322.2
 0375pt>
 File: images/actions_probability_UCB-eps-converted-to.pdf Graphic file (type pd
 f)
 <use images/actions_probability_UCB-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_UCB-eps-converted-to.pdf  u
-sed on input line 199.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+sed on input line 223.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/actions_probability_OUCB.eps>
-(epstopdf)                    date: 2018-10-10 08:39:55
+(epstopdf)                    date: 2018-10-12 08:14:52
 (epstopdf)                    size: 29489 bytes
 (epstopdf)             Output file: <images/actions_probability_OUCB-eps-conver
 ted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:41:26
-(epstopdf)                    size: 8725 bytes
+(epstopdf)                    date: 2018-10-12 08:27:54
+(epstopdf)                    size: 8646 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _OUCB-eps-converted-to.pdf images/actions_probability_OUCB.eps>
-(epstopdf)             \includegraphics on input line 203.
+(epstopdf)             \includegraphics on input line 227.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_OUCB-eps-converted-to.pdf, id=124, 429.605pt x 322.
+<images/actions_probability_OUCB-eps-converted-to.pdf, id=148, 429.605pt x 322.
 20375pt>
 File: images/actions_probability_OUCB-eps-converted-to.pdf Graphic file (type p
 df)
 <use images/actions_probability_OUCB-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_OUCB-eps-converted-to.pdf  
-used on input line 203.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+used on input line 227.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
+Package epstopdf Info: Source file: <images/actions_probability_CUCB.eps>
+(epstopdf)                    date: 2018-10-12 08:14:58
+(epstopdf)                    size: 29501 bytes
+(epstopdf)             Output file: <images/actions_probability_CUCB-eps-conver
+ted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:34:00
+(epstopdf)                    size: 8688 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/actions_probability
+_CUCB-eps-converted-to.pdf images/actions_probability_CUCB.eps>
+(epstopdf)             \includegraphics on input line 231.
+Package epstopdf Info: Output file is already uptodate.
+<images/actions_probability_CUCB-eps-converted-to.pdf, id=149, 429.605pt x 322.
+20375pt>
+File: images/actions_probability_CUCB-eps-converted-to.pdf Graphic file (type p
+df)
+<use images/actions_probability_CUCB-eps-converted-to.pdf>
+Package pdftex.def Info: images/actions_probability_CUCB-eps-converted-to.pdf  
+used on input line 231.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_UCB.eps>
-(epstopdf)                    date: 2018-10-10 07:38:35
-(epstopdf)                    size: 154020 bytes
+(epstopdf)                    date: 2018-10-12 08:14:43
+(epstopdf)                    size: 155659 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_UCB-eps-con
 verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:34
-(epstopdf)                    size: 27003 bytes
+(epstopdf)                    date: 2018-10-12 08:27:55
+(epstopdf)                    size: 31453 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_UCB-eps-converted-to.pdf images/temporal_individual_tpt_UCB.eps>
-(epstopdf)             \includegraphics on input line 207.
+(epstopdf)             \includegraphics on input line 235.
 Package epstopdf Info: Output file is already uptodate.
-<images/temporal_individual_tpt_UCB-eps-converted-to.pdf, id=125, 437.635pt x 3
+<images/temporal_individual_tpt_UCB-eps-converted-to.pdf, id=150, 437.635pt x 3
 37.26pt>
 File: images/temporal_individual_tpt_UCB-eps-converted-to.pdf Graphic file (typ
 e pdf)
 <use images/temporal_individual_tpt_UCB-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_UCB-eps-converted-to.pd
-f  used on input line 207.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+f  used on input line 235.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_OUCB.eps>
-(epstopdf)                    date: 2018-10-10 08:39:52
-(epstopdf)                    size: 156404 bytes
+(epstopdf)                    date: 2018-10-12 08:14:50
+(epstopdf)                    size: 154564 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_OUCB-eps-co
 nverted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:41:27
-(epstopdf)                    size: 29520 bytes
+(epstopdf)                    date: 2018-10-12 08:27:55
+(epstopdf)                    size: 31545 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_OUCB-eps-converted-to.pdf images/temporal_individual_tpt_OUCB.eps>
-(epstopdf)             \includegraphics on input line 211.
+(epstopdf)             \includegraphics on input line 239.
 Package epstopdf Info: Output file is already uptodate.
-<images/temporal_individual_tpt_OUCB-eps-converted-to.pdf, id=126, 437.635pt x 
+<images/temporal_individual_tpt_OUCB-eps-converted-to.pdf, id=151, 437.635pt x 
 337.26pt>
 File: images/temporal_individual_tpt_OUCB-eps-converted-to.pdf Graphic file (ty
 pe pdf)
 <use images/temporal_individual_tpt_OUCB-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_OUCB-eps-converted-to.p
-df  used on input line 211.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+df  used on input line 239.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
+Package epstopdf Info: Source file: <images/temporal_individual_tpt_CUCB.eps>
+(epstopdf)                    date: 2018-10-12 08:14:55
+(epstopdf)                    size: 155651 bytes
+(epstopdf)             Output file: <images/temporal_individual_tpt_CUCB-eps-co
+nverted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:34:01
+(epstopdf)                    size: 25571 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
+_tpt_CUCB-eps-converted-to.pdf images/temporal_individual_tpt_CUCB.eps>
+(epstopdf)             \includegraphics on input line 243.
+Package epstopdf Info: Output file is already uptodate.
+<images/temporal_individual_tpt_CUCB-eps-converted-to.pdf, id=152, 437.635pt x 
+337.26pt>
+File: images/temporal_individual_tpt_CUCB-eps-converted-to.pdf Graphic file (ty
+pe pdf)
+<use images/temporal_individual_tpt_CUCB-eps-converted-to.pdf>
+Package pdftex.def Info: images/temporal_individual_tpt_CUCB-eps-converted-to.p
+df  used on input line 243.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/mean_tpt_UCB.eps>
-(epstopdf)                    date: 2018-10-10 07:38:37
-(epstopdf)                    size: 15456 bytes
+(epstopdf)                    date: 2018-10-12 08:14:45
+(epstopdf)                    size: 16098 bytes
 (epstopdf)             Output file: <images/mean_tpt_UCB-eps-converted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:36
-(epstopdf)                    size: 6935 bytes
+(epstopdf)                    date: 2018-10-12 08:27:56
+(epstopdf)                    size: 7205 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_UCB-eps-co
 nverted-to.pdf images/mean_tpt_UCB.eps>
-(epstopdf)             \includegraphics on input line 215.
+(epstopdf)             \includegraphics on input line 247.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_UCB-eps-converted-to.pdf, id=127, 450.68375pt x 322.20375pt>
+<images/mean_tpt_UCB-eps-converted-to.pdf, id=153, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_UCB-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_UCB-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_UCB-eps-converted-to.pdf  used on inpu
-t line 215.
-(pdftex.def)             Requested size: 155.02pt x 110.8261pt.
+t line 247.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 Package epstopdf Info: Source file: <images/mean_tpt_OUCB.eps>
-(epstopdf)                    date: 2018-10-10 08:39:53
-(epstopdf)                    size: 15943 bytes
+(epstopdf)                    date: 2018-10-12 08:14:51
+(epstopdf)                    size: 16105 bytes
 (epstopdf)             Output file: <images/mean_tpt_OUCB-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2018-10-10 08:41:27
-(epstopdf)                    size: 7084 bytes
+(epstopdf)                    date: 2018-10-12 08:27:56
+(epstopdf)                    size: 7213 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_OUCB-eps-c
 onverted-to.pdf images/mean_tpt_OUCB.eps>
-(epstopdf)             \includegraphics on input line 219.
+(epstopdf)             \includegraphics on input line 251.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_OUCB-eps-converted-to.pdf, id=128, 450.68375pt x 328.22626pt>
+<images/mean_tpt_OUCB-eps-converted-to.pdf, id=154, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_OUCB-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_OUCB-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_OUCB-eps-converted-to.pdf  used on inp
-ut line 219.
-(pdftex.def)             Requested size: 155.02pt x 112.89761pt.
+ut line 251.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
+Package epstopdf Info: Source file: <images/mean_tpt_CUCB.eps>
+(epstopdf)                    date: 2018-10-12 08:14:56
+(epstopdf)                    size: 16101 bytes
+(epstopdf)             Output file: <images/mean_tpt_CUCB-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2018-10-12 08:34:01
+(epstopdf)                    size: 7208 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_CUCB-eps-c
+onverted-to.pdf images/mean_tpt_CUCB.eps>
+(epstopdf)             \includegraphics on input line 255.
+Package epstopdf Info: Output file is already uptodate.
+<images/mean_tpt_CUCB-eps-converted-to.pdf, id=155, 450.68375pt x 328.22626pt>
+File: images/mean_tpt_CUCB-eps-converted-to.pdf Graphic file (type pdf)
+<use images/mean_tpt_CUCB-eps-converted-to.pdf>
+Package pdftex.def Info: images/mean_tpt_CUCB-eps-converted-to.pdf  used on inp
+ut line 255.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [3 <./images/actions_probability_EXP3-eps-converted-to.pdf> <./images/actions_p
-robability_OEXP3-eps-converted-to.pdf> <./images/temporal_individual_tpt_EXP3-e
-ps-converted-to.pdf> <./images/temporal_individual_tpt_OEXP3-eps-converted-to.p
-df> <./images/mean_tpt_EXP3-eps-converted-to.pdf> <./images/mean_tpt_OEXP3-eps-
-converted-to.pdf>]
+robability_OEXP3-eps-converted-to.pdf> <./images/actions_probability_CEXP3-eps-
+converted-to.pdf> <./images/temporal_individual_tpt_EXP3-eps-converted-to.pdf> 
+<./images/temporal_individual_tpt_OEXP3-eps-converted-to.pdf> <./images/tempora
+l_individual_tpt_CEXP3-eps-converted-to.pdf> <./images/mean_tpt_EXP3-eps-conver
+ted-to.pdf> <./images/mean_tpt_OEXP3-eps-converted-to.pdf> <./images/mean_tpt_C
+EXP3-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <images/actions_probability_TS.eps>
-(epstopdf)                    date: 2018-10-10 07:39:10
-(epstopdf)                    size: 29479 bytes
+(epstopdf)                    date: 2018-10-12 08:15:18
+(epstopdf)                    size: 29495 bytes
 (epstopdf)             Output file: <images/actions_probability_TS-eps-converte
 d-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:37
-(epstopdf)                    size: 8732 bytes
+(epstopdf)                    date: 2018-10-12 08:27:57
+(epstopdf)                    size: 8699 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _TS-eps-converted-to.pdf images/actions_probability_TS.eps>
-(epstopdf)             \includegraphics on input line 234.
+(epstopdf)             \includegraphics on input line 270.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_TS-eps-converted-to.pdf, id=181, 429.605pt x 322.20
+<images/actions_probability_TS-eps-converted-to.pdf, id=229, 429.605pt x 322.20
 375pt>
 File: images/actions_probability_TS-eps-converted-to.pdf Graphic file (type pdf
 )
 <use images/actions_probability_TS-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_TS-eps-converted-to.pdf  us
-ed on input line 234.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+ed on input line 270.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/actions_probability_OTS.eps>
-(epstopdf)                    date: 2018-10-10 07:39:18
-(epstopdf)                    size: 29460 bytes
+(epstopdf)                    date: 2018-10-12 08:15:23
+(epstopdf)                    size: 29484 bytes
 (epstopdf)             Output file: <images/actions_probability_OTS-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:42
-(epstopdf)                    size: 8686 bytes
+(epstopdf)                    date: 2018-10-12 08:27:57
+(epstopdf)                    size: 8633 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/actions_probability
 _OTS-eps-converted-to.pdf images/actions_probability_OTS.eps>
-(epstopdf)             \includegraphics on input line 238.
+(epstopdf)             \includegraphics on input line 274.
 Package epstopdf Info: Output file is already uptodate.
-<images/actions_probability_OTS-eps-converted-to.pdf, id=182, 429.605pt x 322.2
+<images/actions_probability_OTS-eps-converted-to.pdf, id=230, 429.605pt x 322.2
 0375pt>
 File: images/actions_probability_OTS-eps-converted-to.pdf Graphic file (type pd
 f)
 <use images/actions_probability_OTS-eps-converted-to.pdf>
 Package pdftex.def Info: images/actions_probability_OTS-eps-converted-to.pdf  u
-sed on input line 238.
-(pdftex.def)             Requested size: 155.02pt x 116.26366pt.
+sed on input line 274.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
+Package epstopdf Info: Source file: <images/actions_probability_CTS.eps>
+(epstopdf)                    date: 2018-10-12 08:15:29
+(epstopdf)                    size: 29468 bytes
+(epstopdf)             Output file: <images/actions_probability_CTS-eps-convert
+ed-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:34:02
+(epstopdf)                    size: 8637 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/actions_probability
+_CTS-eps-converted-to.pdf images/actions_probability_CTS.eps>
+(epstopdf)             \includegraphics on input line 278.
+Package epstopdf Info: Output file is already uptodate.
+<images/actions_probability_CTS-eps-converted-to.pdf, id=231, 429.605pt x 322.2
+0375pt>
+File: images/actions_probability_CTS-eps-converted-to.pdf Graphic file (type pd
+f)
+<use images/actions_probability_CTS-eps-converted-to.pdf>
+Package pdftex.def Info: images/actions_probability_CTS-eps-converted-to.pdf  u
+sed on input line 278.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_TS.eps>
-(epstopdf)                    date: 2018-10-10 07:39:06
-(epstopdf)                    size: 155913 bytes
+(epstopdf)                    date: 2018-10-12 08:15:14
+(epstopdf)                    size: 156263 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_TS-eps-conv
 erted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:38
-(epstopdf)                    size: 26773 bytes
+(epstopdf)                    date: 2018-10-12 08:27:58
+(epstopdf)                    size: 26908 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_TS-eps-converted-to.pdf images/temporal_individual_tpt_TS.eps>
-(epstopdf)             \includegraphics on input line 242.
+(epstopdf)             \includegraphics on input line 282.
 Package epstopdf Info: Output file is already uptodate.
-<images/temporal_individual_tpt_TS-eps-converted-to.pdf, id=183, 437.635pt x 33
+<images/temporal_individual_tpt_TS-eps-converted-to.pdf, id=232, 437.635pt x 33
 7.26pt>
 File: images/temporal_individual_tpt_TS-eps-converted-to.pdf Graphic file (type
  pdf)
 <use images/temporal_individual_tpt_TS-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_TS-eps-converted-to.pdf
-  used on input line 242.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+  used on input line 282.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/temporal_individual_tpt_OTS.eps>
-(epstopdf)                    date: 2018-10-10 07:39:15
-(epstopdf)                    size: 155938 bytes
+(epstopdf)                    date: 2018-10-12 08:15:21
+(epstopdf)                    size: 156240 bytes
 (epstopdf)             Output file: <images/temporal_individual_tpt_OTS-eps-con
 verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:38
-(epstopdf)                    size: 25745 bytes
+(epstopdf)                    date: 2018-10-12 08:27:59
+(epstopdf)                    size: 25987 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
 _tpt_OTS-eps-converted-to.pdf images/temporal_individual_tpt_OTS.eps>
-(epstopdf)             \includegraphics on input line 246.
+(epstopdf)             \includegraphics on input line 286.
 Package epstopdf Info: Output file is already uptodate.
-<images/temporal_individual_tpt_OTS-eps-converted-to.pdf, id=184, 437.635pt x 3
+<images/temporal_individual_tpt_OTS-eps-converted-to.pdf, id=233, 437.635pt x 3
 37.26pt>
 File: images/temporal_individual_tpt_OTS-eps-converted-to.pdf Graphic file (typ
 e pdf)
 <use images/temporal_individual_tpt_OTS-eps-converted-to.pdf>
 Package pdftex.def Info: images/temporal_individual_tpt_OTS-eps-converted-to.pd
-f  used on input line 246.
-(pdftex.def)             Requested size: 155.02pt x 119.4631pt.
+f  used on input line 286.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
+Package epstopdf Info: Source file: <images/temporal_individual_tpt_CTS.eps>
+(epstopdf)                    date: 2018-10-12 08:15:26
+(epstopdf)                    size: 152836 bytes
+(epstopdf)             Output file: <images/temporal_individual_tpt_CTS-eps-con
+verted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:34:02
+(epstopdf)                    size: 25452 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
+_tpt_CTS-eps-converted-to.pdf images/temporal_individual_tpt_CTS.eps>
+(epstopdf)             \includegraphics on input line 290.
+Package epstopdf Info: Output file is already uptodate.
+<images/temporal_individual_tpt_CTS-eps-converted-to.pdf, id=234, 437.635pt x 3
+37.26pt>
+File: images/temporal_individual_tpt_CTS-eps-converted-to.pdf Graphic file (typ
+e pdf)
+<use images/temporal_individual_tpt_CTS-eps-converted-to.pdf>
+Package pdftex.def Info: images/temporal_individual_tpt_CTS-eps-converted-to.pd
+f  used on input line 290.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
 Package epstopdf Info: Source file: <images/mean_tpt_TS.eps>
-(epstopdf)                    date: 2018-10-10 07:39:08
-(epstopdf)                    size: 15364 bytes
+(epstopdf)                    date: 2018-10-12 08:15:16
+(epstopdf)                    size: 16091 bytes
 (epstopdf)             Output file: <images/mean_tpt_TS-eps-converted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:39
-(epstopdf)                    size: 6924 bytes
+(epstopdf)                    date: 2018-10-12 08:27:59
+(epstopdf)                    size: 7203 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_TS-eps-con
 verted-to.pdf images/mean_tpt_TS.eps>
-(epstopdf)             \includegraphics on input line 250.
+(epstopdf)             \includegraphics on input line 294.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_TS-eps-converted-to.pdf, id=185, 450.68375pt x 328.22626pt>
+<images/mean_tpt_TS-eps-converted-to.pdf, id=235, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_TS-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_TS-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_TS-eps-converted-to.pdf  used on input
- line 250.
-(pdftex.def)             Requested size: 155.02pt x 112.89761pt.
+ line 294.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 Package epstopdf Info: Source file: <images/mean_tpt_OTS.eps>
-(epstopdf)                    date: 2018-10-10 07:39:16
-(epstopdf)                    size: 15438 bytes
+(epstopdf)                    date: 2018-10-12 08:15:22
+(epstopdf)                    size: 16091 bytes
 (epstopdf)             Output file: <images/mean_tpt_OTS-eps-converted-to.pdf>
-(epstopdf)                    date: 2018-10-10 08:33:39
-(epstopdf)                    size: 6937 bytes
+(epstopdf)                    date: 2018-10-12 08:28:00
+(epstopdf)                    size: 7207 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_OTS-eps-co
 nverted-to.pdf images/mean_tpt_OTS.eps>
-(epstopdf)             \includegraphics on input line 254.
+(epstopdf)             \includegraphics on input line 298.
 Package epstopdf Info: Output file is already uptodate.
-<images/mean_tpt_OTS-eps-converted-to.pdf, id=186, 450.68375pt x 326.21875pt>
+<images/mean_tpt_OTS-eps-converted-to.pdf, id=236, 450.68375pt x 328.22626pt>
 File: images/mean_tpt_OTS-eps-converted-to.pdf Graphic file (type pdf)
 <use images/mean_tpt_OTS-eps-converted-to.pdf>
 Package pdftex.def Info: images/mean_tpt_OTS-eps-converted-to.pdf  used on inpu
-t line 254.
-(pdftex.def)             Requested size: 155.02pt x 112.20709pt.
+t line 298.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
+Package epstopdf Info: Source file: <images/mean_tpt_CTS.eps>
+(epstopdf)                    date: 2018-10-12 08:15:27
+(epstopdf)                    size: 15413 bytes
+(epstopdf)             Output file: <images/mean_tpt_CTS-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:34:03
+(epstopdf)                    size: 7049 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_CTS-eps-co
+nverted-to.pdf images/mean_tpt_CTS.eps>
+(epstopdf)             \includegraphics on input line 302.
+Package epstopdf Info: Output file is already uptodate.
+<images/mean_tpt_CTS-eps-converted-to.pdf, id=237, 450.68375pt x 328.22626pt>
+File: images/mean_tpt_CTS-eps-converted-to.pdf Graphic file (type pdf)
+<use images/mean_tpt_CTS-eps-converted-to.pdf>
+Package pdftex.def Info: images/mean_tpt_CTS-eps-converted-to.pdf  used on inpu
+t line 302.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [4 <./images/actions_probability_UCB-eps-converted-to.pdf> <./images/actions_pr
-obability_OUCB-eps-converted-to.pdf> <./images/temporal_individual_tpt_UCB-eps-
-converted-to.pdf> <./images/temporal_individual_tpt_OUCB-eps-converted-to.pdf> 
-<./images/mean_tpt_UCB-eps-converted-to.pdf> <./images/mean_tpt_OUCB-eps-conver
-ted-to.pdf>] [5 <./images/actions_probability_TS-eps-converted-to.pdf> <./image
-s/actions_probability_OTS-eps-converted-to.pdf> <./images/temporal_individual_t
-pt_TS-eps-converted-to.pdf> <./images/temporal_individual_tpt_OTS-eps-converted
--to.pdf> <./images/mean_tpt_TS-eps-converted-to.pdf> <./images/mean_tpt_OTS-eps
--converted-to.pdf>]
-Package epstopdf Info: Source file: <images/hist_mean_tpt_2_WNs_actions.eps>
-(epstopdf)                    date: 2018-10-10 11:20:34
-(epstopdf)                    size: 98570 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_2_WNs_actions-eps-con
+obability_OUCB-eps-converted-to.pdf> <./images/actions_probability_CUCB-eps-con
+verted-to.pdf> <./images/temporal_individual_tpt_UCB-eps-converted-to.pdf> <./i
+mages/temporal_individual_tpt_OUCB-eps-converted-to.pdf> <./images/temporal_ind
+ividual_tpt_CUCB-eps-converted-to.pdf> <./images/mean_tpt_UCB-eps-converted-to.
+pdf> <./images/mean_tpt_OUCB-eps-converted-to.pdf> <./images/mean_tpt_CUCB-eps-
+converted-to.pdf>]
+Package epstopdf Info: Source file: <images/actions_probability_PEG.eps>
+(epstopdf)                    date: 2018-10-12 08:40:38
+(epstopdf)                    size: 29484 bytes
+(epstopdf)             Output file: <images/actions_probability_PEG-eps-convert
+ed-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:51:36
+(epstopdf)                    size: 8709 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/actions_probability
+_PEG-eps-converted-to.pdf images/actions_probability_PEG.eps>
+(epstopdf)             \includegraphics on input line 322.
+Package epstopdf Info: Output file is already uptodate.
+<images/actions_probability_PEG-eps-converted-to.pdf, id=305, 429.605pt x 322.2
+0375pt>
+File: images/actions_probability_PEG-eps-converted-to.pdf Graphic file (type pd
+f)
+<use images/actions_probability_PEG-eps-converted-to.pdf>
+Package pdftex.def Info: images/actions_probability_PEG-eps-converted-to.pdf  u
+sed on input line 322.
+(pdftex.def)             Requested size: 140.92793pt x 105.69826pt.
+Package epstopdf Info: Source file: <images/temporal_individual_tpt_PEG.eps>
+(epstopdf)                    date: 2018-10-12 08:40:36
+(epstopdf)                    size: 156183 bytes
+(epstopdf)             Output file: <images/temporal_individual_tpt_PEG-eps-con
 verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 11:22:49
-(epstopdf)                    size: 94140 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_2_WNs
-_actions-eps-converted-to.pdf images/hist_mean_tpt_2_WNs_actions.eps>
-(epstopdf)             \includegraphics on input line 269.
+(epstopdf)                    date: 2018-10-12 08:51:36
+(epstopdf)                    size: 26194 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/temporal_individual
+_tpt_PEG-eps-converted-to.pdf images/temporal_individual_tpt_PEG.eps>
+(epstopdf)             \includegraphics on input line 326.
 Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_2_WNs_actions-eps-converted-to.pdf, id=283, 502.87875pt x
- 352.31625pt>
-File: images/hist_mean_tpt_2_WNs_actions-eps-converted-to.pdf Graphic file (typ
+<images/temporal_individual_tpt_PEG-eps-converted-to.pdf, id=306, 437.635pt x 3
+37.26pt>
+File: images/temporal_individual_tpt_PEG-eps-converted-to.pdf Graphic file (typ
 e pdf)
-<use images/hist_mean_tpt_2_WNs_actions-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_2_WNs_actions-eps-converted-to.pd
-f  used on input line 269.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_4_WNs_actions.eps>
-(epstopdf)                    date: 2018-10-10 11:20:36
-(epstopdf)                    size: 100838 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_4_WNs_actions-eps-con
-verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 11:22:50
-(epstopdf)                    size: 96649 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_4_WNs
-_actions-eps-converted-to.pdf images/hist_mean_tpt_4_WNs_actions.eps>
-(epstopdf)             \includegraphics on input line 273.
+<use images/temporal_individual_tpt_PEG-eps-converted-to.pdf>
+Package pdftex.def Info: images/temporal_individual_tpt_PEG-eps-converted-to.pd
+f  used on input line 326.
+(pdftex.def)             Requested size: 140.92793pt x 108.60469pt.
+Package epstopdf Info: Source file: <images/mean_tpt_PEG.eps>
+(epstopdf)                    date: 2018-10-12 08:40:37
+(epstopdf)                    size: 16092 bytes
+(epstopdf)             Output file: <images/mean_tpt_PEG-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-10-12 08:51:37
+(epstopdf)                    size: 7212 bytes
+(epstopdf)             Command: <repstopdf --outfile=images/mean_tpt_PEG-eps-co
+nverted-to.pdf images/mean_tpt_PEG.eps>
+(epstopdf)             \includegraphics on input line 330.
 Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_4_WNs_actions-eps-converted-to.pdf, id=284, 502.87875pt x
- 352.31625pt>
-File: images/hist_mean_tpt_4_WNs_actions-eps-converted-to.pdf Graphic file (typ
-e pdf)
-<use images/hist_mean_tpt_4_WNs_actions-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_4_WNs_actions-eps-converted-to.pd
-f  used on input line 273.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_6_WNs_actions.eps>
-(epstopdf)                    date: 2018-10-10 11:20:38
-(epstopdf)                    size: 102642 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_6_WNs_actions-eps-con
-verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 11:22:51
-(epstopdf)                    size: 98908 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_6_WNs
-_actions-eps-converted-to.pdf images/hist_mean_tpt_6_WNs_actions.eps>
-(epstopdf)             \includegraphics on input line 277.
-Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_6_WNs_actions-eps-converted-to.pdf, id=285, 502.87875pt x
- 352.31625pt>
-File: images/hist_mean_tpt_6_WNs_actions-eps-converted-to.pdf Graphic file (typ
-e pdf)
-<use images/hist_mean_tpt_6_WNs_actions-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_6_WNs_actions-eps-converted-to.pd
-f  used on input line 277.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_8_WNs_actions.eps>
-(epstopdf)                    date: 2018-10-10 11:20:40
-(epstopdf)                    size: 102958 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_8_WNs_actions-eps-con
-verted-to.pdf>
-(epstopdf)                    date: 2018-10-10 11:22:51
-(epstopdf)                    size: 98871 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_8_WNs
-_actions-eps-converted-to.pdf images/hist_mean_tpt_8_WNs_actions.eps>
-(epstopdf)             \includegraphics on input line 281.
-Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_8_WNs_actions-eps-converted-to.pdf, id=286, 502.87875pt x
- 352.31625pt>
-File: images/hist_mean_tpt_8_WNs_actions-eps-converted-to.pdf Graphic file (typ
-e pdf)
-<use images/hist_mean_tpt_8_WNs_actions-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_8_WNs_actions-eps-converted-to.pd
-f  used on input line 281.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_2_WNs.eps>
-(epstopdf)                    date: 2018-10-10 11:26:28
-(epstopdf)                    size: 97097 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_2_WNs-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2018-10-10 11:27:40
-(epstopdf)                    size: 93451 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_2_WNs
--eps-converted-to.pdf images/hist_mean_tpt_2_WNs.eps>
-(epstopdf)             \includegraphics on input line 293.
-Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_2_WNs-eps-converted-to.pdf, id=288, 502.87875pt x 352.316
-25pt>
-File: images/hist_mean_tpt_2_WNs-eps-converted-to.pdf Graphic file (type pdf)
-<use images/hist_mean_tpt_2_WNs-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_2_WNs-eps-converted-to.pdf  used 
-on input line 293.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_4_WNs.eps>
-(epstopdf)                    date: 2018-10-10 11:26:30
-(epstopdf)                    size: 103225 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_4_WNs-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2018-10-10 11:27:41
-(epstopdf)                    size: 99838 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_4_WNs
--eps-converted-to.pdf images/hist_mean_tpt_4_WNs.eps>
-(epstopdf)             \includegraphics on input line 297.
-Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_4_WNs-eps-converted-to.pdf, id=289, 502.87875pt x 352.316
-25pt>
-File: images/hist_mean_tpt_4_WNs-eps-converted-to.pdf Graphic file (type pdf)
-<use images/hist_mean_tpt_4_WNs-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_4_WNs-eps-converted-to.pdf  used 
-on input line 297.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_6_WNs.eps>
-(epstopdf)                    date: 2018-10-10 11:26:33
-(epstopdf)                    size: 101565 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_6_WNs-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2018-10-10 11:27:41
-(epstopdf)                    size: 97585 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_6_WNs
--eps-converted-to.pdf images/hist_mean_tpt_6_WNs.eps>
-(epstopdf)             \includegraphics on input line 301.
-Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_6_WNs-eps-converted-to.pdf, id=290, 502.87875pt x 352.316
-25pt>
-File: images/hist_mean_tpt_6_WNs-eps-converted-to.pdf Graphic file (type pdf)
-<use images/hist_mean_tpt_6_WNs-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_6_WNs-eps-converted-to.pdf  used 
-on input line 301.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
-Package epstopdf Info: Source file: <images/hist_mean_tpt_8_WNs.eps>
-(epstopdf)                    date: 2018-10-10 11:26:35
-(epstopdf)                    size: 100625 bytes
-(epstopdf)             Output file: <images/hist_mean_tpt_8_WNs-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2018-10-10 11:27:42
-(epstopdf)                    size: 96723 bytes
-(epstopdf)             Command: <repstopdf --outfile=images/hist_mean_tpt_8_WNs
--eps-converted-to.pdf images/hist_mean_tpt_8_WNs.eps>
-(epstopdf)             \includegraphics on input line 305.
-Package epstopdf Info: Output file is already uptodate.
-<images/hist_mean_tpt_8_WNs-eps-converted-to.pdf, id=291, 502.87875pt x 352.316
-25pt>
-File: images/hist_mean_tpt_8_WNs-eps-converted-to.pdf Graphic file (type pdf)
-<use images/hist_mean_tpt_8_WNs-eps-converted-to.pdf>
-Package pdftex.def Info: images/hist_mean_tpt_8_WNs-eps-converted-to.pdf  used 
-on input line 305.
-(pdftex.def)             Requested size: 187.89914pt x 131.6398pt.
+<images/mean_tpt_PEG-eps-converted-to.pdf, id=307, 450.68375pt x 328.22626pt>
+File: images/mean_tpt_PEG-eps-converted-to.pdf Graphic file (type pdf)
+<use images/mean_tpt_PEG-eps-converted-to.pdf>
+Package pdftex.def Info: images/mean_tpt_PEG-eps-converted-to.pdf  used on inpu
+t line 330.
+(pdftex.def)             Requested size: 140.92793pt x 102.63556pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[6 <./images/hist_mean_tpt_2_WNs_actions-eps-converted-to.pdf> <./images/hist_m
-ean_tpt_4_WNs_actions-eps-converted-to.pdf> <./images/hist_mean_tpt_6_WNs_actio
-ns-eps-converted-to.pdf> <./images/hist_mean_tpt_8_WNs_actions-eps-converted-to
-.pdf>] [7 <./images/hist_mean_tpt_2_WNs-eps-converted-to.pdf> <./images/hist_me
-an_tpt_4_WNs-eps-converted-to.pdf> <./images/hist_mean_tpt_6_WNs-eps-converted-
-to.pdf> <./images/hist_mean_tpt_8_WNs-eps-converted-to.pdf>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 319.
-
-
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 319.
-<images/impact_num_channels.png, id=378, 562.1pt x 421.575pt>
-File: images/impact_num_channels.png Graphic file (type png)
-<use images/impact_num_channels.png>
-Package pdftex.def Info: images/impact_num_channels.png  used on input line 329
-.
-(pdftex.def)             Requested size: 187.89914pt x 140.92133pt.
-<images/impact_num_channels_on_variability.png, id=379, 562.1pt x 421.575pt>
-File: images/impact_num_channels_on_variability.png Graphic file (type png)
-<use images/impact_num_channels_on_variability.png>
-Package pdftex.def Info: images/impact_num_channels_on_variability.png  used on
- input line 333.
-(pdftex.def)             Requested size: 187.89914pt x 140.92133pt.
-<images/impact_tx_power_levels_on_throughput.png, id=380, 562.1pt x 421.575pt>
-File: images/impact_tx_power_levels_on_throughput.png Graphic file (type png)
-<use images/impact_tx_power_levels_on_throughput.png>
-Package pdftex.def Info: images/impact_tx_power_levels_on_throughput.png  used 
-on input line 337.
-(pdftex.def)             Requested size: 187.89914pt x 140.92133pt.
-<images/impact_tx_power_levels_on_variability.png, id=381, 562.1pt x 421.575pt>
-
-File: images/impact_tx_power_levels_on_variability.png Graphic file (type png)
-<use images/impact_tx_power_levels_on_variability.png>
-Package pdftex.def Info: images/impact_tx_power_levels_on_variability.png  used
- on input line 341.
-(pdftex.def)             Requested size: 187.89914pt x 140.92133pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 348.
- [8 <./images/impact_num_channels.png (PNG copy)> <./images/impact_num_channels
-_on_variability.png (PNG copy)> <./images/impact_tx_power_levels_on_throughput.
-png (PNG copy)> <./images/impact_tx_power_levels_on_variability.png (PNG copy)>
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 348.
-
-(./ordered_learning.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 348.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 348.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 398.
+[5 <./images/actions_probability_TS-eps-converted-to.pdf> <./images/actions_pro
+bability_OTS-eps-converted-to.pdf> <./images/actions_probability_CTS-eps-conver
+ted-to.pdf> <./images/temporal_individual_tpt_TS-eps-converted-to.pdf> <./image
+s/temporal_individual_tpt_OTS-eps-converted-to.pdf> <./images/temporal_individu
+al_tpt_CTS-eps-converted-to.pdf> <./images/mean_tpt_TS-eps-converted-to.pdf> <.
+/images/mean_tpt_OTS-eps-converted-to.pdf> <./images/mean_tpt_CTS-eps-converted
+-to.pdf>] [6 <./images/actions_probability_PEG-eps-converted-to.pdf> <./images/
+temporal_individual_tpt_PEG-eps-converted-to.pdf> <./images/mean_tpt_PEG-eps-co
+nverted-to.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 398.
+ (./ordered_learning.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 398.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 398.
 Package rerunfilecheck Info: File `ordered_learning.out' has not changed.
-(rerunfilecheck)             Checksum: 03EC9CDA6B81837C71CAD668811B807B;466.
+(rerunfilecheck)             Checksum: 63ADA20F1CC15A8E777A5AEB7D6368B1;389.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 22558 strings out of 492649
- 427377 string characters out of 6129622
- 487238 words of memory out of 5000000
- 26090 multiletter control sequences out of 15000+600000
+ 22553 strings out of 492649
+ 427877 string characters out of 6129622
+ 488743 words of memory out of 5000000
+ 26089 multiletter control sequences out of 15000+600000
  542960 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 53i,8n,92p,10386b,727s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,8n,92p,10386b,739s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 }</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></u
-sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr
-/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/l
-ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loc
-al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local
-/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/te
-xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/tex
-live/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texl
-ive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on ordered_learning.pdf (8 pages, 1274694 bytes).
+/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
+sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
+/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/l
+ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/lo
+cal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loca
+l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local
+/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on ordered_learning.pdf (6 pages, 534605 bytes).
 PDF statistics:
- 431 PDF objects out of 1000 (max. 8388607)
- 283 compressed objects within 3 object streams
- 24 named destinations out of 1000 (max. 500000)
- 245 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 442 PDF objects out of 1000 (max. 8388607)
+ 317 compressed objects within 4 object streams
+ 20 named destinations out of 1000 (max. 500000)
+ 252 words of extra memory for PDF output out of 10000 (max. 10000000)
 

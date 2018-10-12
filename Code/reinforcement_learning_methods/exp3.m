@@ -122,8 +122,8 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
                         weightsPerArm(wlan_i, k) = weightsPerArm(wlan_i, k)^...
                             (eta / previousEta) * exp((eta * estimated_reward(wlan_i)));
                     else
-                            weightsPerArm(wlan_ix, k) = ...
-                                weightsPerArm(wlan_ix, k)^(eta / previousEta);
+                        weightsPerArm(wlan_ix, k) = ...
+                            weightsPerArm(wlan_ix, k)^(eta / previousEta);
                     end
                  end
                  weightsPerArm(wlan_i, k) = max( weightsPerArm(wlan_i, k), 1e-6 );

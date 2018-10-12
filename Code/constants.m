@@ -9,8 +9,8 @@
 %%% ************************************************************************
 
 nWlans = 4;                         % Number of WLANs in the map
-totalIterations = 1000;            % Maximum convergence time (one period implies the participation of all WLANs)
-minimumIterationToConsider = 500;  % Iteration from which to consider the obtained results
+totalIterations = 1000;             % Maximum convergence time (one period implies the participation of all WLANs)
+minimumIterationToConsider = 500;   % Iteration from which to consider the obtained results
 totalScenarios = 100;               % Number of TOTAL repetitions to take the average
 
 % Define the transitory and the permanent intervals of iterations
@@ -19,10 +19,10 @@ permanentInterval = minimumIterationToConsider + 1 : totalIterations;
 
 NOISE_DBM = -100;                   % Floor NOISE_DBM in dBm
 
-nChannels = 2;                      % Number of available channels (from 1 to n_channels)
+nChannels = 3;                      % Number of available channels (from 1 to n_channels)
 channelActions = 1 : nChannels;     % Possible channels
 ccaActions = [-82];                 % CCA levels (dBm)
-txPowerActions = [-15 0 15 30];          % Transmit power levels (dBm)
+txPowerActions = [-15 0 15 30];     % Transmit power levels (dBm)
 
 % Each state represents an [i,j,k] combination for indexes on "channels", "cca" and "tx_power"
 possibleActions = 1:(size(channelActions, 2) * ...

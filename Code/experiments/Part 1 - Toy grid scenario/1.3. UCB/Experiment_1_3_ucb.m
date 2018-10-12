@@ -38,35 +38,30 @@ disp('-----------------------')
 % Generate constants from 'constants.m'
 constants
 
-load('throughput_per_configuration_cochannel_interference_on.mat')
-%load('throughput_per_configuration_cochannel_interference_off.mat')
-% Find the best configuration for each WLAN and display it
-for i = 1 : size(throughputPerConfiguration, 1)
-    agg_tpt(i) = sum(throughputPerConfiguration(i,:));
-    fairness(i) = jains_fairness(throughputPerConfiguration(i,:));
-    prop_fairness(i) = sum(log(throughputPerConfiguration(i,:)));
-    max_min(i) = min(throughputPerConfiguration(i,:));
-end    
-
-% Proportional fairness
-[val, ix] = max(prop_fairness);
-max_pf = agg_tpt(ix);    
-% Aggregate throughput
-[max_agg, ix2] = max(agg_tpt);
-% Max-min throughput
-[max_max_min, ix3] = max(max_min);
-
 % Setup the scenario: generate WLANs and initialize states and actions
 wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
 
 % Compute the maximum achievable throughput per WLAN
 upperBoundThroughputPerWlan = compute_max_selfish_throughput( wlans );
+
+load('workspace_throughput_all_combinations_toy_scenario.mat')
+% JFI
+[max_f, ix_max_f] = max(jains_fairness(throughputPerConfiguration));
+% Proportional fairness
+[max_pf, ix_max_pf] = max(sum(log(throughputPerConfiguration)'));
+agg_tpt_max_pf = sum(throughputPerConfiguration(ix_max_pf,:));
+% Aggregate throughput
+[max_agg, ix_max_agg] = max(sum(throughputPerConfiguration'));
+% Max-min throughput
+[max_max_min, ix_max_min] = max(min(throughputPerConfiguration'));
     
 % Compute the throughput experienced per WLAN at each iteration
 [tpt_evolution_per_wlan_ucb, times_arm_has_been_played_ucb, regret_per_wlan_ucb] = ...
     ucb(wlans, upperBoundThroughputPerWlan);
 [tpt_evolution_per_wlan_oucb, times_arm_has_been_played_oucb, regret_per_wlan_oucb] = ...
     ordered_ucb(wlans, upperBoundThroughputPerWlan);
+[tpt_evolution_per_wlan_cucb, times_arm_has_been_played_cucb, regret_per_wlan_cucb] = ...
+    ordered_ucb_cumulative(wlans, upperBoundThroughputPerWlan);
 
 % Plot the results
 if plotResults
@@ -74,6 +69,8 @@ if plotResults
         times_arm_has_been_played_ucb, upperBoundThroughputPerWlan, max_max_min, 'UCB');
     display_results_individual_performance(wlans, tpt_evolution_per_wlan_oucb, ...
         times_arm_has_been_played_oucb, upperBoundThroughputPerWlan, max_max_min, 'OUCB');
+    display_results_individual_performance(wlans, tpt_evolution_per_wlan_cucb, ...
+        times_arm_has_been_played_cucb, upperBoundThroughputPerWlan, max_max_min, 'CUCB');
 end
 
 % Save the workspace

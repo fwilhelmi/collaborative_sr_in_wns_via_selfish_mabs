@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan] = ...
-    ordered_exp3(wlans, gamma, initialEta, upperBoundThroughputPerWlan, varargin)
+    ordered_exp3_cumulative(wlans, gamma, initialEta, upperBoundThroughputPerWlan, varargin)
 % exp3 applies EXP3 (basic formulation) to maximize the experienced
 % throughput of a given scenario
 %
@@ -66,13 +66,24 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
     armsProbabilities = (1/K)*ones(nWlans, K);  % Initialize arms probabilities
     estimated_reward = zeros(1, nWlans);        % Initialize the estimated reward for each WN    
     regretAfterAction = zeros(1, nWlans);       % Initialize the regret experienced by each WLAN
-    eta = initialEta;  % Initialize the learning rate
+    eta = initialEta * ones(1, nWlans);  % Initialize the learning rate
     previous_eta = eta;
+    
+    cumulative_reward = zeros(1, nWlans);
+    iterations_without_acting = ones(1, nWlans);        
+    iteration_per_wlan = zeros(1, nWlans);    
     
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME
     iteration = 1;
+    order = [];
     while(iteration < totalIterations + 1) 
-        wlan_ix = mod(iteration, nWlans) + 1;
+        
+        if isempty(order)
+            order = randperm(nWlans);
+        end        
+        wlan_ix = order(1);
+        order(1) = [];
+        
         % Update arms probabilities according to weights      
         for k = 1 : K
             armsProbabilities(wlan_ix, k) = (1 - gamma) * ...
@@ -99,51 +110,54 @@ function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan
         % Compute the reward with the throughput obtained in the round after applying the action
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps    
         % Update the reward of each WN
-        rw = tptAfterAction./upperBoundThroughputPerWlan;         
-        % Store the throughput at the end of the iteration for statistics
-        tptExperiencedPerWlan(iteration, :) = tptAfterAction;
-        regretExperiencedPerWlan(iteration, :) = (1 - rw);               
-        % Update transitions counter of static WNs
+        rw = tptAfterAction./upperBoundThroughputPerWlan;     
+        cumulative_reward = cumulative_reward + rw;             
+        % 
+        % Update the times WN has selected the current action
+        timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) = ...
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 1; 
+        % Update estimated reward according to the past experience
+        avg_reward = cumulative_reward(wlan_ix)/iterations_without_acting(wlan_ix);
+        iterations_without_acting(wlan_ix) = 1;
+        cumulative_reward(wlan_ix) = 0;  
+        estimated_reward(wlan_ix) = (avg_reward / ...
+            armsProbabilities(wlan_ix, selectedArm(wlan_ix)));
+        % Update the weights of each action       
+        for k = 1 : K
+            if eta(wlan_ix) == 0 && previous_eta(wlan_ix) == 0
+                weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^0 * ...
+                    exp((eta(wlan_ix) * estimated_reward(wlan_ix)));  
+            else 
+                if k == selectedArm(wlan_ix)
+                    weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^...
+                        (eta(wlan_ix)/previous_eta(wlan_ix)) * ...
+                        exp((eta(wlan_ix) * estimated_reward(wlan_ix)));
+                    else
+                        weightsPerArm(wlan_ix, k) = weightsPerArm(wlan_ix, k)^...
+                            (eta(wlan_ix) / previous_eta(wlan_ix));
+                end                
+            end
+            % Bound the weight assigned to each arm
+            weightsPerArm(wlan_ix, k) = max( weightsPerArm(wlan_ix, k), 1e-6 );
+        end   
         for wlan_ix_aux = 1 : nWlans
-            % Update the times WN has selected the current action
-            timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1; 
-            % Update estimated reward according to the past experience
-            estimated_reward(wlan_ix_aux) = (rw(wlan_ix_aux) / ...
-                armsProbabilities(wlan_ix_aux, selectedArm(wlan_ix_aux)));
-            % Update the weights of each action       
-            for k = 1 : K
-                if eta == 0 && previous_eta == 0
-                    weightsPerArm(wlan_ix_aux, k) = weightsPerArm(wlan_ix_aux, k)^0 * ...
-                        exp((eta * estimated_reward(wlan_ix_aux)));  
-                else 
-                    if k == selectedArm(wlan_ix_aux)
-                        weightsPerArm(wlan_ix_aux, k) = weightsPerArm(wlan_ix_aux, k)^...
-                            (eta/previous_eta) * ...
-                            exp((eta * estimated_reward(wlan_ix_aux)));
-%                     else
-%                         weightsPerArm(wlan_ix_aux, k) = weightsPerArm(wlan_ix_aux, k)^...
-%                             (eta / previous_eta);
-                    end                
-                end
-                % Bound the weight assigned to each arm
-                weightsPerArm(wlan_ix_aux, k) = max( weightsPerArm(wlan_ix_aux, k), 1e-6 );
-            end            
             if wlan_ix_aux ~= wlan_ix
                 transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;    
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                    timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;                                             
-            end        
-        end          
+                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;                                              
+            end              
+        end  
+        % Store the throughput at the end of the iteration for statistics
+        tptExperiencedPerWlan(iteration, :) = tptAfterAction;
+        regretExperiencedPerWlan(iteration, :) = (1 - rw);  
         % Update the learning rate according to the "update mode"
-        previous_eta = eta;
+        previous_eta(wlan_ix) = eta(wlan_ix);
         if updateMode == UPDATE_MODE_FAST
-            eta = initialEta / iteration;    
+            eta(wlan_ix) = initialEta / iteration_per_wlan(wlan_ix);    
         elseif updateMode == UPDATE_MODE_SLOW
-            eta = initialEta / sqrt(iteration);   
+            eta(wlan_ix) = initialEta / sqrt(iteration_per_wlan(wlan_ix));   
         end     
         % Increase the number of iterations   
+        iteration_per_wlan(wlan_ix) = iteration_per_wlan(wlan_ix) + 1;
         iteration = iteration + 1;   
     end
         
