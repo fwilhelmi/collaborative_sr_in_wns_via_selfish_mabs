@@ -42,24 +42,38 @@ gamma = 0;
 % Setup the scenario: generate WLANs and initialize states and actions
 wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
 
+% Compute the maximum achievable throughput per WLAN
+upperBoundThroughputPerWlan = compute_max_selfish_throughput( wlans );
+
+load('workspace_throughput_all_combinations_toy_scenario.mat')
+% JFI
+[max_f, ix_max_f] = max(jains_fairness(throughputPerConfiguration));
+% Proportional fairness
+[max_pf, ix_max_pf] = max(sum(log(throughputPerConfiguration)'));
+agg_tpt_max_pf = sum(throughputPerConfiguration(ix_max_pf,:));
+% Aggregate throughput
+[max_agg, ix_max_agg] = max(sum(throughputPerConfiguration'));
+% Max-min throughput
+[max_max_min, ix_max_min] = max(min(throughputPerConfiguration'));
+
 % Initialize variables for storing the output
-throughputEvolutionPerWlan = cell(1, totalRepetitions);
-meanThroughputEvolutionPerWlan = cell(1, totalRepetitions);
-fairnessEvolution = cell(1, totalRepetitions);
-meanThroughputExperienced = cell(1, totalRepetitions);
-aggregateThroughput = cell(1, totalRepetitions);
+throughputEvolutionPerWlan = cell(1, totalScenarios);
+meanThroughputEvolutionPerWlan = cell(1, totalScenarios);
+fairnessEvolution = cell(1, totalScenarios);
+meanThroughputExperienced = cell(1, totalScenarios);
+aggregateThroughput = cell(1, totalScenarios);
 
 %% ITERATE FOR NUMBER OF REPETITIONS (TO TAKE THE AVERAGE)
-for r = 1 : totalRepetitions
+for r = 1 : totalScenarios
     disp('------------------------------------')
-    disp(['ROUND ' num2str(r) '/' num2str(totalRepetitions) ...
+    disp(['ROUND ' num2str(r) '/' num2str(totalScenarios) ...
         ' (' num2str(totalIterations) ' iterations)'])
     disp('------------------------------------')
     % Iterate for each gamma
     for g = 1 : size(gamma, 2)
         % Iterate for each eta
         for e = 1 : size(initialEta, 2)         
-            [throughputEvolutionPerWlan{r}, actionsProbability] = exp3(wlans, gamma(g), initialEta(e));
+            [throughputEvolutionPerWlan{r}, actionsProbability] = exp3(wlans, gamma(g), initialEta(e), upperBoundThroughputPerWlan);
             for iteration=1:totalIterations
                 meanThroughputEvolutionPerWlan{r}(iteration) = mean(throughputEvolutionPerWlan{r}(iteration,:));
             end
@@ -84,27 +98,23 @@ set(0,'defaultUipanelFontName','Times New Roman');
 auxArray = zeros(size(gamma, 2), size(initialEta, 2));
 for g = 1 : size(gamma, 2)     
     for e = 1 : size(initialEta, 2)
-        for i = 1 : totalRepetitions
+        for i = 1 : totalScenarios
             auxArray(g, e) = auxArray(g, e) + aggregateThroughput{i}(g, e);
         end
     end
 end
-meanAggregateThroughputPerEpsilon = auxArray / totalRepetitions;
-disp('meanAggregateThroughputPerEpsilon')
-disp(meanAggregateThroughputPerEpsilon)
+meanAggregateThroughputPerEta = auxArray / totalScenarios;
 
 auxArrayStd = zeros(size(gamma, 2), size(initialEta, 2));
 for g = 1:size(gamma, 2)     
     for e = 1:size(initialEta, 2)
-        for i = 1:totalRepetitions
+        for i = 1:totalScenarios
             auxArrayStd(g, e) = auxArrayStd(g, e) + ((aggregateThroughput{i}(g, e) ...
-                - meanAggregateThroughputPerEpsilon(g, e))^2);
+                - meanAggregateThroughputPerEta(g, e))^2);
         end
     end
 end
-stdAggregateThroughputPerEpsilon = sqrt(auxArrayStd / totalRepetitions);
-disp('stdAggregateThroughputPerEpsilon')
-disp(stdAggregateThroughputPerEpsilon)
+stdAggregateThroughputPerEta = sqrt(auxArrayStd / totalScenarios);
 
 % Plot the results with error
 l = {};
@@ -112,16 +122,16 @@ figure('pos',[450 400 500 350])
 axes;
 axis([1 20 30 70]);
 for g = 1:size(gamma, 2)   
-    errorbar(initialEta, meanAggregateThroughputPerEpsilon(g, :), stdAggregateThroughputPerEpsilon(g, :), '-d');
+    errorbar(initialEta, meanAggregateThroughputPerEta(g, :), stdAggregateThroughputPerEta(g, :), '-d');
     hold on
     l = [l ['\gamma = ' num2str(gamma(g))]];
 end
 grid on
-plot(initialEta, agg_tpt_optimal_prop_fairness * ones(1, size(initialEta, 2)), '--r');
+plot(initialEta, agg_tpt_max_pf * ones(1, size(initialEta, 2)), '--r');
 set(gca, 'FontSize', 22)
 xlabel('\eta_{0}','FontSize', 24)
 ylabel('Network Throughput (Mbps)','FontSize',24)
-axis([min(initialEta) max(initialEta) 700 1.1 * agg_tpt_optimal_prop_fairness])
+axis([min(initialEta) max(initialEta) 0 1.1 * agg_tpt_max_pf])
 xticks(initialEta)
 legend({'Mean agg. throughput', 'Optimal (max. prop. fairness)'})
 

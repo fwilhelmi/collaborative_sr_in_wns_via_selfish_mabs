@@ -9,8 +9,8 @@
 %%% ************************************************************************
 
 nWlans = 4;                         % Number of WLANs in the map
-totalIterations = 1000;             % Maximum convergence time (one period implies the participation of all WLANs)
-minimumIterationToConsider = 500;   % Iteration from which to consider the obtained results
+totalIterations = 10000;             % Maximum convergence time (one period implies the participation of all WLANs)
+minimumIterationToConsider = 5000;   % Iteration from which to consider the obtained results
 totalScenarios = 100;               % Number of TOTAL repetitions to take the average
 
 % Define the transitory and the permanent intervals of iterations
