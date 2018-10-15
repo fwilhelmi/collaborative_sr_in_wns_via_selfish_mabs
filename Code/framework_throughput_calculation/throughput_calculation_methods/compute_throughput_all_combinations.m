@@ -51,66 +51,66 @@ function throughputPerConfiguration = compute_throughput_all_combinations( wlans
         throughputPerConfiguration(i, :) = compute_throughput_from_sinr(wlan_aux, NOISE_DBM); 
     end
     
-%     % Find the best configuration for each WLAN and display it
-%     for i = 1 : size(throughputPerConfiguration, 1)
-%         agg_tpt(i) = sum(throughputPerConfiguration(i,:));
-%         fairness(i) = jains_fairness(throughputPerConfiguration(i,:));
-%         prop_fairness(i) = sum(log(throughputPerConfiguration(i,:)));
-%         max_min(i) = min(throughputPerConfiguration(i,:));
-%     end    
-%     
-%     % Proportional fairness
-%     [val, ix] = max(prop_fairness);
-%     disp('---------------')
-%     disp(['Best proportional fairness: ' num2str(val)])
-%     disp(['Aggregate throughput: ' num2str(agg_tpt(ix)) ' Mbps'])   
-%     max_pf = agg_tpt(ix);
-%     disp(['Mean individual throughput: ' num2str(mean(throughputPerConfiguration(ix, :))) ' Mbps']) 
-%     disp(['std: ' num2str(std(throughputPerConfiguration(ix, :))) ' Mbps']) 
-%     disp(['Fairness: ' num2str(fairness(ix))])
-%     disp(['Best configurations: ' num2str(possible_comb(ix, :))])
-%     for i = 1:num_wlans
-%         [a, ~, c] = val2indexes(possible_comb(ix, i), num_channels, size(ccaActions, 2), size(txPowerActions, 2));  
-%         disp(['   * WLAN' num2str(i) ':'])
-%         disp(['       - Channel:' num2str(a)])
-%         disp(['       - TPC:' num2str(txPowerActions(c))])
-%         disp(['       - Throughput:' num2str(throughputPerConfiguration(ix, i))])
-%     end
-%     
-%     % Aggregate throughput
-%     [max_agg, ix2] = max(agg_tpt);
-%     disp('---------------')
-%     disp(['Best aggregate throughput: ' num2str(max_agg) ' Mbps'])
-%     disp(['Max individual throughput: ' num2str(max(throughputPerConfiguration(ix2, :))) ' Mbps']) 
-%     disp(['Min individual throughput: ' num2str(min(throughputPerConfiguration(ix2, :))) ' Mbps']) 
-%     disp(['Mean individual throughput: ' num2str(mean(throughputPerConfiguration(ix2, :))) ' Mbps']) 
-%     disp(['std: ' num2str(std(throughputPerConfiguration(ix2, :))) ' Mbps'])    
-%     disp(['Fairness: ' num2str(fairness(ix2))])
-%     disp(['Best configurations: ' num2str(possible_comb(ix2, :))])
-%     for i = 1 : num_wlans
-%         [a, ~, c] = val2indexes(possible_comb(ix2, i), num_channels, size(ccaActions, 2), size(txPowerActions, 2));  
-%         disp(['   * WLAN' num2str(i) ':'])
-%         disp(['       - Channel:' num2str(a)])
-%         disp(['       - TPC:' num2str(txPowerActions(c))])
-%         disp(['       - Throughput:' num2str(throughputPerConfiguration(ix2, i))])
-%     end
-%     
-%     % Max-min throughput
-%     [max_max_min, ix3] = max(max_min);
-%     disp('---------------')
-%     disp(['Best max-min throughput: ' num2str(max_max_min) ' Mbps'])
-%     disp(['Max individual throughput: ' num2str(max(throughputPerConfiguration(ix3, :))) ' Mbps']) 
-%     disp(['Min individual throughput: ' num2str(min(throughputPerConfiguration(ix3, :))) ' Mbps']) 
-%     disp(['Mean individual throughput: ' num2str(mean(throughputPerConfiguration(ix3, :))) ' Mbps']) 
-%     disp(['std: ' num2str(std(throughputPerConfiguration(ix3, :))) ' Mbps'])    
-%     disp(['Fairness: ' num2str(fairness(ix3))])
-%     disp(['Best configurations: ' num2str(possible_comb(ix3, :))])
-%     for i = 1 : num_wlans
-%         [a, ~, c] = val2indexes(possible_comb(ix3, i), num_channels, size(ccaActions, 2), size(txPowerActions, 2));  
-%         disp(['   * WLAN' num2str(i) ':'])
-%         disp(['       - Channel:' num2str(a)])
-%         disp(['       - TPC:' num2str(txPowerActions(c))])
-%         disp(['       - Throughput:' num2str(throughputPerConfiguration(ix3, i))])
-%     end
+    % Find the best configuration for each WLAN and display it
+    for i = 1 : size(throughputPerConfiguration, 1)
+        agg_tpt(i) = sum(throughputPerConfiguration(i,:));
+        fairness(i) = jains_fairness(throughputPerConfiguration(i,:));
+        prop_fairness(i) = sum(log(throughputPerConfiguration(i,:)));
+        max_min(i) = min(throughputPerConfiguration(i,:));
+    end    
+    
+    % Proportional fairness
+    [val, ix] = max(prop_fairness);
+    disp('---------------')
+    disp(['Best proportional fairness: ' num2str(val)])
+    disp(['Aggregate throughput: ' num2str(agg_tpt(ix)) ' Mbps'])   
+    max_pf = agg_tpt(ix);
+    disp(['Mean individual throughput: ' num2str(mean(throughputPerConfiguration(ix, :))) ' Mbps']) 
+    disp(['std: ' num2str(std(throughputPerConfiguration(ix, :))) ' Mbps']) 
+    disp(['Fairness: ' num2str(fairness(ix))])
+    disp(['Best configurations: ' num2str(possible_comb(ix, :))])
+    for i = 1:num_wlans
+        [a, ~, c] = val2indexes(possible_comb(ix, i), num_channels, size(ccaActions, 2), size(txPowerActions, 2));  
+        disp(['   * WLAN' num2str(i) ':'])
+        disp(['       - Channel:' num2str(a)])
+        disp(['       - TPC:' num2str(txPowerActions(c))])
+        disp(['       - Throughput:' num2str(throughputPerConfiguration(ix, i))])
+    end
+    
+    % Aggregate throughput
+    [max_agg, ix2] = max(agg_tpt);
+    disp('---------------')
+    disp(['Best aggregate throughput: ' num2str(max_agg) ' Mbps'])
+    disp(['Max individual throughput: ' num2str(max(throughputPerConfiguration(ix2, :))) ' Mbps']) 
+    disp(['Min individual throughput: ' num2str(min(throughputPerConfiguration(ix2, :))) ' Mbps']) 
+    disp(['Mean individual throughput: ' num2str(mean(throughputPerConfiguration(ix2, :))) ' Mbps']) 
+    disp(['std: ' num2str(std(throughputPerConfiguration(ix2, :))) ' Mbps'])    
+    disp(['Fairness: ' num2str(fairness(ix2))])
+    disp(['Best configurations: ' num2str(possible_comb(ix2, :))])
+    for i = 1 : num_wlans
+        [a, ~, c] = val2indexes(possible_comb(ix2, i), num_channels, size(ccaActions, 2), size(txPowerActions, 2));  
+        disp(['   * WLAN' num2str(i) ':'])
+        disp(['       - Channel:' num2str(a)])
+        disp(['       - TPC:' num2str(txPowerActions(c))])
+        disp(['       - Throughput:' num2str(throughputPerConfiguration(ix2, i))])
+    end
+    
+    % Max-min throughput
+    [max_max_min, ix3] = max(max_min);
+    disp('---------------')
+    disp(['Best max-min throughput: ' num2str(max_max_min) ' Mbps'])
+    disp(['Max individual throughput: ' num2str(max(throughputPerConfiguration(ix3, :))) ' Mbps']) 
+    disp(['Min individual throughput: ' num2str(min(throughputPerConfiguration(ix3, :))) ' Mbps']) 
+    disp(['Mean individual throughput: ' num2str(mean(throughputPerConfiguration(ix3, :))) ' Mbps']) 
+    disp(['std: ' num2str(std(throughputPerConfiguration(ix3, :))) ' Mbps'])    
+    disp(['Fairness: ' num2str(fairness(ix3))])
+    disp(['Best configurations: ' num2str(possible_comb(ix3, :))])
+    for i = 1 : num_wlans
+        [a, ~, c] = val2indexes(possible_comb(ix3, i), num_channels, size(ccaActions, 2), size(txPowerActions, 2));  
+        disp(['   * WLAN' num2str(i) ':'])
+        disp(['       - Channel:' num2str(a)])
+        disp(['       - TPC:' num2str(txPowerActions(c))])
+        disp(['       - Throughput:' num2str(throughputPerConfiguration(ix3, i))])
+    end
     
 end

@@ -114,7 +114,7 @@ In order to decrease the temporal variability experienced by WNs applying online
 	\item Every WN that remains "static" in a given iteration is considered to choose the last selected action.
 \end{itemize}
 
-Two important implications are derived from the abovementioned mechanism: \emph{i)} the action-selection strategy of the learning algorithms are modified, \emph{ii)} the adversarial setting changes, so that the performance of every chosen action is potentially evaluated in a larger set of situations. According to the latter, a higher level of valuable knowledge is more likely to be provided to each arm. However, depending on the learning algorithm used, there can be other implications.
+Two important implications are derived from the abovementioned mechanism: \emph{i)} the action-selection strategies of the learning algorithms are modified, \emph{ii)} the adversarial setting changes, so that the performance of every chosen action is potentially evaluated in a larger set of situations. According to the latter, a higher level of valuable knowledge is more likely to be provided to each arm. However, depending on the learning algorithm used, there can be other implications.
  
 \section{Results - Toy Scenario}
 
@@ -127,39 +127,27 @@ Figure \ref{fig:e_greedy} shows several results regarding the application of $\v
 	\centering
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_EG}
-		\caption{Actions prob. (default)}\label{fig:actions_probability_EG}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/actions_probability_OEG}
-		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OEG}
+		\caption{Actions prob. (default)}\label{fig:hist_actions_EG}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_CEG}
-		\caption{Actions prob. (sync. 2)}\label{fig:actions_probability_CEG}
+		\caption{Actions prob. (sync.)}\label{fig:hist_actions_CEG}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_EG}
 		\caption{Temp. var.  (default)}\label{fig:temporal_individual_tpt_EG}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OEG}
-		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_OEG}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_CEG}
-		\caption{Temp. var.  (sync. 2)}\label{fig:temporal_individual_tpt_CEG}
+		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_CEG}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_EG}
 		\caption{Mean tpt. (default)}\label{fig:mean_tpt_EG}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/mean_tpt_OEG}
-		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OEG}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_CEG}
-		\caption{Mean tpt. (sync. 2)}\label{fig:mean_tpt_CEG}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_CEG}
 	\end{subfigure}
 	\caption{Simulation results in $\varepsilon$-greedy (1,000 iterations)}
 	\label{fig:e_greedy}
@@ -174,39 +162,27 @@ Figure \ref{fig:exp3} shows several results regarding the application of EXP3 in
 	\centering
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_EXP3}
-		\caption{Actions prob. (default)}\label{fig:actions_probability_EXP3}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/actions_probability_OEXP3}
-		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OEXP3}
+		\caption{Actions prob. (default)}\label{fig:hist_actions_EXP3}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_CEXP3}
-		\caption{Actions prob. (sync. 2)}\label{fig:actions_probability_CEXP3}
+		\caption{Actions prob. (sync.)}\label{fig:hist_actions_CEXP3}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_EXP3}
 		\caption{Temp. var.  (default)}\label{fig:temporal_individual_tpt_EXP3}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OEXP3}
-		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_OEXP3}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_CEXP3}
-		\caption{Temp. var.  (sync.  2)}\label{fig:temporal_individual_tpt_CEXP3}
+		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_CEXP3}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_EXP3}
 		\caption{Mean tpt. (default)}\label{fig:mean_tpt_EXP3}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/mean_tpt_OEXP3}
-		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OEXP3}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_CEXP3}
-		\caption{Mean tpt. (sync. 2)}\label{fig:mean_tpt_CEXP3}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_CEXP3}
 	\end{subfigure}
 	\caption{Simulation results in EXP3 (1,000 iterations)}
 	\label{fig:exp3}
@@ -221,39 +197,27 @@ Figure \ref{fig:ucb} shows several results regarding the application of UCB in t
 	\centering
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_UCB}
-		\caption{Actions prob. (default)}\label{fig:actions_probability_UCB}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/actions_probability_OUCB}
-		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OUCB}
+		\caption{Actions prob. (default)}\label{fig:hist_actions_UCB}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_CUCB}
-		\caption{Actions prob. (sync. 2)}\label{fig:actions_probability_CUCB}
+		\caption{Actions prob. (sync.)}\label{fig:hist_actions_CUCB}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_UCB}
 		\caption{Temp. var.  (default)}\label{fig:temporal_individual_tpt_UCB}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OUCB}
-		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_OUCB}
-	\end{subfigure}
-		\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_CUCB}
-		\caption{Temp. var.  (sync. 2)}\label{fig:temporal_individual_tpt_CUCB}
+		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_CUCB}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_UCB}
 		\caption{Mean tpt. (default)}\label{fig:mean_tpt_UCB}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/mean_tpt_OUCB}
-		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OUCB}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_CUCB}
-		\caption{Mean tpt. (sync. 2)}\label{fig:mean_tpt_CUCB}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_CUCB}
 	\end{subfigure}
 	\caption{Simulation results in UCB (1,000 iterations)}
 	\label{fig:ucb}
@@ -268,45 +232,33 @@ Figure \ref{fig:ts} shows several results regarding the application of Thompson 
 	\centering
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_TS}
-		\caption{Actions prob. (default)}\label{fig:actions_probability_TS}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/actions_probability_OTS}
-		\caption{Actions prob. (sync.)}\label{fig:actions_probability_OTS}
+		\caption{Actions prob. (default)}\label{fig:hist_actions_TS}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/actions_probability_CTS}
-		\caption{Actions prob. (sync. 2)}\label{fig:actions_probability_CTS}
+		\caption{Actions prob. (sync.)}\label{fig:hist_actions_CTS}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_TS}
 		\caption{Temp. var.  (default)}\label{fig:temporal_individual_tpt_TS}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_OTS}
-		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_OTS}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/temporal_individual_tpt_CTS}
-		\caption{Temp. var.  (sync. 2)}\label{fig:temporal_individual_tpt_CTS}
+		\caption{Temp. var.  (sync.)}\label{fig:temporal_individual_tpt_CTS}
 	\end{subfigure}\\
 	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_TS}
 		\caption{Mean tpt. (default)}\label{fig:mean_tpt_TS}
 	\end{subfigure}
 	\begin{subfigure}[b]{.3\textwidth}
-		\includegraphics[width=\textwidth]{images/mean_tpt_OTS}
-		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_OTS}
-	\end{subfigure}
-	\begin{subfigure}[b]{.3\textwidth}
 		\includegraphics[width=\textwidth]{images/mean_tpt_CTS}
-		\caption{Mean tpt. (sync. 2)}\label{fig:mean_tpt_CTS}
+		\caption{Mean tpt. (sync.)}\label{fig:mean_tpt_CTS}
 	\end{subfigure}
 	\caption{Simulation results in Thompson sampling (1,000 iterations)}
 	\label{fig:ts}
 \end{figure*}
 
-\section{Learning with penalties}
+\section{Learning with penalties (OPTIONAL)}
 One promising possibility is to explore the effect of applying penalties to the reward, based on the transmit power or the saturation of a given channel (for that, we must know the number of users in each channel). Such penalties are not trivial to be derived, and when the problem becomes non-convex, the complexity increases. For that, we can provide some evidences about their usefulness when applying pure decentralized learning, but left its proper analysis as future work.
 
 Here are some results for e-greedy when applying a penalty ($\alpha = 0.1$) to the transmit power used. The reward is now computed as:
@@ -388,7 +340,7 @@ As shown, WNs focus on few actions, which grant highest performance by consideri
 %		\caption{TxPow impact on the throughput}\label{fig:impact_tx_power_levels_on_throughput}
 %	\end{subfigure}
 %	\begin{subfigure}[b]{.4\textwidth}
-%		\includegraphics[width=\textwidth]{images/impact_tx_power_levels_on_variability}
+%			\includegraphics[width=\textwidth]{images/impact_tx_power_levels_on_variability}
 %		\caption{TxPow impact on the variability}\label{fig:impact_tx_power_levels_on_variability}
 %	\end{subfigure}
 %	\caption{Mean and standard deviation of the throughput experienced in average when using different sets of actions.}

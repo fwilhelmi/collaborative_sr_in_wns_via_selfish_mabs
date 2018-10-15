@@ -135,4 +135,5 @@ axis([min(initialEta) max(initialEta) 0 1.1 * agg_tpt_max_pf])
 xticks(initialEta)
 legend({'Mean agg. throughput', 'Optimal (max. prop. fairness)'})
 
-save('./Output/exp3_exp1_workspace.mat')
+% Save the workspace
+save('simulation_1_2_0_workspace.mat')

@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan] = ...
-    exp3(wlans, gamma, initialEta, upperBoundThroughputPerWlan, alpha_penalty, varargin)
+    exp3_with_penalty(wlans, gamma, initialEta, upperBoundThroughputPerWlan, alpha_penalty, varargin)
 % exp3 applies EXP3 (basic formulation) to maximize the experienced
 % throughput of a given scenario
 %

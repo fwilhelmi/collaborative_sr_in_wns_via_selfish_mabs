@@ -101,15 +101,6 @@ for r = 1 : totalRepetitions
     
 end
 
-% Save the workspace
-save('./Output/eg_exp1_workspace.mat')
-save('meanThroughputExperiencedEgreedy', 'meanThroughputExperiencedEgreedy')
-save('meanAggregateThroughputEgreedy', 'meanAggregateThroughputEgreedy')
-save('meanMaxMinThroughputEgreedy', 'meanMaxMinThroughputEgreedy')
-save('stdThroughputExperiencedEgreedy', 'stdThroughputExperiencedEgreedy')
-save('stdAggregateThroughputEgreedy', 'stdAggregateThroughputEgreedy')
-save('stdMaxMinThroughputEgreedy', 'stdMaxMinThroughputEgreedy')
-
 %% PLOT THE RESULTS
 
 % Set font type
@@ -143,3 +134,6 @@ xlabel('\epsilon_{0}', 'FontSize', 24)
 axis([min(initialEpsilon) max(initialEpsilon) 350 1.1 * agg_tpt_max_pf])
 xticks(initialEpsilon)
 legend({'Mean agg. throughput', 'Optimal (max. prop. fairness)'})
+
+% Save the workspace
+save('simulation_1_1_0_workspace.mat')

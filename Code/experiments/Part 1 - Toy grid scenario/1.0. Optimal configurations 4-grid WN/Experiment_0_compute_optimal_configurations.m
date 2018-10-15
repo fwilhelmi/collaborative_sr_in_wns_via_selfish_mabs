@@ -38,6 +38,6 @@ wlans = generate_network_3D(nWlans, 'grid', 2, 0); % SAFE CONFIGURATION
 
 % Compute the optimal configuration to compare the approaches
 %[throughputPerConfiguration, max_pf, max_agg, max_max_min] = compute_throughput_all_combinations( wlans );
-[throughputPerConfiguration] = compute_throughput_all_combinations( wlans );
+throughputPerConfiguration = compute_throughput_all_combinations( wlans );
 
 save('workspace_throughput_all_combinations.mat')

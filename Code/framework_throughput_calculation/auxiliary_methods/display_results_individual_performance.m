@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan, ...
-    timesArmHasBeenPlayed, upperBoundThroughputPerWlan, upperBoundAggregatePerformance, method_name )
+    timesArmHasBeenPlayed, maxIndividualPerformance, maxAggregatePerformance, method_name )
 % display_results_individual_performance displays the results of experiments for
 % individual performance of each policy (e.g., "Experiment_2_1_individual_performance_EG_parameters_4_WN.m")
 %   INPUT: 
@@ -38,9 +38,9 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
     mean_fairness_entire_simulation = mean(jains_fairness(tptEvolutionPerWlan(1:totalIterations, :)));
     mean_prop_fairness_entire_simulation = mean(sum(log(tptEvolutionPerWlan(1:totalIterations, :)),2));
     mean_agg_tpt_comparison_optimal_entire_simulation = ...
-        mean_agg_tpt_entire_simulation / upperBoundAggregatePerformance;
+        mean_agg_tpt_entire_simulation / maxAggregatePerformance;
     mean_ind_tpt_comparison_optimal_entire_simulation = ...
-        mean(mean(tptEvolutionPerWlan(1:totalIterations, :),2)) ./ upperBoundAggregatePerformance;
+        mean(mean(tptEvolutionPerWlan(1:totalIterations, :),2)) ./ maxAggregatePerformance;
     
     % Plot results of the entire simulation
     disp(['------------' newline 'Results (entire simulation):' newline '------------'])
@@ -67,10 +67,10 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
         mean_prop_fairness_last_iterations = mean(sum(log(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations, :)),2));
         % Mean aggregate tpt. / Aggregate throughput (optimal prop. fairness)
         mean_agg_tpt_comparison_optimal_last_iterations = ...
-            mean_agg_tpt_last_iterations / upperBoundAggregatePerformance;
+            mean_agg_tpt_last_iterations / maxAggregatePerformance;
         % Mean average tpt. / individual throughput (optimal prop. fairness)
         mean_ind_tpt_comparison_optimal_last_iterations = ...
-            mean(mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations, :),2)) ./ upperBoundAggregatePerformance;
+            mean(mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations, :),2)) ./ maxAggregatePerformance;
                 
         disp(['------------' newline 'Results (last iterations):' newline '------------'])
 
@@ -100,105 +100,117 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
 
     num_wlans = size(wlans, 2);
     
-    %% Aggregated throughput experienced for each iteration
-    figure('pos',[450 400 500 350]);
-    axes;
-    axis([1 20 30 70]);
-    agg_tpt_per_iteration = sum(tptEvolutionPerWlan(1:totalIterations, :), 2);
-    plot(1:totalIterations, agg_tpt_per_iteration)
-    set(gca,'FontSize', 22)
-    xlabel([method_name ' iteration'], 'fontsize', 24)
-    ylabel('Network Throughput (Mbps)', 'fontsize', 24)
-    axis([1 totalIterations 0 num_wlans * 1.1 * max(upperBoundAggregatePerformance)])    
-    hold on
-    h1 = plot(1 : totalIterations, num_wlans * upperBoundAggregatePerformance * ones(1, totalIterations), 'r--', 'linewidth',2);
-    %legend(h1, {'Optimal (Max. Prop. Fairness)'});
-    legend({'Temporal throughput', 'Optimal (Max. Prop. Fairness)'});
-    %text(totalIterations * 0.5 , max_pf * 1.1, 'Optimal (Max. Prop. Fairness)', 'fontsize', 24)
-    % Save Figure
-    fig_name = ['temporal_aggregate_tpt_' method_name];
-    savefig(['./Output/' fig_name '.fig'])
-    saveas(gcf,['./Output/' fig_name],'epsc')
-    
-    %% Throughput experienced by each WLAN for each iteration
-    fig = figure('pos',[450 400 500 350]);
-    axes;
-    axis([1 20 30 70]);
-    for i = 1 : num_wlans
-        subplot(num_wlans/2, num_wlans/2, i)
-        tpt_per_iteration = tptEvolutionPerWlan(1:totalIterations, i);
-        plot(1:totalIterations, tpt_per_iteration);
-        hold on
-        plot(1 : totalIterations, upperBoundAggregatePerformance * ones(1, totalIterations), 'r--', 'linewidth',2);
-        title(['WN ' num2str(i)]);
-        set(gca, 'FontSize', 18)
-        axis([1 totalIterations 0 1.1 * max(tpt_per_iteration)])
-    end
-    % Set Axes labels
-    AxesH    = findobj(fig, 'Type', 'Axes');       
-    % Y-label
-    YLabelHC = get(AxesH, 'YLabel');
-    YLabelH  = [YLabelHC{:}];
-    set(YLabelH, 'String', 'Throughput (Mbps)')
-    % X-label
-    XLabelHC = get(AxesH, 'XLabel');
-    XLabelH  = [XLabelHC{:}];
-    set(XLabelH, 'String', [method_name ' iteration']) 
-    % Save Figure
-    fig_name = ['temporal_individual_tpt_' method_name];
-    savefig(['./Output/' fig_name '.fig'])
-    saveas(gcf,['./Output/' fig_name],'epsc')
-    
-    %% Average tpt experienced per WLAN
-    mean_tpt_per_wlan = mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
-    std_per_wlan = std(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
-    figure('pos',[450 400 500 350])
-    axes;
-    axis([1 20 30 70]);
-    bar(mean_tpt_per_wlan, 0.5)
-    set(gca, 'FontSize', 22)
-    xlabel('WN id','fontsize', 24)
-    ylabel('Mean throughput (Mbps)','fontsize', 24)
-    hold on
-    errorbar(mean_tpt_per_wlan, std_per_wlan, '.r');
-    plot(0 : nWlans + 1, upperBoundAggregatePerformance * ones(1, nWlans + 2), 'r--', 'linewidth',2);
-    % Save Figure
-    fig_name = ['mean_tpt_' method_name];
-    savefig(['./Output/' fig_name '.fig'])
-    saveas(gcf,['./Output/' fig_name],'epsc')
+%     %% Aggregated throughput experienced for each iteration
+%     figure('pos',[450 400 500 350]);
+%     axes;
+%     axis([1 20 30 70]);
+%     agg_tpt_per_iteration = sum(tptEvolutionPerWlan(1:totalIterations, :), 2);
+%     plot(1:totalIterations, agg_tpt_per_iteration)
+%     set(gca,'FontSize', 22)
+%     xlabel([method_name ' iteration'], 'fontsize', 24)
+%     ylabel('Network Throughput (Mbps)', 'fontsize', 24)
+%     axis([1 totalIterations 0 1.1 * max(maxAggregatePerformance)])    
+%     hold on
+%     h1 = plot(1 : totalIterations, maxAggregatePerformance * ones(1, totalIterations), 'r--', 'linewidth',2);
+%     %legend(h1, {'Optimal (Max. Prop. Fairness)'});
+%     legend({'Temporal throughput', 'Optimal (Max. Prop. Fairness)'});
+%     %text(totalIterations * 0.5 , max_pf * 1.1, 'Optimal (Max. Prop. Fairness)', 'fontsize', 24)
+%     % Save Figure
+%     fig_name = ['temporal_aggregate_tpt_' method_name];
+%     savefig(['./Output/' fig_name '.fig'])
+%     saveas(gcf,['./Output/' fig_name],'png')
+%     
+%     %% Throughput experienced by each WLAN for each iteration
+%     fig = figure('pos',[450 400 500 350]);
+%     axes;
+%     axis([1 20 30 70]);
+%     for i = 1 : num_wlans
+%         subplot(num_wlans/2, num_wlans/2, i)
+%         tpt_per_iteration = tptEvolutionPerWlan(1:totalIterations, i);
+%         plot(1:totalIterations, tpt_per_iteration);
+%         hold on
+%         plot(1 : totalIterations, maxIndividualPerformance * ones(1, totalIterations), 'r--', 'linewidth',2);
+%         title(['WN ' num2str(i)]);
+%         set(gca, 'FontSize', 18)
+%         axis([1 totalIterations 0 1.1 * max(tpt_per_iteration)])
+%     end
+%     % Set Axes labels
+%     AxesH    = findobj(fig, 'Type', 'Axes');       
+%     % Y-label
+%     YLabelHC = get(AxesH, 'YLabel');
+%     YLabelH  = [YLabelHC{:}];
+%     set(YLabelH, 'String', 'Throughput (Mbps)')
+%     % X-label
+%     XLabelHC = get(AxesH, 'XLabel');
+%     XLabelH  = [XLabelHC{:}];
+%     set(XLabelH, 'String', [method_name ' iteration']) 
+%     % Save Figure
+%     fig_name = ['temporal_individual_tpt_' method_name];
+%     savefig(['./Output/' fig_name '.fig'])
+%     saveas(gcf,['./Output/' fig_name],'png')
+%     
+%     %% Average tpt experienced per WLAN
+%     mean_tpt_per_wlan = mean(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
+%     std_per_wlan = std(tptEvolutionPerWlan(minimumIterationToConsider:totalIterations,:),1);
+%     figure('pos',[450 400 500 350])
+%     axes;
+%     axis([1 20 30 70]);
+%     bar(mean_tpt_per_wlan, 0.5)
+%     set(gca, 'FontSize', 22)
+%     xlabel('WN id','fontsize', 24)
+%     ylabel('Mean throughput (Mbps)','fontsize', 24)
+%     hold on
+%     errorbar(mean_tpt_per_wlan, std_per_wlan, '.r');
+%     plot(0 : nWlans + 1, 1.1 * maxIndividualPerformance * ones(1, nWlans + 2), 'r--', 'linewidth',2);
+%     % Save Figure
+%     fig_name = ['mean_tpt_' method_name];
+%     savefig(['./Output/' fig_name '.fig'])
+%     saveas(gcf,['./Output/' fig_name],'png')
     
     %% Actions probability
     fig = figure('pos',[450 400 500 350]);
     axes;
     axis([1 20 30 70]);  
     % Print the preferred action per wlan
-    for i=1:num_wlans             
+    for i = 1:num_wlans             
         K = size(timesArmHasBeenPlayed, 2);
         subplot(2,2,i);
         bar(1:K, timesArmHasBeenPlayed(i, :)/totalIterations);
         hold on
         title(['WN' num2str(i)])
-        axis([0 9 0 1])
-        xticks(1:8)
-        xticklabels(1:8)
-        set(gca, 'FontSize', 22)
-        % xticklabels({'ch=1/tpc=5','ch=2/tpc=5','ch=1/tpc=10','ch=2/tpc=10','ch=1/tpc=15','ch=2/tpc=15','ch=1/tpc=20','ch=2/tpc=20'})
+        axis([0 K+1 0 1])
+        xticks(1:K)
+        xticklabels(1:K)
+        set(gca, 'FontSize', 14)
     end
     % Set Axes labels
     AxesH    = findobj(fig, 'Type', 'Axes');       
     % Y-label
     YLabelHC = get(AxesH, 'YLabel');
     YLabelH  = [YLabelHC{:}];
-    set(YLabelH, 'String', 'Action prob.', 'fontsize', 24)
+    set(YLabelH, 'String', 'Action prob.', 'fontsize', 20)
     % X-label
     XLabelHC = get(AxesH, 'XLabel');
     XLabelH  = [XLabelHC{:}];
-    set(XLabelH, 'String', 'Action index', 'fontsize', 24) 
+    set(XLabelH, 'String', 'Action index', 'fontsize', 20) 
     % Save Figure
     fig_name = ['actions_probability_' method_name];
     savefig(['./Output/' fig_name '.fig'])
-    saveas(gcf,['./Output/' fig_name],'epsc')
+    saveas(gcf,['./Output/' fig_name],'png')
     
+%     %% Histogram actions (global)
+%     fig = figure('pos',[450 400 500 350]);
+%     axes;
+%     axis([1 20 30 70]); 
+%     bar(sum(timesArmHasBeenPlayed));
+%     set(gca, 'FontSize', 22)
+%     xlabel('Action ix','fontsize', 24)
+%     ylabel('Frequency','fontsize', 24)
+%     % Save Figure
+%     fig_name = ['hist_actions_' method_name];
+%     savefig(['./Output/' fig_name '.fig'])
+%     saveas(gcf,['./Output/' fig_name],'png')
+        
 %     %% Histogram experienced throughput (single simulation)
 %     figure('pos',[450 400 500 350]);
 %     axes;
@@ -218,6 +230,6 @@ function [] = display_results_individual_performance( wlans, tptEvolutionPerWlan
 %     % Save Figure
 %     fig_name = ['histogram_individual_throughput_' method_name];
 %     savefig(['./Output/' fig_name '.fig'])
-%     saveas(gcf,['./Output/' fig_name],'epsc')
+%     saveas(gcf,['./Output/' fig_name],'png')
     
 end

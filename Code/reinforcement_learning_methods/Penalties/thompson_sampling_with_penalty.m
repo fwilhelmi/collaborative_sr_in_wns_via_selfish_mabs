@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-thompson_sampling( wlans, upperBoundThroughputPerWlan, alpha_penalty, varargin )
+    thompson_sampling_with_penalty( wlans, upperBoundThroughputPerWlan, alpha_penalty, varargin )
 % thompson_sampling applies TS to maximize the experienced
 % throughput of a given scenario
 %

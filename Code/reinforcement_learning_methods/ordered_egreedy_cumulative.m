@@ -119,7 +119,9 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             if wlan_ix_aux ~= wlan_ix
                 iterations_without_acting(wlan_ix_aux) = iterations_without_acting(wlan_ix_aux) + 1;
                 transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;   
+                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1; 
+%                 timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
+%                     timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;
             end
         end           
         % Store the throughput at the end of the iteration for statistics

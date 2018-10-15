@@ -9,7 +9,7 @@
 %%% ************************************************************************
 
 function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    ucb( wlans, upperBoundThroughputPerWlan, alpha_penalty, varargin )
+    ucb_with_penalty( wlans, upperBoundThroughputPerWlan, alpha_penalty, varargin )
 % ucb applies UCB to maximize the experienced throughput of a given scenario
 %
 %   OUTPUT: 
