@@ -116,8 +116,8 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
 %         tptAfterAction
 %         rewardPerArm    
         % Store the throughput and the regret at the end of the iteration for statistics
-        tptExperiencedPerWlan(iteration, :) = tptAfterAction;        % bps
-        regretExperiencedPerWlan(iteration, :) = (1 - rw);        
+        tptExperiencedPerWlan(iteration - first_iteration + 1, :) = tptAfterAction;        % bps
+        regretExperiencedPerWlan(iteration - first_iteration + 1, :) = (1 - rw);        
         % Update the exploration coefficient according to the inputted mode
         if updateMode == UPDATE_MODE_FAST
             epsilon = initialEpsilon / iteration;    
