@@ -20,6 +20,8 @@ function arm = select_action_egreedy(rewards_per_configuration, e)
     
     if rand() > e    % Check if we have to "exploit"
         
+        %disp('exploit')
+        
         [val,~] = max(rewards_per_configuration);
         
         % Break ties randomly
@@ -37,6 +39,8 @@ function arm = select_action_egreedy(rewards_per_configuration, e)
         end
         
     else             % Check if we have to "explore"
+        
+        %disp('explore')
         
         arm = randi([1 size(rewards_per_configuration,2)], 1, 1);
         

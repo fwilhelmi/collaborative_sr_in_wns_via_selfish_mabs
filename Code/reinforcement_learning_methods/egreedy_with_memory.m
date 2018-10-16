@@ -8,8 +8,8 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan, meanRewardPerAction, rewardPerArm ] = ...
-    egreedy_with_memory( wlans, initialEpsilon, upperBoundThroughputPerWlan, rewardPerArm, first_iteration, last_iteration, varargin )
+function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan, meanRewardPerAction, rewardPerArm, iteration_per_wlan ] = ...
+    egreedy_with_memory( wlans, initialEpsilon, upperBoundThroughputPerWlan, rewardPerArm, first_iteration, last_iteration, iteration_per_wlan, varargin )
 % EGREEDY - Given a WN, applies e-greedy to maximize the experienced throughput
 %
 %   OUTPUT: 
@@ -70,7 +70,15 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     cumulative_reward_per_action = zeros(nWlans, K);
     
     % Initialize epsilon
-    epsilon = initialEpsilon; 
+    for i = 1 : nWlans
+        if updateMode == UPDATE_MODE_FAST
+            epsilon(i) = initialEpsilon / iteration_per_wlan(i);    
+        elseif updateMode == UPDATE_MODE_SLOW
+            epsilon(i) = initialEpsilon / sqrt(iteration_per_wlan(i));   
+        else
+            disp(['updateModeEpsilon = ' num2str(updateModeEpsilon) ' does not exist!'])
+        end    
+    end
    
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME       
     iteration = first_iteration;
@@ -80,7 +88,7 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         % Iterate sequentially for each agent in the random order   
         for i = 1 : nWlans          
             % Select an action according to the policy
-            selectedArm(order(i)) = select_action_egreedy(rewardPerArm(order(i),:), epsilon);    
+            selectedArm(order(i)) = select_action_egreedy(rewardPerArm(order(i),:), epsilon(i));    
             % Update the current action
             currentAction(order(i)) = selectedArm(order(i));
             % Find the index of the current and the previous action in allCombs
@@ -96,8 +104,7 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             % Update WN configuration
             wlansAux(order(i)).Channel = a;   
             wlansAux(order(i)).TxPower = txPowerActions(c);
-        end 
-        
+        end         
         % Compute the throughput noticed after applying the action
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps     
         % Update the reward of each WN
@@ -109,23 +116,19 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             rewardPerArm(wlan_i, selectedArm(wlan_i)) = rw(wlan_i);
             cumulative_reward_per_action(wlan_i, selectedArm(wlan_i)) =  ...
                 cumulative_reward_per_action(wlan_i, selectedArm(wlan_i)) + rw(wlan_i);
-        end  
-
-%         disp(['Iteration ' num2str(iteration)])
-%         selectedArm
-%         tptAfterAction
-%         rewardPerArm    
+            % Update the exploration coefficient according to the inputted mode
+            if updateMode == UPDATE_MODE_FAST
+                epsilon(wlan_i) = initialEpsilon / iteration_per_wlan(wlan_i);    
+            elseif updateMode == UPDATE_MODE_SLOW
+                epsilon(wlan_i) = initialEpsilon / sqrt(iteration_per_wlan(wlan_i));   
+            else
+                disp(['updateModeEpsilon = ' num2str(updateModeEpsilon) ' does not exist!'])
+            end    
+            iteration_per_wlan(wlan_i) = iteration_per_wlan(wlan_i) + 1;
+        end    
         % Store the throughput and the regret at the end of the iteration for statistics
         tptExperiencedPerWlan(iteration - first_iteration + 1, :) = tptAfterAction;        % bps
-        regretExperiencedPerWlan(iteration - first_iteration + 1, :) = (1 - rw);        
-        % Update the exploration coefficient according to the inputted mode
-        if updateMode == UPDATE_MODE_FAST
-            epsilon = initialEpsilon / iteration;    
-        elseif updateMode == UPDATE_MODE_SLOW
-            epsilon = initialEpsilon / sqrt(iteration);   
-        else
-            disp(['updateModeEpsilon = ' num2str(updateModeEpsilon) ' does not exist!'])
-        end        
+        regretExperiencedPerWlan(iteration - first_iteration + 1, :) = (1 - rw);            
         % Increase the number of iterations
         iteration = iteration + 1;     
     end

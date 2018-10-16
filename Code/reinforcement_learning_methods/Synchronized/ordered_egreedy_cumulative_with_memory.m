@@ -8,8 +8,9 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    ordered_egreedy( wlans, initialEpsilon, upperBoundThroughputPerWlan, varargin )
+function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan, rewardPerArm, epsilon, iteration_per_wlan, cumulative_reward] = ...
+    ordered_egreedy_cumulative_with_memory( wlans, epsilon, upperBoundThroughputPerWlan, ...
+    rewardPerArm, cumulative_reward, first_iteration, last_iteration, iteration_per_wlan, varargin )
 % EGREEDY - Given a WN, applies e-greedy to maximize the experienced throughput
 %
 %   OUTPUT: 
@@ -66,17 +67,35 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     transitionsCounter = zeros(nWlans, K^2);    
     % Store the times an action has been played in each WN
     timesArmHasBeenPlayed = zeros(nWlans, K);     
-    % Initialize the mean reward obtained by each WLAN for each arm
-    rewardPerArm = zeros(nWlans, K);             
+    
+    %cumulative_reward = zeros(1, nWlans);
+    iterations_without_acting = ones(1, nWlans);        
+    %iteration_per_wlan = zeros(1, nWlans);    
     % Initialize epsilon
-    epsilon = initialEpsilon; 
+    %epsilon = initialEpsilon * ones(1, nWlans);     
+    initialEpsilon = epsilon;
+    for i = 1 : nWlans
+        epsilon(i) = epsilon(i) / iteration_per_wlan(i);
+    end
     
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME            
-    iteration = 1;    
-    while(iteration < totalIterations+1)         
-        wlan_ix = mod(iteration, nWlans) + 1;        
+    iteration = first_iteration;    
+    order = [];
+    while(iteration < last_iteration+1)   
+        
+        if isempty(order)
+            order = randperm(nWlans);
+        end        
+        wlan_ix = order(1);
+        order(1) = [];
+%         disp(['Iteration: ' num2str(iteration)]) 
+%         disp(['    * wlan_ix: ' num2str(wlan_ix)]) 
+%         disp(['    * epsilon: ' num2str(epsilon(wlan_ix))]) 
+%         disp(['    * rewardPerArm: ' num2str(rewardPerArm(wlan_ix,:))])
         %%%%%%%%%%%% Select an action according to the policy
-        selectedArm(wlan_ix) = select_action_egreedy(rewardPerArm(wlan_ix, :), epsilon);    
+        selectedArm(wlan_ix) = select_action_egreedy(rewardPerArm(wlan_ix, :), epsilon(wlan_ix));    
+        %disp(['    * selectedArm: ' num2str(selectedArm(wlan_ix))])         
+        
         % Update the current action
         currentAction(wlan_ix) = selectedArm(wlan_ix);
         % Find the index of the current and the previous action in allCombs
@@ -88,7 +107,9 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         transitionsCounter(wlan_ix, ix) = transitionsCounter(wlan_ix, ix) + 1;  
         % Find channel and tx power of the current action
         [a, ~, c] = val2indexes(selectedArm(wlan_ix), ...
-            size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));                     
+            size(channelActions,2), size(ccaActions,2), size(txPowerActions,2));        
+        timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) = ...
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 1;                 
         % Update WN configuration
         wlansAux(wlan_ix).Channel = a;   
         wlansAux(wlan_ix).TxPower = txPowerActions(c);
@@ -96,32 +117,40 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         % Compute the throughput noticed after applying the action
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps          
         % Update the reward of each WN
-        rw = tptAfterAction./upperBoundThroughputPerWlan;  
+        rw = tptAfterAction./upperBoundThroughputPerWlan;         
         for wlan_ix_aux = 1 : nWlans
-            rewardPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = rw(wlan_ix_aux);
-            timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;    
+            if wlan_ix_aux == wlan_ix
+                cumulative_reward(wlan_ix_aux) = cumulative_reward(wlan_ix_aux) + rw(wlan_ix_aux);
+                rewardPerArm(wlan_ix_aux, selectedArm(wlan_ix_aux)) = cumulative_reward(wlan_ix_aux)/iterations_without_acting(wlan_ix_aux);
+                iterations_without_acting(wlan_ix_aux) = 1;
+                cumulative_reward(wlan_ix_aux) = 0; 
+            end
             % Update transitions counter of static WNs
             if wlan_ix_aux ~= wlan_ix
+                iterations_without_acting(wlan_ix_aux) = iterations_without_acting(wlan_ix_aux) + 1;
                 transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;   
+                    transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1; 
+%                 timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
+%                     timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;
             end
         end           
         % Store the throughput at the end of the iteration for statistics
-        tptExperiencedPerWlan(iteration, :) = tptAfterAction;
-        regretExperiencedPerWlan(iteration, :) = (1 - rw);
+        tptExperiencedPerWlan(iteration - first_iteration + 1, :) = tptAfterAction;
+        regretExperiencedPerWlan(iteration - first_iteration + 1, :) = (1 - rw);
         % Update the exploration coefficient according to the inputted mode
         if updateMode == UPDATE_MODE_FAST
-            epsilon = initialEpsilon / iteration;    
+            epsilon(wlan_ix) = initialEpsilon(wlan_ix) / iteration_per_wlan(wlan_ix);    
         elseif updateMode == UPDATE_MODE_SLOW
-            epsilon = initialEpsilon / sqrt(iteration);   
+            epsilon(wlan_ix) = initialEpsilon(wlan_ix) / sqrt(iteration_per_wlan(wlan_ix));   
         else
             disp(['updateModeEpsilon = ' num2str(epsilon) ' does not exist!'])
         end        
         % Increase the number of iterations
-        iteration = iteration + 1;            
-    end
+        iteration_per_wlan(wlan_ix) = iteration_per_wlan(wlan_ix) + 1;
+        iteration = iteration + 1; 
         
+    end
+            
     %% PRINT INFORMATION REGARDING ACTION SELECTION
     if printInfo    
         % Print the preferred action per wlan

@@ -8,8 +8,9 @@
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
 
-function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan ] = ...
-    ordered_thompson_sampling( wlans, upperBoundThroughputPerWlan, varargin )
+function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWlan, estimatedRewardPerWlan ] = ...
+    ordered_thompson_sampling_cumulative_with_memory( wlans, upperBoundThroughputPerWlan, ...
+    first_iteration, last_iteration, estimatedRewardPerWlan, timesArmHasBeenPlayed, varargin )
 % thompson_sampling applies TS to maximize the experienced
 % throughput of a given scenario
 %
@@ -57,18 +58,26 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
     % Initialize the indexes of the taken action
     actionIndexPerWlan = initialActionIndexPerWlan;                              
     selectedArm = actionIndexPerWlan;               % Initialize arm selection for each WLAN by using the initial action
-    timesArmHasBeenPlayed = zeros(nWlans, K);       % Initialize the times an arm has been played
+    %timesArmHasBeenPlayed = zeros(nWlans, K);       % Initialize the times an arm has been played
     currentAction = zeros(1, nWlans);
     previousAction = selectedArm;
     transitionsCounter = zeros(nWlans, K^2);
     cumulativeRewardPerWlan = zeros(nWlans, K);     % Initialize the cumulative reward obtained by each WLAN for each arm
     meanRewardPerWlan = zeros(nWlans, K);           % Initialize the mean reward obtained by each WLAN for each arm
-    estimatedRewardPerWlan = zeros(nWlans, K);      % Initialize the mean reward obtained by each WLAN for each arm
-             
+    %estimatedRewardPerWlan = zeros(nWlans, K);      % Initialize the mean reward obtained by each WLAN for each arm
+    
+    cumulative_reward = zeros(1, nWlans);
+    iterations_without_acting = ones(1, nWlans);        
+    
     %% ITERATE UNTIL CONVERGENCE OR MAXIMUM CONVERGENCE TIME  
-    iteration = 1;
-    while(iteration < totalIterations + 1)    
-        wlan_ix = mod(iteration, nWlans) + 1;
+    iteration = first_iteration;
+    order = [];
+    while(iteration < last_iteration + 1)    
+        if isempty(order)
+            order = randperm(nWlans);
+        end        
+        wlan_ix = order(1);
+        order(1) = [];
         % Select an action according to the policy
         selectedArm(wlan_ix) = select_action_ts(estimatedRewardPerWlan(wlan_ix, :), ...
             timesArmHasBeenPlayed(wlan_ix, :));  
@@ -90,20 +99,24 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
         % Compute the reward with the throughput obtained in the round after applying the action
         tptAfterAction = compute_throughput_from_sinr(wlansAux, NOISE_DBM);  % bps  
         % Update the reward of each WN
-        rw = zeros(1, nWlans);
-        for wlan_ix_aux = 1 : nWlans
-            rw(wlan_ix_aux) = tptAfterAction(wlan_ix_aux)/((upperBoundThroughputPerWlan(wlan_ix_aux)));       
-            estimatedRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                (estimatedRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) * ...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + rw(wlan_ix_aux)) / ...
-                (timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 2);                    
-            cumulativeRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                cumulativeRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) + rw(wlan_ix_aux);
-            meanRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                cumulativeRewardPerWlan(wlan_ix_aux, selectedArm(wlan_ix_aux)) /...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux));
-            timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
-                timesArmHasBeenPlayed(wlan_ix_aux, selectedArm(wlan_ix_aux)) + 1;  
+        rw = tptAfterAction ./ upperBoundThroughputPerWlan;
+        cumulative_reward = cumulative_reward + rw;
+        avg_reward = cumulative_reward(wlan_ix)/iterations_without_acting(wlan_ix);
+        iterations_without_acting(wlan_ix) = 1;
+        cumulative_reward(wlan_ix) = 0;  
+        estimatedRewardPerWlan(wlan_ix, selectedArm(wlan_ix)) = ...
+            (estimatedRewardPerWlan(wlan_ix, selectedArm(wlan_ix)) * ...
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + avg_reward) / ...
+            (timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 2);                    
+        cumulativeRewardPerWlan(wlan_ix, selectedArm(wlan_ix)) = ...
+            cumulativeRewardPerWlan(wlan_ix, selectedArm(wlan_ix)) + avg_reward;
+        meanRewardPerWlan(wlan_ix, selectedArm(wlan_ix)) = ...
+            cumulativeRewardPerWlan(wlan_ix, selectedArm(wlan_ix)) /...
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix));
+        % Update the times WN has selected the current action 
+        timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) = ...
+            timesArmHasBeenPlayed(wlan_ix, selectedArm(wlan_ix)) + 1;  
+        for wlan_ix_aux = 1 : nWlans            
             % Update transitions counter of static WNs
             if wlan_ix_aux ~= wlan_ix
                 transitionsCounter(wlan_ix_aux, selectedArm(wlan_ix_aux)) = ...
@@ -111,9 +124,9 @@ function [ tptExperiencedPerWlan, timesArmHasBeenPlayed, regretExperiencedPerWla
             end        
         end
         % Store the throughput at the end of the iteration for statistics
-        tptExperiencedPerWlan(iteration, :) = tptAfterAction;
-        regretExperiencedPerWlan(iteration, :) = (1 - rw);
-        % Increase the number of 'learning iterations' of a WLAN
+        tptExperiencedPerWlan(iteration - first_iteration + 1, :) = tptAfterAction;
+        regretExperiencedPerWlan(iteration - first_iteration + 1, :) = (1 - rw);
+        % Increase the number of 'learning iterations'
         iteration = iteration + 1;         
     end    
     

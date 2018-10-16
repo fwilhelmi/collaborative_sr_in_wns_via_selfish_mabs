@@ -51,7 +51,7 @@ throughputEvolutionPerWlanTs = cell(size(nWlans, 2), totalScenarios);
 load('wlans')
 initialEpsilon = 1;            % Initial Exploration coefficient
 gamma = 0;
-initialEta = .6;
+initialEta = .1;
 
 % Repeat for each number of WNs in the scenario
 for s = 1 : size(nWlans, 2)    
