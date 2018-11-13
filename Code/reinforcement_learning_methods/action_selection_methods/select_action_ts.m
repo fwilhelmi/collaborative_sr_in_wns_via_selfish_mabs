@@ -7,6 +7,7 @@
 %%% *   https://github.com/wn-upf/Collaborative_SR_in_WNs_via_Selfish_MABs *
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
+
 function [ arm ] = select_action_ts( mu_hat, times_arm_has_been_played )
 % select_action_ts: returns the best possible arm given the current distribution
 %   OUTPUT:

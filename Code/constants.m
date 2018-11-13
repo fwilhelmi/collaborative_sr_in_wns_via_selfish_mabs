@@ -9,8 +9,8 @@
 %%% ************************************************************************
 
 nWlans = 4;                         % Number of WLANs in the map
-totalIterations = 10000;             % Maximum convergence time (one period implies the participation of all WLANs)
-minimumIterationToConsider = 5000;   % Iteration from which to consider the obtained results
+totalIterations = 10000;            % Maximum convergence time (one period implies the participation of all WLANs)
+minimumIterationToConsider = 5000;  % Iteration from which to consider the obtained results
 totalScenarios = 100;               % Number of TOTAL repetitions to take the average
 
 % Define the transitory and the permanent intervals of iterations
@@ -34,7 +34,7 @@ allCombs = allcomb(1:K, 1:K);
 possibleComb = allcomb(possibleActions,...
     possibleActions,possibleActions,possibleActions);
 
-plotResults = true;                % To plot or not the results at the end of the simulation
+plotResults = true;                 % To plot or not the results at the end of the simulation
 printInfo = false;                  % To print info after Bandits implementation (1) or not (0)
 drawMap = false;                    % Variable for drawing the map
 randomInitialConfiguration = true;  % Variable for assigning random channel/tx_power/cca at the beginning
@@ -61,8 +61,6 @@ PLd1=5;             % Path-loss factor
 shadowing = 9.5;    % Shadowing factor
 obstacles = 30;     % Obstacles factor
 alfa = 4.4;         % Propagation model
-%     shadowingmatrix = shadowing*randn(nWlans);       % Shadowing affecting each WLAN
-%     obstaclesmatrix = obstacles*rand(nWlans);        % Obstacles affecting each WLAN
 
 COCHANNEL_INTERFERENCE = true;
 

@@ -1,7 +1,0 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Results - Toy Scenario}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{-greedy}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{EXP3}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{UCB}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.4}{Thompson sampling}{section.2}% 6
-\BOOKMARK [1][-]{section.3}{Learning with penalties}{}% 7

@@ -7,6 +7,7 @@
 %%% *   https://github.com/wn-upf/Collaborative_SR_in_WNs_via_Selfish_MABs *
 %%% * More info on https://www.upf.edu/en/web/fwilhelmi                    *
 %%% ************************************************************************
+
 function wlans = generate_network_3D(nWlans, topology, stasPosition, printMap)
 % GenerateNetwork3D - Generates a 3D network 
 %   OUTPUT: 
