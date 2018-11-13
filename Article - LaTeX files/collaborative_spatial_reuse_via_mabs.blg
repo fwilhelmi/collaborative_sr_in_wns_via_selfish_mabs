@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: collaborative_spatial_reuse_via_mabs.aux
+The style file: unsrt.bst
+Database file #1: references.bib
+Warning--can't use both volume and number fields in sutton1998reinforcement
+You've used 47 entries,
+            1791 wiz_defined-function locations,
+            748 strings with 12902 characters,
+and the built_in function-call counts, 14380 in all, are:
+= -- 1427
+> -- 513
+< -- 23
++ -- 187
+- -- 140
+* -- 956
+:= -- 2040
+add.period$ -- 158
+call.type$ -- 47
+change.case$ -- 46
+chr.to.int$ -- 0
+cite$ -- 48
+duplicate$ -- 674
+empty$ -- 1402
+format.name$ -- 140
+if$ -- 3370
+int.to.chr$ -- 0
+int.to.str$ -- 47
+missing$ -- 47
+newline$ -- 238
+num.names$ -- 51
+pop$ -- 160
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 401
+stack$ -- 0
+substring$ -- 1239
+swap$ -- 260
+text.length$ -- 23
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 156
+width$ -- 49
+write$ -- 536
+(There was 1 warning)

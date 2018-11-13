@@ -1,0 +1,26 @@
+\begin{thebibliography}{}
+
+\bibitem[Gupta et~al., 2011]{gupta2011thompson}
+Gupta, N., Granmo, O.-C., and Agrawala, A. (2011).
+\newblock Thompson sampling for dynamic multi-armed bandits.
+\newblock In {\em 2011 10th International Conference on Machine Learning and
+  Applications Workshops}, pages 484--489. IEEE.
+
+\bibitem[Kasslin and Lappeteläinen, 2000]{kasslin2000tpc}
+Kasslin, M. and Lappeteläinen, A. (July 2000).
+\newblock Transmitter power control (tpc) for 802.11 wlan - rev.1.
+\newblock {\em doc.: IEEE802.11-00/190}, pages 802--11.
+
+\bibitem[Tang et~al., 2014]{tang2014joint}
+Tang, S., Yomo, H., Hasegawa, A., Shibata, T., and Ohashi, M. (2014).
+\newblock Joint transmit power control and rate adaptation for wireless {LAN}s.
+\newblock {\em Wireless personal communications}, 74(2):469--486.
+
+\bibitem[Wilhelmi et~al., 2018]{wilhelmi2018potential}
+Wilhelmi, F., Barrachina-Mu{\~n}oz, S., Cano, C., Bellalta, B., Jonsson, A.,
+  and Neu, G. (2018).
+\newblock Potential and pitfalls of multi-armed bandits for decentralized
+  spatial reuse in wlans.
+\newblock {\em arXiv preprint arXiv:1805.11083}.
+
+\end{thebibliography}
